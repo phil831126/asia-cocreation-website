@@ -67,7 +67,7 @@ function backToTop() {
 .foot {
   position: relative;
   isolation: isolate;
-  padding-top: clamp(64px, 8vw, 100px);
+  padding-top: var(--section-y);
   background: var(--c-bg-alt);
   overflow: hidden;
 }

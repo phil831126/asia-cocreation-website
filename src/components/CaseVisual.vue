@@ -83,7 +83,7 @@ const icon = computed(() => icons[props.item.category])
   place-items: center;
   width: 68px;
   height: 68px;
-  border-radius: 22px;
+  border-radius: var(--radius-md);
 }
 
 .cv__label {

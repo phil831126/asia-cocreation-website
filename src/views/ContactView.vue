@@ -180,7 +180,7 @@ function onSubmit() {
   flex: none;
   width: 46px;
   height: 46px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   background: var(--c-yellow);
 }
 

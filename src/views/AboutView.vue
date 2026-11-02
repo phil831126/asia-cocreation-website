@@ -193,7 +193,7 @@ const values = [
   place-items: center;
   width: 50px;
   height: 50px;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   background: var(--c-yellow-tint);
 }
 
@@ -253,7 +253,7 @@ const values = [
   place-items: center;
   width: 56px;
   height: 56px;
-  border-radius: 18px;
+  border-radius: var(--radius-md);
   background: var(--c-yellow);
 }
 

@@ -36,7 +36,7 @@ defineProps<{ eyebrow: string; title: string; desc?: string; crumbs?: { label: s
 .ph {
   position: relative;
   isolation: isolate;
-  padding: calc(var(--nav-h) + clamp(56px, 8vw, 110px)) 0 clamp(56px, 7vw, 96px);
+  padding: calc(var(--nav-h) + var(--section-y)) 0 var(--section-y);
   background: linear-gradient(180deg, #fff, var(--c-bg-alt));
   overflow: hidden;
 }

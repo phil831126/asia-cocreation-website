@@ -141,7 +141,7 @@ const PLACEHOLDER_SLOTS = 3
   place-items: center;
   width: 56px;
   height: 56px;
-  border-radius: 18px;
+  border-radius: var(--radius-md);
   background: #fff;
   box-shadow: var(--shadow-sm);
 }

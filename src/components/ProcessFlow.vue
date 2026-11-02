@@ -39,7 +39,7 @@ const inView = useInView(listEl, 0.25)
 
 .flow__body {
   position: relative;
-  margin-top: var(--space-7);
+  margin-top: var(--space-6);
 }
 
 .flow__list {
@@ -126,7 +126,7 @@ const inView = useInView(listEl, 0.25)
   right: auto;
   left: 30px;
   bottom: 0;
-  border-radius: 10px;
+  border-radius: 6px;
   transform: rotate(18deg);
 }
 

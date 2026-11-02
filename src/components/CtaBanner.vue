@@ -43,7 +43,7 @@ import { ctaSection as copy } from '@/data/home'
 
 <style scoped>
 .cta-wrap {
-  padding-block: clamp(60px, 8vw, 110px);
+  padding-block: var(--section-y);
 }
 
 .cta {

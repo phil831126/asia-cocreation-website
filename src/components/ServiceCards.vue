@@ -130,7 +130,7 @@ import { servicesSection as copy } from '@/data/home'
   place-items: center;
   width: 58px;
   height: 58px;
-  border-radius: 18px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: var(--shadow-sm);
