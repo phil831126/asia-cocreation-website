@@ -9,9 +9,11 @@ html {
   scroll-padding-top: calc(var(--nav-h) + 24px);
 }
 
-/* 首頁區塊快捷捲動時，各區塊已自行預留導覽列空間 */
-html.snap-mode {
-  scroll-padding-top: 0;
+/* 首頁桌面版各區塊已自行預留導覽列空間 */
+@media (min-width: 1024px) {
+  html.snap-mode {
+    scroll-padding-top: 0;
+  }
 }
 
 body {

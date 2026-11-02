@@ -3,16 +3,18 @@ import { prefersReducedMotion } from './motion'
 
 /**
  * 首頁區塊快捷捲動：滾輪或鍵盤輕推一下，就平滑跳到上／下一個區塊。
- * - 只在桌面（滑鼠、足夠的螢幕尺寸）且未開啟「減少動態效果」時啟用
  * - 區塊需為 root 的直接子元素，並加上 data-snap="區塊名稱"
+ * - 只攔截滑鼠滾輪與鍵盤；觸控滑動不會產生滾輪事件，手機仍為一般捲動
  * - 區塊若高於視窗，先以一般捲動看完該區塊，再跳到下一區
+ * - 開啟「減少動態效果」時改為直接跳轉、不播放捲動動畫
  */
 
-const ENABLE_QUERY = '(min-width: 1024px) and (min-height: 600px) and (hover: hover) and (pointer: fine)'
 const DURATION = 750
 /** 一次手勢結束的判斷：超過這段時間沒有滾輪輸入，才接受下一次跳轉（吸收觸控板慣性） */
 const QUIET_MS = 180
 const EDGE = 4
+/** 區塊標題需避開的固定導覽列高度 */
+const NAV_CLEARANCE = 92
 
 export interface SnapSection {
   label: string
@@ -20,11 +22,9 @@ export interface SnapSection {
 }
 
 export function useSectionSnap(root: Ref<HTMLElement | null>) {
-  const enabled = ref(false)
   const active = ref(0)
   const sections = ref<SnapSection[]>([])
 
-  let mq: MediaQueryList | null = null
   let animating = false
   let lastWheel = 0
   let frame = 0
@@ -39,10 +39,17 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
 
   const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight
 
-  /** 各區塊頂端的捲動位置，最後再加上頁面底部（頁尾） */
+  /** 區塊的停靠位置：區塊頂端；若區塊上方留白不足以避開導覽列，則再往上預留 */
+  function snapTop(el: HTMLElement) {
+    const top = el.getBoundingClientRect().top + window.scrollY
+    const padding = parseFloat(getComputedStyle(el).paddingTop) || 0
+    return Math.max(0, Math.round(top - Math.max(0, NAV_CLEARANCE - padding)))
+  }
+
+  /** 各區塊的停靠位置，最後再加上頁面底部（頁尾） */
   function targets() {
     const end = maxScroll()
-    const list = sections.value.map((s) => Math.min(Math.round(s.el.getBoundingClientRect().top + window.scrollY), end))
+    const list = sections.value.map((s, i) => (i === 0 ? 0 : Math.min(snapTop(s.el), end)))
     if (list.length && end - list[list.length - 1] > EDGE) list.push(end)
     return list
   }
@@ -52,6 +59,10 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
     const start = window.scrollY
     const distance = top - start
     if (Math.abs(distance) < 2) return
+    if (prefersReducedMotion()) {
+      window.scrollTo(0, top)
+      return
+    }
     animating = true
     const t0 = performance.now()
     const tick = (now: number) => {
@@ -97,7 +108,7 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
   }
 
   function onWheel(e: WheelEvent) {
-    if (!enabled.value || e.ctrlKey || e.deltaY === 0 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return
+    if (e.ctrlKey || e.deltaY === 0 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return
     const now = performance.now()
     const gestureStart = now - lastWheel > QUIET_MS
     lastWheel = now
@@ -113,7 +124,7 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (!enabled.value || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return
     const target = e.target as HTMLElement
     if (target.closest('input, textarea, select, [contenteditable="true"]')) return
 
@@ -139,16 +150,9 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
     active.value = idx
   }
 
-  function update() {
-    enabled.value = !!mq?.matches && !prefersReducedMotion()
-    document.documentElement.classList.toggle('snap-mode', enabled.value)
-  }
-
   onMounted(() => {
     collect()
-    mq = window.matchMedia(ENABLE_QUERY)
-    mq.addEventListener('change', update)
-    update()
+    document.documentElement.classList.add('snap-mode')
     onScroll()
     window.addEventListener('wheel', onWheel, { passive: false })
     window.addEventListener('keydown', onKeydown)
@@ -157,12 +161,11 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
 
   onBeforeUnmount(() => {
     cancelAnimationFrame(frame)
-    mq?.removeEventListener('change', update)
     window.removeEventListener('wheel', onWheel)
     window.removeEventListener('keydown', onKeydown)
     window.removeEventListener('scroll', onScroll)
     document.documentElement.classList.remove('snap-mode')
   })
 
-  return { enabled, active, sections, goTo }
+  return { active, sections, goTo }
 }

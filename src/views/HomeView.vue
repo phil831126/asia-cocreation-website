@@ -17,7 +17,7 @@ const snap = useSectionSnap(root)
 </script>
 
 <template>
-  <div ref="root" class="page" :class="{ 'home--snap': snap.enabled.value }">
+  <div ref="root" class="page home">
     <!-- 01 主視覺（含成果 Dashboard） -->
     <HeroSection data-snap="首頁" />
     <!-- 02 三大服務 -->
@@ -48,7 +48,6 @@ const snap = useSectionSnap(root)
 
     <Teleport to="body">
       <SectionDots
-        v-if="snap.enabled.value"
         :sections="snap.sections.value"
         :active="snap.active.value"
         @go="snap.goTo"
@@ -66,19 +65,21 @@ const snap = useSectionSnap(root)
   margin-bottom: var(--block-gap);
 }
 
-/* 區塊快捷捲動（桌面）：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列 */
-.home--snap > [data-snap] {
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: calc(var(--nav-h) + 8px);
-  padding-bottom: 32px;
+/* 桌面：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列（搭配區塊快捷捲動） */
+@media (min-width: 1024px) {
+  .home > [data-snap] {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: calc(var(--nav-h) + 8px);
+    padding-bottom: 32px;
+  }
 }
 
-@media (max-height: 820px) {
-  .home--snap > [data-snap] {
+@media (min-width: 1024px) and (max-height: 820px) {
+  .home > [data-snap] {
     padding-bottom: 16px;
   }
 }
