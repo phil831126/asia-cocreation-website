@@ -1,0 +1,64 @@
+/* =========================================================
+   首頁文案
+   ※ 以下為網站設計「示範文案」，並非企業確認之官方標語，
+     請於取得正式文案後直接修改本檔。
+   ========================================================= */
+
+export const hero = {
+  eyebrow: '亞洲共創學院',
+  titleLines: ['聚焦專業，', '連結學習與產業'],
+  /** 標題中以品牌黃底線強調的文字 */
+  titleHighlight: '連結學習與產業',
+  subtitle: '亞洲共創透過專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。',
+  primaryCta: { label: '了解合作服務', sectionId: 'services' },
+  secondaryCta: { label: '洽詢合作', to: '/contact' },
+  /** 放大鏡主視覺周圍的概念關鍵字 */
+  keywords: ['探索知識', '聚焦需求', '連結資源', '共創未來'],
+}
+
+export const partnersStrip = {
+  label: '合作單位',
+  note: 'Logo 待企業提供',
+}
+
+export const statsSection = {
+  eyebrow: 'Achievements',
+  title: '以實際行動，累積專業成果',
+  highlight: '累積專業成果',
+  desc: '在產學合作、政府標案與企業內訓領域持續投入，以具體成果回應每一次合作需求。',
+}
+
+export const servicesSection = {
+  eyebrow: 'Our Services',
+  title: '專業整合，打造多元培訓服務',
+  highlight: '多元培訓服務',
+  desc: '從政府人才培育計畫到企業客製化課程，依據不同單位的需求，規劃合適的培訓與合作方式。',
+}
+
+export const processSection = {
+  eyebrow: 'How We Work',
+  title: '從需求出發，讓合作逐步實現',
+  highlight: '讓合作逐步實現',
+  desc: '以下為建議的合作展示流程，實際作業方式將依各合作案調整。',
+}
+
+export const casesSection = {
+  eyebrow: 'Case Studies',
+  title: '讓每一次合作，成為共創的成果',
+  highlight: '成為共創的成果',
+  desc: '政府、產學與企業相關合作案例整理中，以下為版型示意。',
+}
+
+export const partnerWallSection = {
+  eyebrow: 'Partners',
+  title: '攜手合作，共創更多可能',
+  highlight: '共創更多可能',
+  desc: '合作單位 Logo 將於企業提供並確認授權後更新。',
+}
+
+export const ctaSection = {
+  eyebrow: "Let's Co-create",
+  title: '下一段合作，從共創開始',
+  desc: '從需求交流到專業培訓規劃，讓我們一起探索合作的可能。',
+  button: { label: '聯絡我們', to: '/contact' },
+}

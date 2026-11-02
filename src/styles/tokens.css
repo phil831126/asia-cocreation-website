@@ -1,0 +1,59 @@
+/* =========================================================
+   品牌主題設定（Design Tokens）
+   - 色碼為設計參考值，取得原始 Logo 後請依實際顏色調整
+   - 全站元件皆引用這裡的變數，修改此檔即可統一更新
+   ========================================================= */
+:root {
+  /* 品牌色 */
+  --c-yellow: #f8be20;
+  --c-yellow-deep: #e0a500;
+  --c-yellow-soft: #fcdf8e;
+  --c-yellow-tint: #fff6dc;
+  --c-gray: #888888;
+  --c-gray-300: #c9c9c6;
+  --c-gray-200: #e3e3e0;
+  --c-gray-100: #efefec;
+
+  /* 背景與文字 */
+  --c-bg: #ffffff;
+  --c-bg-alt: #f7f7f5;
+  --c-text: #222222;
+  --c-text-2: #595959; /* 次要文字：維持 AA 對比 */
+  --c-text-3: #737373;
+  --c-line: rgba(34, 34, 34, 0.1);
+  --c-line-strong: rgba(34, 34, 34, 0.18);
+
+  /* 字體 */
+  --font-sans: 'Noto Sans TC', system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --font-display: 'Outfit', 'Noto Sans TC', system-ui, sans-serif;
+
+  /* 圓角 */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+
+  /* 間距系統（8px 基準） */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+
+  /* 版面 */
+  --container: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --section-y: clamp(80px, 10vw, 140px);
+  --nav-h: 84px;
+
+  /* 陰影 */
+  --shadow-sm: 0 2px 10px -4px rgba(34, 34, 34, 0.12);
+  --shadow-md: 0 18px 40px -20px rgba(34, 34, 34, 0.22);
+  --shadow-lg: 0 30px 70px -30px rgba(34, 34, 34, 0.3);
+
+  /* 動態 */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
