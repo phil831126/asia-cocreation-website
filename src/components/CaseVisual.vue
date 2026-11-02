@@ -62,17 +62,18 @@ const icon = computed(() => icons[props.item.category])
   border-radius: 50%;
 }
 
+/* 以高度決定尺寸，圖片變扁時仍維持正圓 */
 .cv__ring--a {
-  width: 56%;
+  height: 86%;
   aspect-ratio: 1;
   border: 1px solid rgba(136, 136, 136, 0.35);
 }
 
 .cv__ring--b {
-  width: 15%;
+  height: 24%;
   aspect-ratio: 1;
   right: 24%;
-  top: 18%;
+  top: 14%;
   background: radial-gradient(circle at 35% 30%, #ffe08a, var(--c-yellow) 60%, var(--c-yellow-deep));
   opacity: 0.75;
 }
@@ -95,18 +96,5 @@ const icon = computed(() => icons[props.item.category])
   background: rgba(255, 255, 255, 0.85);
   font-size: 0.75rem;
   color: var(--c-text-2);
-}
-
-/* 較矮的桌面螢幕：圖片改扁一點，讓案例區完整放進一個畫面 */
-@media (min-width: 1024px) and (max-height: 820px) {
-  .cv {
-    aspect-ratio: 2 / 1;
-  }
-}
-
-@media (min-width: 1024px) and (max-height: 740px) {
-  .cv {
-    aspect-ratio: 5 / 2;
-  }
 }
 </style>

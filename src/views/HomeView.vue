@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ArrowRight } from '@lucide/vue'
 import HeroSection from '@/components/HeroSection.vue'
 import ServiceCards from '@/components/ServiceCards.vue'
 import ProcessFlow from '@/components/ProcessFlow.vue'
@@ -7,7 +8,6 @@ import SectionHeading from '@/components/SectionHeading.vue'
 import CaseShowcase from '@/components/CaseShowcase.vue'
 import PartnerWall from '@/components/PartnerWall.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
-import BaseButton from '@/components/BaseButton.vue'
 import SectionDots from '@/components/SectionDots.vue'
 import { casesSection } from '@/data/home'
 import { useSectionSnap } from '@/composables/sectionSnap'
@@ -27,18 +27,19 @@ const snap = useSectionSnap(root)
     <!-- 04 案例分享（Swiper） -->
     <section id="cases" class="section" data-snap="案例分享">
       <div class="container">
-        <div class="home-cases__head">
-          <SectionHeading
-            :eyebrow="casesSection.eyebrow"
-            :title="casesSection.title"
-            :highlight="casesSection.highlight"
-            :desc="casesSection.desc"
-          />
-          <div v-reveal="200">
-            <BaseButton to="/cases" variant="ghost" size="sm">查看全部案例</BaseButton>
-          </div>
-        </div>
-        <CaseShowcase layout="swiper" />
+        <CaseShowcase layout="swiper">
+          <template #head>
+            <SectionHeading
+              :eyebrow="casesSection.eyebrow"
+              :title="casesSection.title"
+              :highlight="casesSection.highlight"
+              :desc="casesSection.desc"
+            />
+          </template>
+          <template #actions>
+            <RouterLink to="/cases" class="link-arrow">查看全部案例 <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
+          </template>
+        </CaseShowcase>
       </div>
     </section>
     <!-- 05 合作單位展示 -->
@@ -57,14 +58,6 @@ const snap = useSectionSnap(root)
 </template>
 
 <style scoped>
-.home-cases__head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: var(--block-gap);
-}
-
 /* 桌面：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列（搭配區塊快捷捲動） */
 @media (min-width: 1024px) {
   .home > [data-snap] {
@@ -84,10 +77,4 @@ const snap = useSectionSnap(root)
   }
 }
 
-@media (max-width: 768px) {
-  .home-cases__head {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
 </style>

@@ -23,25 +23,34 @@ function countOf(key: 'all' | CaseCategory) {
 
 <template>
   <div class="cs">
-    <div class="cs__filters" role="group" aria-label="案例分類篩選">
-      <button
-        v-for="cat in caseCategories"
-        :key="cat.key"
-        type="button"
-        class="cs__filter"
-        :class="{ 'is-active': active === cat.key }"
-        :aria-pressed="active === cat.key"
-        @click="active = cat.key"
-      >
-        {{ cat.label }}
-        <span class="num cs__count">{{ countOf(cat.key) }}</span>
-      </button>
+    <!-- 提供 head 插槽時：標題在左、分類與操作在右，壓成同一列 -->
+    <div class="cs__top" :class="{ 'cs__top--row': $slots.head }">
+      <slot name="head" />
+      <div class="cs__tools">
+        <div class="cs__filters" role="group" aria-label="案例分類篩選">
+          <button
+            v-for="cat in caseCategories"
+            :key="cat.key"
+            type="button"
+            class="cs__filter"
+            :class="{ 'is-active': active === cat.key }"
+            :aria-pressed="active === cat.key"
+            @click="active = cat.key"
+          >
+            {{ cat.label }}
+            <span class="num cs__count">{{ countOf(cat.key) }}</span>
+          </button>
+        </div>
+        <slot v-if="layout !== 'swiper'" name="actions" />
+      </div>
     </div>
 
     <p class="sr-only" aria-live="polite">目前顯示 {{ filtered.length }} 則案例</p>
 
     <Transition name="cs-fade" mode="out-in">
-      <CaseSwiper v-if="layout === 'swiper'" :key="`swiper-${active}`" :items="filtered" />
+      <CaseSwiper v-if="layout === 'swiper'" :key="`swiper-${active}`" :items="filtered">
+        <template #aside><slot name="actions" /></template>
+      </CaseSwiper>
       <ul v-else :key="active" class="cs__grid">
         <li v-for="(item, i) in filtered" :key="item.id" :style="{ '--i': i }">
           <CaseCard :item="item" />
@@ -52,11 +61,37 @@ function countOf(key: 'all' | CaseCategory) {
 </template>
 
 <style scoped>
+.cs__top {
+  margin-bottom: var(--block-gap);
+}
+
+.cs__top--row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 32px;
+}
+
+.cs__tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.cs__top--row .cs__tools {
+  justify-content: flex-end;
+}
+
+/* 同列時，標題下的說明縮成一行小字 */
+.cs__top--row :deep(.sh__desc) {
+  font-size: 0.9rem;
+}
+
 .cs__filters {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: var(--block-gap);
 }
 
 .cs__filter {
@@ -143,10 +178,27 @@ function countOf(key: 'all' | CaseCategory) {
   }
 }
 
+/* 空間不夠並排時，回到上下堆疊 */
+@media (max-width: 1100px) {
+  .cs__top--row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cs__top--row .cs__tools {
+    justify-content: space-between;
+  }
+}
+
 @media (max-width: 640px) {
   .cs__grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .cs__tools {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .cs__filters {
@@ -169,6 +221,11 @@ function countOf(key: 'all' | CaseCategory) {
   .cs__count {
     min-width: 26px;
     height: 26px;
+  }
+
+  /* 矮螢幕直接隱藏標題下的說明 */
+  .cs__top--row :deep(.sh__desc) {
+    display: none;
   }
 }
 </style>

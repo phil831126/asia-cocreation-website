@@ -81,7 +81,10 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
       </button>
     </div>
 
-    <div ref="pagination" class="cw__pagination"></div>
+    <div class="cw__footer">
+      <div ref="pagination" class="cw__pagination"></div>
+      <div v-if="$slots.aside" class="cw__aside"><slot name="aside" /></div>
+    </div>
   </div>
 </template>
 
@@ -99,6 +102,29 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
 .cw__slide {
   height: auto;
+}
+
+/* 首頁卡片簡介最多兩行，完整內容在案例頁 */
+.cw__slide :deep(.cc__excerpt) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 桌面：圖片高度跟著畫面高度縮放，讓整個案例區放進一個畫面 */
+@media (min-width: 1024px) {
+  .cw__slide :deep(.cv) {
+    aspect-ratio: auto;
+    height: clamp(120px, 21vh, 240px);
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 760px) {
+  .cw__slide :deep(.cc__excerpt) {
+    display: none;
+  }
 }
 
 /* 左右箭頭：位於卡片兩側、對齊圖片中央 */
@@ -149,12 +175,24 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   display: none;
 }
 
+/* 頁碼置中；右側可放額外連結，不增加高度 */
+.cw__footer {
+  position: relative;
+  margin-top: 20px;
+}
+
 .cw__pagination {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 20px;
+}
+
+.cw__aside {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .cw__pagination :deep(.cw__dot) {
@@ -186,6 +224,14 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
   .cw__arrow--next {
     right: 8px;
+  }
+
+  .cw__aside {
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    transform: none;
   }
 }
 </style>
