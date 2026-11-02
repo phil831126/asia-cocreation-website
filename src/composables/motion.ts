@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, ref, watch, type Directive, type Ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, type Directive, type Ref } from 'vue'
 
 export function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -64,35 +64,6 @@ export function useInView(target: Ref<HTMLElement | null>, threshold = 0.3) {
 
   onBeforeUnmount(() => observer?.disconnect())
   return inView
-}
-
-/* ---------- useCountUp：數字遞增動畫 ---------- */
-export function useCountUp(target: number | null, active: Ref<boolean>, duration = 1800) {
-  const display = ref(0)
-  let frame = 0
-
-  watch(
-    active,
-    (isActive) => {
-      if (!isActive || target === null) return
-      if (prefersReducedMotion()) {
-        display.value = target
-        return
-      }
-      const start = performance.now()
-      const tick = (now: number) => {
-        const t = Math.min((now - start) / duration, 1)
-        const eased = 1 - Math.pow(1 - t, 3)
-        display.value = Math.round(target * eased)
-        if (t < 1) frame = requestAnimationFrame(tick)
-      }
-      frame = requestAnimationFrame(tick)
-    },
-    { immediate: true },
-  )
-
-  onBeforeUnmount(() => cancelAnimationFrame(frame))
-  return display
 }
 
 /* ---------- 捲動至頁面區塊 ---------- */

@@ -35,7 +35,7 @@ src/
 │  └─ base.css      全站基礎樣式、按鈕、捲動淡入動畫
 ├─ components/      版面元件（Navbar、放大鏡主視覺、各首頁區塊、Footer…）
 ├─ views/           頁面：首頁、關於我們、學習地圖、案例分享、案例詳情、聯絡我們
-└─ composables/     捲動淡入、數字遞增等動態工具
+└─ composables/     捲動淡入等動態工具
 ```
 
 ## 如何更新資料
@@ -44,7 +44,7 @@ src/
 | --- | --- | --- |
 | 正式 Logo | `src/data/site.ts` | 檔案放到 `public/brand/`，填入 `logoSrc: '/brand/logo.svg'` |
 | 聯絡資訊 | `src/data/site.ts` | 填寫 `contact` 的 phone / email / address / hours |
-| 成果數據 | `src/data/dashboard.ts` | 修改 `kpis` 的 `value`（「逾」以 `suffix: '+'` 表示），數字遞增動畫自動套用 |
+| 成果數據 | `src/data/dashboard.ts` | 修改 `kpis` 的 `value`（「逾」以 `suffix: '+'` 表示），滾輪式數字動畫自動套用 |
 | 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，填寫 `name`、`logo`（可選 `url`） |
 | 案例 | `src/data/cases.ts` | 替換標題、簡介、圖片（`public/cases/`），並將 `placeholder` 改為 `false` |
 | 課程 | `src/data/courses.ts` | 在各分類 `courses` 陣列加入課程 |

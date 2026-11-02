@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { BookOpen, GraduationCap, Users, Handshake } from '@lucide/vue'
+import RollingNumber from './RollingNumber.vue'
 import { kpis } from '@/data/dashboard'
 import { dashboardCopy } from '@/data/home'
-import { useCountUp, useInView } from '@/composables/motion'
+import { useInView } from '@/composables/motion'
 
 const panel = ref<HTMLElement | null>(null)
 const inView = useInView(panel, 0.2)
-const counts = kpis.map((k) => useCountUp(k.value, inView, 1800))
 
 const kpiIcons: Record<string, unknown> = { courses: BookOpen, learners: GraduationCap, teachers: Users, partners: Handshake }
 </script>
@@ -31,7 +31,7 @@ const kpiIcons: Record<string, unknown> = { courses: BookOpen, learners: Graduat
             {{ k.label }}
           </dt>
           <dd class="kpi__value">
-            <span class="num kpi__num" aria-hidden="true">{{ counts[i].value.toLocaleString('zh-TW') }}{{ k.suffix }}</span>
+            <RollingNumber class="num kpi__num" :value="k.value" :suffix="k.suffix" :active="inView" />
             <span class="kpi__unit" aria-hidden="true">{{ k.unit }}</span>
             <span class="sr-only">逾 {{ k.value.toLocaleString('zh-TW') }} {{ k.unit }}</span>
           </dd>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import Swiper from 'swiper'
-import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules'
+import { A11y, Autoplay, Keyboard, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import { ArrowLeft, ArrowRight } from '@lucide/vue'
 import CaseCard from './CaseCard.vue'
@@ -27,13 +27,17 @@ function alignArrows(s: Swiper) {
 
 onMounted(() => {
   if (!root.value) return
+  const reduced = prefersReducedMotion()
   swiper = new Swiper(root.value, {
-    modules: [Navigation, Pagination, Keyboard, A11y],
+    modules: [Navigation, Pagination, Keyboard, A11y, Autoplay],
     slidesPerView: 1.08,
     spaceBetween: 16,
-    speed: prefersReducedMotion() ? 0 : 600,
+    speed: reduced ? 0 : 600,
     grabCursor: true,
     watchOverflow: true,
+    // 每 5 秒向左輪換一張，最後一張後接回第一張；滑鼠停留時暫停
+    loop: true,
+    autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
     keyboard: { enabled: true, onlyInViewport: true },
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
     pagination: { el: pagination.value, clickable: true, bulletClass: 'cw__dot', bulletActiveClass: 'is-active' },
