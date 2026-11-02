@@ -61,11 +61,6 @@ function splitLine(line: string) {
         <HeroDashboard />
       </div>
     </div>
-
-    <a href="#services" class="hero__scroll" @click.prevent="scrollToSection('services')">
-      <span>向下探索</span>
-      <span class="hero__scroll-line" aria-hidden="true"><ArrowDown :size="14" /></span>
-    </a>
   </section>
 </template>
 

@@ -37,7 +37,7 @@ onMounted(() => {
     watchOverflow: true,
     // 每 5 秒向左輪換一張，最後一張後接回第一張；滑鼠停留時暫停
     loop: true,
-    autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+    autoplay: reduced ? false : { delay: 1000, disableOnInteraction: false, pauseOnMouseEnter: true },
     keyboard: { enabled: true, onlyInViewport: true },
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
     pagination: { el: pagination.value, clickable: true, bulletClass: 'cw__dot', bulletActiveClass: 'is-active' },
