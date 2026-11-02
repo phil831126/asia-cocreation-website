@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import CaseCard from './CaseCard.vue'
+import CaseSwiper from './CaseSwiper.vue'
 import { cases, caseCategories, type CaseCategory } from '@/data/cases'
 
-const props = withDefaults(defineProps<{ limit?: number }>(), { limit: 0 })
+const props = withDefaults(defineProps<{ limit?: number; layout?: 'grid' | 'swiper' }>(), {
+  limit: 0,
+  layout: 'grid',
+})
 
 const active = ref<'all' | CaseCategory>('all')
 
@@ -37,7 +41,8 @@ function countOf(key: 'all' | CaseCategory) {
     <p class="sr-only" aria-live="polite">目前顯示 {{ filtered.length }} 則案例</p>
 
     <Transition name="cs-fade" mode="out-in">
-      <ul :key="active" class="cs__grid">
+      <CaseSwiper v-if="layout === 'swiper'" :key="`swiper-${active}`" :items="filtered" />
+      <ul v-else :key="active" class="cs__grid">
         <li v-for="(item, i) in filtered" :key="item.id" :style="{ '--i': i }">
           <CaseCard :item="item" />
         </li>

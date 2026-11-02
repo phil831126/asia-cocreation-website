@@ -2,7 +2,7 @@
 import { ImageIcon } from '@lucide/vue'
 import type { Partner } from '@/data/partners'
 
-defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
+defineProps<{ partner: Partner; index: number }>()
 </script>
 
 <template>
@@ -12,11 +12,11 @@ defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
     :target="partner.url ? '_blank' : undefined"
     :rel="partner.url ? 'noopener' : undefined"
     class="pl"
-    :class="[`pl--${variant ?? 'strip'}`, { 'pl--empty': !partner.logo }]"
+    :class="{ 'pl--empty': !partner.logo }"
   >
     <img v-if="partner.logo" :src="partner.logo" :alt="partner.name" class="pl__img" loading="lazy" />
     <template v-else>
-      <ImageIcon :size="variant === 'wall' ? 22 : 18" class="pl__icon" aria-hidden="true" />
+      <ImageIcon :size="22" class="pl__icon" aria-hidden="true" />
       <span class="pl__text">
         <span class="pl__label">合作單位 Logo 待提供</span>
         <span class="num pl__no">#{{ String(index + 1).padStart(2, '0') }}</span>
@@ -28,10 +28,16 @@ defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
 <style scoped>
 .pl {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
+  height: 120px;
+  padding: 0 18px;
   border-radius: var(--radius-md);
+  background: #fff;
+  border: 1px solid var(--c-line);
+  text-align: center;
   transition:
     border-color 0.3s,
     background-color 0.3s,
@@ -39,20 +45,7 @@ defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
     box-shadow 0.4s var(--ease-out);
 }
 
-.pl--strip {
-  width: 220px;
-  height: 84px;
-  padding: 0 20px;
-}
-
-.pl--wall {
-  height: 120px;
-  padding: 0 18px;
-  background: #fff;
-  border: 1px solid var(--c-line);
-}
-
-.pl--wall:hover {
+.pl:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   border-color: transparent;
@@ -92,6 +85,7 @@ defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
 .pl__text {
   display: flex;
   flex-direction: column;
+  align-items: center;
   line-height: 1.35;
 }
 
@@ -105,15 +99,5 @@ defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()
   font-size: 0.75rem;
   color: var(--c-text-3);
   letter-spacing: 0.08em;
-}
-
-.pl--wall {
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
-}
-
-.pl--wall .pl__text {
-  align-items: center;
 }
 </style>

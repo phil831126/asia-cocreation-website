@@ -12,7 +12,7 @@ withDefaults(defineProps<{ showCompany?: boolean }>(), { showCompany: false })
       <svg class="logo__mark" viewBox="0 0 44 44" aria-hidden="true">
         <circle cx="19" cy="19" r="13" fill="none" stroke="#888888" stroke-width="4.5" />
         <circle cx="19" cy="19" r="6.5" fill="#F8BE20" />
-        <path d="M29 29 L39 39" stroke="#222222" stroke-width="5" stroke-linecap="round" />
+        <path d="M29 29 L39 39" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
       </svg>
       <span class="logo__text">
         <span class="logo__name">{{ brand.name }}</span>

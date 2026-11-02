@@ -9,13 +9,13 @@ export type CaseCategory = 'government' | 'academia' | 'enterprise'
 
 export const caseCategories: { key: 'all' | CaseCategory; label: string }[] = [
   { key: 'all', label: '全部案例' },
-  { key: 'government', label: '政府委訓' },
+  { key: 'government', label: '政府計畫' },
   { key: 'academia', label: '產學合作' },
   { key: 'enterprise', label: '企業內訓' },
 ]
 
 export const categoryLabel: Record<CaseCategory, string> = {
-  government: '政府委訓',
+  government: '政府計畫',
   academia: '產學合作',
   enterprise: '企業內訓',
 }

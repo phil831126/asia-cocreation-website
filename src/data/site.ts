@@ -50,7 +50,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   home: {
     title: '亞洲共創學院｜聚焦專業，連結學習與產業',
     description:
-      '亞洲共創學院（亞洲共創股份有限公司）提供政府委訓、企業內訓與品牌服務，透過專業課程規劃與教育培訓，連結政府、企業與人才發展需求。',
+      '亞洲共創學院（亞洲共創股份有限公司）提供政府計畫、企業內訓與品牌服務，透過專業課程規劃與教育培訓，連結政府、企業與人才發展需求。',
   },
   about: {
     title: '關於我們｜亞洲共創學院',
@@ -62,7 +62,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   cases: {
     title: '案例分享｜亞洲共創學院',
-    description: '瀏覽亞洲共創學院在政府委訓、產學合作與企業內訓的合作案例。',
+    description: '瀏覽亞洲共創學院在政府計畫、產學合作與企業內訓的合作案例。',
   },
   caseDetail: {
     title: '案例詳情｜亞洲共創學院',
@@ -70,7 +70,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   contact: {
     title: '聯絡我們｜亞洲共創學院',
-    description: '與亞洲共創學院洽詢政府委訓、企業內訓、品牌服務與產學合作。',
+    description: '與亞洲共創學院洽詢政府計畫、企業內訓、品牌服務與產學合作。',
   },
   notFound: {
     title: '找不到頁面｜亞洲共創學院',

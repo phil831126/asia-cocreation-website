@@ -14,7 +14,7 @@ import { partnerWallSection as copy } from '@/data/home'
       </div>
       <ul class="wall__grid">
         <li v-for="(p, i) in partners" :key="p.id" v-reveal="(i % 5) * 60">
-          <PartnerLogo :partner="p" :index="i" variant="wall" />
+          <PartnerLogo :partner="p" :index="i" />
         </li>
       </ul>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, ArrowDown } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
-import MagnifierVisual from './MagnifierVisual.vue'
+import HeroDashboard from './HeroDashboard.vue'
 import ServiceIcon from './ServiceIcon.vue'
 import { hero } from '@/data/home'
 import { services } from '@/data/services'
@@ -18,21 +18,22 @@ function splitLine(line: string) {
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__bg" aria-hidden="true">
       <div class="hero__dots"></div>
+      <div class="hero__orb"></div>
       <svg class="hero__lines" viewBox="0 0 1440 900" preserveAspectRatio="none">
-        <path d="M-40 720 C 260 640, 420 820, 720 700 S 1180 420, 1480 520" fill="none" stroke="#888888" stroke-opacity="0.18" />
+        <path d="M-40 720 C 260 640, 420 820, 720 700 S 1180 420, 1480 520" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
         <path d="M-40 780 C 300 700, 480 880, 780 760 S 1200 500, 1480 600" fill="none" stroke="#F8BE20" stroke-opacity="0.45" />
-        <line x1="0" y1="140" x2="1440" y2="140" stroke="#222222" stroke-opacity="0.04" />
-        <line x1="960" y1="0" x2="960" y2="900" stroke="#222222" stroke-opacity="0.04" />
+        <line x1="0" y1="140" x2="1440" y2="140" stroke="#ffffff" stroke-opacity="0.05" />
+        <line x1="760" y1="0" x2="760" y2="900" stroke="#ffffff" stroke-opacity="0.05" />
       </svg>
     </div>
 
     <div class="container hero__grid">
       <div class="hero__copy">
-        <span class="eyebrow hero__in" style="--d: 0.05s">{{ hero.eyebrow }}</span>
+        <span class="eyebrow hero__eyebrow hero__in" style="--d: 0.05s">{{ hero.eyebrow }}</span>
 
         <h1 id="hero-title" class="hero__title">
           <span v-for="(line, i) in hero.titleLines" :key="line" class="hero__line hero__in" :style="{ '--d': `${0.15 + i * 0.12}s` }">
-            {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="highlight">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
+            {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="hero__mark">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
           </span>
         </h1>
 
@@ -42,7 +43,7 @@ function splitLine(line: string) {
           <BaseButton :href="`#${hero.primaryCta.sectionId}`" @click.prevent="scrollToSection(hero.primaryCta.sectionId)">
             {{ hero.primaryCta.label }}
           </BaseButton>
-          <BaseButton :to="hero.secondaryCta.to" variant="ghost">{{ hero.secondaryCta.label }}</BaseButton>
+          <BaseButton :to="hero.secondaryCta.to" variant="ghost" class="hero__ghost">{{ hero.secondaryCta.label }}</BaseButton>
         </div>
 
         <ul class="hero__tags hero__in" style="--d: 0.72s" aria-label="核心服務">
@@ -56,12 +57,12 @@ function splitLine(line: string) {
         </ul>
       </div>
 
-      <div class="hero__visual hero__in" style="--d: 0.2s">
-        <MagnifierVisual :keywords="hero.keywords" />
+      <div class="hero__visual hero__in" style="--d: 0.25s">
+        <HeroDashboard />
       </div>
     </div>
 
-    <a href="#achievements" class="hero__scroll" @click.prevent="scrollToSection('achievements')">
+    <a href="#services" class="hero__scroll" @click.prevent="scrollToSection('services')">
       <span>向下探索</span>
       <span class="hero__scroll-line" aria-hidden="true"><ArrowDown :size="14" /></span>
     </a>
@@ -76,8 +77,9 @@ function splitLine(line: string) {
   flex-direction: column;
   justify-content: center;
   min-height: min(100svh, 960px);
-  padding: calc(var(--nav-h) + 40px) 0 96px;
-  background: linear-gradient(180deg, #fff 0%, #fbfbf9 70%, #fff 100%);
+  padding: calc(var(--nav-h) + 24px) 0 88px;
+  background: radial-gradient(ellipse 80% 60% at 75% 40%, #232323 0%, #111111 60%, #0b0b0b 100%);
+  color: #fff;
   overflow: hidden;
 }
 
@@ -88,18 +90,28 @@ function splitLine(line: string) {
   pointer-events: none;
 }
 
-/* 範例 3：黃色漸層點陣 */
+/* 黃色漸層點陣 */
 .hero__dots {
   position: absolute;
   right: -4%;
   top: 6%;
   width: 62%;
   height: 90%;
-  background-image: radial-gradient(rgba(224, 165, 0, 0.6) 1.4px, transparent 1.6px);
+  background-image: radial-gradient(rgba(248, 190, 32, 0.55) 1.3px, transparent 1.5px);
   background-size: 18px 18px;
   -webkit-mask-image: radial-gradient(ellipse at 55% 45%, #000 0%, transparent 62%);
   mask-image: radial-gradient(ellipse at 55% 45%, #000 0%, transparent 62%);
-  opacity: 0.4;
+  opacity: 0.35;
+}
+
+.hero__orb {
+  position: absolute;
+  left: -10%;
+  bottom: -30%;
+  width: 50%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 190, 32, 0.14), transparent 65%);
 }
 
 .hero__lines {
@@ -111,9 +123,9 @@ function splitLine(line: string) {
 
 .hero__grid {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(24px, 4vw, 64px);
+  gap: clamp(32px, 5vw, 80px);
 }
 
 .hero__copy {
@@ -123,10 +135,14 @@ function splitLine(line: string) {
   gap: 26px;
 }
 
+.hero__eyebrow {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .hero__title {
   display: flex;
   flex-direction: column;
-  font-size: clamp(2.5rem, 5.4vw, 4.75rem);
+  font-size: clamp(2.5rem, 5.2vw, 4.6rem);
   font-weight: 900;
   line-height: 1.18;
   letter-spacing: 0.03em;
@@ -136,11 +152,15 @@ function splitLine(line: string) {
   display: block;
 }
 
+.hero__mark {
+  color: var(--c-yellow);
+}
+
 .hero__sub {
   max-width: 520px;
   font-size: clamp(1.02rem, 1.3vw, 1.15rem);
   line-height: 1.9;
-  color: var(--c-text-2);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .hero__actions {
@@ -150,13 +170,37 @@ function splitLine(line: string) {
   margin-top: 6px;
 }
 
+/* 深色背景上的次要按鈕 */
+.hero__ghost.btn--ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.hero__ghost.btn--ghost::before {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero__ghost.btn--ghost:hover {
+  border-color: #fff;
+}
+
+.hero__ghost.btn--ghost :deep(.btn__icon) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.hero__ghost.btn--ghost:hover :deep(.btn__icon) {
+  background: var(--c-yellow);
+  color: var(--c-text);
+}
+
 .hero__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
   padding-top: 26px;
-  border-top: 1px solid var(--c-line);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .hero__tag {
@@ -165,16 +209,19 @@ function splitLine(line: string) {
   gap: 8px;
   padding: 7px 14px;
   border-radius: 999px;
-  background: var(--c-bg-alt);
+  background: rgba(255, 255, 255, 0.07);
   font-size: 0.9rem;
   font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
   transition:
     background-color 0.3s,
+    color 0.3s,
     transform 0.3s var(--ease-out);
 }
 
 .hero__tag:hover {
-  background: var(--c-yellow-tint);
+  background: var(--c-yellow);
+  color: var(--c-text);
   transform: translateY(-2px);
 }
 
@@ -196,8 +243,8 @@ function splitLine(line: string) {
 
 .hero__visual {
   width: 100%;
-  max-width: 600px;
-  justify-self: center;
+  max-width: 560px;
+  justify-self: end;
 }
 
 /* 載入時逐步淡入 */
@@ -224,7 +271,7 @@ function splitLine(line: string) {
   gap: 8px;
   font-size: 0.78rem;
   letter-spacing: 0.2em;
-  color: var(--c-text-3);
+  color: rgba(255, 255, 255, 0.55);
   transform: translateX(-50%);
 }
 
@@ -233,7 +280,7 @@ function splitLine(line: string) {
   place-items: center;
   width: 30px;
   height: 46px;
-  border: 1px solid var(--c-line-strong);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
 }
 
@@ -247,40 +294,39 @@ function splitLine(line: string) {
   }
 }
 
-@media (max-width: 960px) {
-  .hero {
-    min-height: auto;
-    padding-bottom: 72px;
-  }
-
+@media (max-width: 1080px) {
   .hero__grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
   }
 
   .hero__visual {
-    order: -1;
-    max-width: 440px;
+    max-width: 640px;
+    justify-self: stretch;
   }
 
   .hero__dots {
     width: 100%;
     height: 60%;
     right: 0;
+    top: auto;
+    bottom: 0;
   }
 
   .hero__scroll {
     display: none;
   }
+
+  .hero {
+    min-height: auto;
+    padding-bottom: 80px;
+  }
 }
 
 @media (max-width: 560px) {
   .hero {
-    padding-top: calc(var(--nav-h) + 8px);
-  }
-
-  .hero__visual {
-    max-width: 340px;
+    padding-top: calc(var(--nav-h) + 24px);
+    padding-bottom: 64px;
   }
 
   .hero__actions {

@@ -10,7 +10,7 @@ const route = useRoute()
 const fieldIcons = { phone: Phone, email: Mail, address: MapPin, hours: Clock }
 
 const needOptions = [
-  { value: 'government', label: '政府委訓' },
+  { value: 'government', label: '政府計畫' },
   { value: 'enterprise', label: '企業內訓' },
   { value: 'brand', label: '品牌服務' },
   { value: 'academia', label: '產學合作' },

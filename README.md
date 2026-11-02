@@ -24,11 +24,11 @@ src/
 ├─ data/            ← 所有可修改的內容都在這裡
 │  ├─ site.ts       品牌名稱、Logo 路徑、導覽、聯絡資訊、各頁 SEO
 │  ├─ home.ts       首頁各區塊文案
-│  ├─ stats.ts      合作成果數據（Dashboard）
+│  ├─ dashboard.ts  Hero 成果 Dashboard（開課數、學員、業師、合作單位等）
 │  ├─ services.ts   三大服務項目
 │  ├─ process.ts    合作流程四階段
 │  ├─ cases.ts      案例資料與分類
-│  ├─ partners.ts   合作單位 Logo（跑馬燈與 Logo 牆共用）
+│  ├─ partners.ts   合作單位 Logo 牆
 │  └─ courses.ts    學習地圖課程分類
 ├─ styles/
 │  ├─ tokens.css    品牌主題色、字體、圓角、間距（修改此檔即可統一調整視覺）
@@ -44,7 +44,7 @@ src/
 | --- | --- | --- |
 | 正式 Logo | `src/data/site.ts` | 檔案放到 `public/brand/`，填入 `logoSrc: '/brand/logo.svg'` |
 | 聯絡資訊 | `src/data/site.ts` | 填寫 `contact` 的 phone / email / address / hours |
-| 成果數據 | `src/data/stats.ts` | `value` 由 `null` 改為數字、填 `unit` 與 `caption`，即自動啟用數字遞增動畫 |
+| 成果數據 | `src/data/dashboard.ts` | 修改 `kpis` 的 `value`（「逾」以 `suffix: '+'` 表示），數字遞增動畫自動套用 |
 | 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，填寫 `name`、`logo`（可選 `url`） |
 | 案例 | `src/data/cases.ts` | 替換標題、簡介、圖片（`public/cases/`），並將 `placeholder` 改為 `false` |
 | 課程 | `src/data/courses.ts` | 在各分類 `courses` 陣列加入課程 |
@@ -57,7 +57,7 @@ src/
 1. **品牌 Logo 原始檔**：目前使用暫代的放大鏡標誌（非正式 Logo），品牌色亦為參考色碼。
 2. **參考圖片（範例 1～7）**：專案中未附，視覺依文字規格設計。
 3. **首頁文案確認**：主標題「聚焦專業，連結學習與產業」、副標題及各區塊說明皆為示範文案。
-4. **合作成果數據**：產學合作、政府標案、企業內訓的數值、單位與統計口徑。
+4. **成果數據附註確認**：Hero Dashboard 已依公司簡介填入（開課逾 1,000 堂、學員逾 5,000 名〔以《大專女學生領導力培訓計畫》為例〕、業師逾百人、合作單位 20+），如有更新請改 `dashboard.ts`。
 5. **品牌服務詳細內容**：服務範圍說明。
 6. **三大服務詳細介紹**：關於我們頁的服務細節。
 7. **合作流程**：目前四階段為網站建議的展示方式，需確認是否符合實際作業。

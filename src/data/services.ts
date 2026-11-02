@@ -21,7 +21,7 @@ export const services: Service[] = [
     id: 'government',
     no: '01',
     icon: 'landmark',
-    title: '政府委訓',
+    title: '政府計畫',
     summary: '提供政府委辦培訓、人才培育計畫及相關教育訓練服務，協助規劃課程內容與執行。',
     points: ['政府委辦培訓', '人才培育計畫', '教育訓練規劃'],
   },

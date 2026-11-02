@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import HeroSection from '@/components/HeroSection.vue'
-import PartnerMarquee from '@/components/PartnerMarquee.vue'
-import StatsDashboard from '@/components/StatsDashboard.vue'
 import ServiceCards from '@/components/ServiceCards.vue'
 import ProcessFlow from '@/components/ProcessFlow.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
@@ -14,17 +12,13 @@ import { casesSection } from '@/data/home'
 
 <template>
   <div class="page">
-    <!-- 01 主視覺 -->
+    <!-- 01 主視覺（含成果 Dashboard） -->
     <HeroSection />
-    <!-- 02 合作單位跑馬燈 -->
-    <PartnerMarquee />
-    <!-- 03 合作成果數據 -->
-    <StatsDashboard />
-    <!-- 04 三大服務 -->
+    <!-- 02 三大服務 -->
     <ServiceCards />
-    <!-- 05 合作流程 -->
+    <!-- 03 合作流程 -->
     <ProcessFlow />
-    <!-- 06 案例分享 -->
+    <!-- 04 案例分享（Swiper） -->
     <section id="cases" class="section">
       <div class="container">
         <div class="home-cases__head">
@@ -38,12 +32,12 @@ import { casesSection } from '@/data/home'
             <BaseButton to="/cases" variant="ghost" size="sm">查看全部案例</BaseButton>
           </div>
         </div>
-        <CaseShowcase :limit="6" />
+        <CaseShowcase layout="swiper" />
       </div>
     </section>
-    <!-- 07 合作單位展示 -->
+    <!-- 05 合作單位展示 -->
     <PartnerWall />
-    <!-- 08 合作邀請 -->
+    <!-- 06 合作邀請 -->
     <CtaBanner />
   </div>
 </template>
