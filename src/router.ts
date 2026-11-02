@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 import { pageMeta } from './data/site'
 import { prefersReducedMotion } from './composables/motion'
 import HomeView from './views/HomeView.vue'
@@ -21,6 +21,8 @@ export const router = createRouter({
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView, meta: { key: 'notFound' } },
   ],
   scrollBehavior(to, from, saved) {
+    // 重新整理（或第一次開啟）時一律回到頁面頂端，不還原先前的捲動位置
+    if (from === START_LOCATION) return { top: 0 }
     if (saved) return saved
     if (to.hash) {
       const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
