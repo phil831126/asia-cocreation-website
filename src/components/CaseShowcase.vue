@@ -56,7 +56,7 @@ function countOf(key: 'all' | CaseCategory) {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--block-gap);
 }
 
 .cs__filter {
@@ -159,6 +159,16 @@ function countOf(key: 'all' | CaseCategory) {
 
   .cs__filter {
     flex: none;
+  }
+}
+@media (min-width: 1024px) and (max-height: 820px) {
+  .cs__filter {
+    height: 40px;
+  }
+
+  .cs__count {
+    min-width: 26px;
+    height: 26px;
   }
 }
 </style>

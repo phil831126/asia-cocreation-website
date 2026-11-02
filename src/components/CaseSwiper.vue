@@ -154,7 +154,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 32px;
+  margin-top: 20px;
 }
 
 .cw__pagination :deep(.cw__dot) {

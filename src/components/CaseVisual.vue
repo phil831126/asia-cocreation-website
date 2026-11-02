@@ -24,7 +24,7 @@ const icon = computed(() => icons[props.item.category])
 <style scoped>
 .cv {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: var(--c-bg-alt);
 }
@@ -95,5 +95,18 @@ const icon = computed(() => icons[props.item.category])
   background: rgba(255, 255, 255, 0.85);
   font-size: 0.75rem;
   color: var(--c-text-2);
+}
+
+/* 較矮的桌面螢幕：圖片改扁一點，讓案例區完整放進一個畫面 */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .cv {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 740px) {
+  .cv {
+    aspect-ratio: 5 / 2;
+  }
 }
 </style>

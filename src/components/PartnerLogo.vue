@@ -32,7 +32,7 @@ defineProps<{ partner: Partner; index: number }>()
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 120px;
+  height: 96px;
   padding: 0 18px;
   border-radius: var(--radius-md);
   background: #fff;

@@ -63,7 +63,7 @@ defineProps<{ item: CaseItem }>()
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 24px 26px 26px;
+  padding: 20px 22px 22px;
 }
 
 .cc__meta {
@@ -84,7 +84,7 @@ defineProps<{ item: CaseItem }>()
 }
 
 .cc__title {
-  margin-top: 16px;
+  margin-top: 12px;
   font-size: 1.2rem;
   line-height: 1.5;
 }
@@ -114,7 +114,7 @@ defineProps<{ item: CaseItem }>()
 .cc__more {
   align-self: flex-start;
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 14px;
   background-position: left calc(100% - 0px);
 }
 

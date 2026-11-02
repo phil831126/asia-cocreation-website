@@ -39,7 +39,7 @@ const inView = useInView(listEl, 0.25)
 
 .flow__body {
   position: relative;
-  margin-top: var(--space-6);
+  margin-top: var(--block-gap);
 }
 
 .flow__list {
@@ -135,8 +135,8 @@ const inView = useInView(listEl, 0.25)
 }
 
 .step__no {
-  margin-top: 28px;
-  font-size: 3.6rem;
+  margin-top: 20px;
+  font-size: 3rem;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -168,7 +168,7 @@ const inView = useInView(listEl, 0.25)
 /* 手機：垂直時間軸 */
 @media (max-width: 640px) {
   .flow__body {
-    margin-top: var(--space-5);
+    margin-top: var(--block-gap);
   }
 
   .flow__list {

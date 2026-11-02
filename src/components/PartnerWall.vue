@@ -27,7 +27,7 @@ import { partnerWallSection as copy } from '@/data/home'
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--block-gap);
 }
 
 .wall__grid {
@@ -46,7 +46,7 @@ import { partnerWallSection as copy } from '@/data/home'
   .wall__head {
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--block-gap);
   }
 
   .wall__grid {

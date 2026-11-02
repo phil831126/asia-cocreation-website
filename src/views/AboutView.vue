@@ -165,7 +165,7 @@ const values = [
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-top: var(--space-6);
+  margin-top: var(--block-gap);
 }
 
 .aud__item {
@@ -222,7 +222,7 @@ const values = [
 }
 
 .svc-rows {
-  margin-top: var(--space-5);
+  margin-top: var(--block-gap);
   border-top: 1px solid var(--c-line-strong);
 }
 
@@ -295,7 +295,7 @@ const values = [
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
-  margin-top: var(--space-6);
+  margin-top: var(--block-gap);
 }
 
 .values__item {
@@ -339,7 +339,7 @@ const values = [
 
   .aud {
     grid-template-columns: 1fr;
-    margin-top: var(--space-5);
+    margin-top: var(--block-gap);
   }
 
   .svc-row {

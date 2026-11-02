@@ -49,7 +49,7 @@ import { ctaSection as copy } from '@/data/home'
 .cta {
   position: relative;
   isolation: isolate;
-  padding: clamp(44px, 7vw, 96px) clamp(28px, 6vw, 88px);
+  padding: clamp(40px, 6vw, 72px) clamp(28px, 6vw, 80px);
   border-radius: var(--radius-xl);
   background:
     radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.45), transparent 40%),

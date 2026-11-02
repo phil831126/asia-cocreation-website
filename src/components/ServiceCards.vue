@@ -42,7 +42,7 @@ import { servicesSection as copy } from '@/data/home'
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-top: var(--space-6);
+  margin-top: var(--block-gap);
 }
 
 .svc__grid > li {
@@ -54,7 +54,7 @@ import { servicesSection as copy } from '@/data/home'
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 36px 32px 30px;
+  padding: 28px 26px 24px;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   overflow: hidden;
@@ -112,7 +112,7 @@ import { servicesSection as copy } from '@/data/home'
 }
 
 .card__no {
-  font-size: 3.2rem;
+  font-size: 2.6rem;
   font-weight: 300;
   line-height: 1;
   color: transparent;
@@ -147,13 +147,13 @@ import { servicesSection as copy } from '@/data/home'
 }
 
 .card__title {
-  margin-top: 40px;
-  font-size: 1.6rem;
+  margin-top: 24px;
+  font-size: 1.45rem;
   letter-spacing: 0.08em;
 }
 
 .card__summary {
-  margin-top: 14px;
+  margin-top: 10px;
   color: var(--c-text-2);
 }
 
@@ -161,7 +161,7 @@ import { servicesSection as copy } from '@/data/home'
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 22px;
+  margin-top: 16px;
 }
 
 .card__points li {
@@ -181,7 +181,7 @@ import { servicesSection as copy } from '@/data/home'
   flex-wrap: wrap;
   gap: 12px;
   margin-top: auto;
-  padding-top: 32px;
+  padding-top: 20px;
 }
 
 .card__link {
@@ -192,7 +192,7 @@ import { servicesSection as copy } from '@/data/home'
   .svc__grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    margin-top: var(--space-5);
+    margin-top: var(--block-gap);
   }
 
   .card {

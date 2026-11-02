@@ -38,7 +38,7 @@ const parts = computed(() => {
 .sh {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   max-width: 760px;
 }
 
@@ -49,16 +49,32 @@ const parts = computed(() => {
 }
 
 .sh__title {
-  font-size: clamp(1.85rem, 3.6vw, 3rem);
+  font-size: clamp(1.75rem, 3vw, 2.6rem);
   font-weight: 700;
-  line-height: 1.32;
+  line-height: 1.3;
   letter-spacing: 0.02em;
   text-wrap: balance;
 }
 
 .sh__desc {
   max-width: 620px;
-  font-size: 1.06rem;
+  font-size: 1rem;
+  line-height: 1.7;
   color: var(--c-text-2);
+}
+
+/* 較矮的桌面螢幕再收緊，讓區塊完整放進一個畫面 */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .sh {
+    gap: 8px;
+  }
+
+  .sh__title {
+    font-size: 2.1rem;
+  }
+
+  .sh__desc {
+    font-size: 0.94rem;
+  }
 }
 </style>
