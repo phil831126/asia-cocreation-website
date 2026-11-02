@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ImageIcon } from 'lucide-vue-next'
+import { ImageIcon } from '@lucide/vue'
 import type { Partner } from '@/data/partners'
 
 defineProps<{ partner: Partner; index: number; variant?: 'strip' | 'wall' }>()

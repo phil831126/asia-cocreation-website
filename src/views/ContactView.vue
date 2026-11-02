@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Phone, Mail, MapPin, Clock, Info } from 'lucide-vue-next'
+import { Phone, Mail, MapPin, Clock, Info } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { contact, contactFields } from '@/data/site'

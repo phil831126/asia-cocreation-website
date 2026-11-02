@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight } from 'lucide-vue-next'
+import { ArrowRight } from '@lucide/vue'
 import SectionHeading from './SectionHeading.vue'
 import ServiceIcon from './ServiceIcon.vue'
 import { services } from '@/data/services'

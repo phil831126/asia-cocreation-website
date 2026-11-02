@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, ArrowDown } from 'lucide-vue-next'
+import { ArrowRight, ArrowDown } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
 import MagnifierVisual from './MagnifierVisual.vue'
 import ServiceIcon from './ServiceIcon.vue'

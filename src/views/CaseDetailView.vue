@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { ArrowLeft } from 'lucide-vue-next'
+import { ArrowLeft } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import CaseVisual from '@/components/CaseVisual.vue'
 import CaseCard from '@/components/CaseCard.vue'

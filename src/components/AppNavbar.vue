@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Menu, X, ArrowUpRight } from 'lucide-vue-next'
+import { Menu, X, ArrowUpRight } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
 import BaseButton from './BaseButton.vue'
 import { navItems } from '@/data/site'

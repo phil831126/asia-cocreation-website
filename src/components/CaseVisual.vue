@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Landmark, GraduationCap, Building2 } from 'lucide-vue-next'
+import { Landmark, GraduationCap, Building2 } from '@lucide/vue'
 import type { CaseItem } from '@/data/cases'
 
 /** 案例圖片；未提供圖片時顯示抽象示意圖（非真實照片） */

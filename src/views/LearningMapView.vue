@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BrainCircuit, Megaphone, Layers, Plus } from 'lucide-vue-next'
+import { BrainCircuit, Megaphone, Layers, Plus } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
 import { courseCategories } from '@/data/courses'

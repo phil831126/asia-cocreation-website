@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Landmark, Building2, UserRound, Search, Crosshair, Network, Sparkle } from 'lucide-vue-next'
+import { Landmark, Building2, UserRound, Search, Crosshair, Network, Sparkle } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import ServiceIcon from '@/components/ServiceIcon.vue'

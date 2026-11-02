@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { GraduationCap, Landmark, Building2 } from 'lucide-vue-next'
+import { GraduationCap, Landmark, Building2 } from '@lucide/vue'
 import { useCountUp, useInView } from '@/composables/motion'
 import type { StatItem } from '@/data/stats'
 

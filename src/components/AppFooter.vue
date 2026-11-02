@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowUp } from 'lucide-vue-next'
+import { ArrowUp } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
 import { brand, navItems, contact, contactFields } from '@/data/site'
 import { prefersReducedMotion } from '@/composables/motion'
