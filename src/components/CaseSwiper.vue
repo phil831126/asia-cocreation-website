@@ -17,11 +17,11 @@ const prevBtn = ref<HTMLButtonElement | null>(null)
 const nextBtn = ref<HTMLButtonElement | null>(null)
 let swiper: Swiper | null = null
 
-/** 讓左右箭頭對齊卡片圖片的垂直中心 */
+/** 讓左右箭頭對齊整張卡片的垂直中心 */
 function alignArrows(s: Swiper) {
-  const media = s.slides[0]?.querySelector<HTMLElement>('.cc__media')
-  if (!media || !stage.value) return
-  const top = media.getBoundingClientRect().top - stage.value.getBoundingClientRect().top + media.offsetHeight / 2
+  const card = s.slides[0]?.querySelector<HTMLElement>('.cc')
+  if (!card || !stage.value) return
+  const top = card.getBoundingClientRect().top - stage.value.getBoundingClientRect().top + card.offsetHeight / 2
   stage.value.style.setProperty('--cw-arrow-top', `${Math.round(top)}px`)
 }
 
@@ -209,6 +209,17 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 .cw__pagination :deep(.cw__dot.is-active) {
   width: 28px;
   background: var(--c-text);
+}
+
+/* 側邊留白較窄：箭頭少突出一些，讓出右側導覽點的位置 */
+@media (min-width: 769px) and (max-width: 1399px) {
+  .cw__arrow--prev {
+    left: -14px;
+  }
+
+  .cw__arrow--next {
+    right: -14px;
+  }
 }
 
 /* 窄螢幕：側邊留白不足，箭頭改在卡片內側 */

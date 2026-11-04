@@ -24,14 +24,14 @@ export const servicesSection = {
   eyebrow: 'Our Services',
   title: '專業整合，打造多元培訓服務',
   highlight: '多元培訓服務',
-  desc: '從政府人才培育計畫到企業客製化課程，依據不同單位的需求，規劃合適的培訓與合作方式。',
+  desc: '從教育訓練、講師媒合到品牌顧問，依據不同單位的需求，提供整合的培訓與合作服務。',
 }
 
-export const processSection = {
-  eyebrow: 'How We Work',
-  title: '從需求出發，讓合作逐步實現',
-  highlight: '讓合作逐步實現',
-  desc: '以下為建議的合作展示流程，實際作業方式將依各合作案調整。',
+export const lecturersSection = {
+  eyebrow: 'Lecturers & Consultants',
+  title: '講師顧問聯盟',
+  highlight: '顧問聯盟',
+  desc: '集結逾百位合作業師，涵蓋職涯探索、品牌行銷與自媒體經營等領域。',
 }
 
 export const casesSection = {

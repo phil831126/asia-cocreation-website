@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Landmark, Building2, Sparkles } from '@lucide/vue'
+import { GraduationCap, Mic, Megaphone } from '@lucide/vue'
 import type { ServiceIcon } from '@/data/services'
 
 const props = withDefaults(defineProps<{ name: ServiceIcon; size?: number }>(), { size: 24 })
-const map = { landmark: Landmark, building: Building2, sparkles: Sparkles }
+const map = { graduation: GraduationCap, mic: Mic, megaphone: Megaphone }
 const icon = computed(() => map[props.name])
 </script>
 

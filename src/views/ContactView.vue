@@ -10,9 +10,9 @@ const route = useRoute()
 const fieldIcons = { phone: Phone, email: Mail, address: MapPin, hours: Clock }
 
 const needOptions = [
-  { value: 'government', label: '政府計畫' },
-  { value: 'enterprise', label: '企業內訓' },
-  { value: 'brand', label: '品牌服務' },
+  { value: 'training', label: '教育訓練（企業內訓／政府計畫）' },
+  { value: 'lecturer', label: '講師經紀' },
+  { value: 'brand', label: '企業品牌顧問' },
   { value: 'academia', label: '產學合作' },
   { value: 'course', label: '課程諮詢' },
   { value: 'other', label: '其他' },

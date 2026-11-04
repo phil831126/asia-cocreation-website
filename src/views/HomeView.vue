@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { ArrowRight } from '@lucide/vue'
 import HeroSection from '@/components/HeroSection.vue'
 import ServiceCards from '@/components/ServiceCards.vue'
-import ProcessFlow from '@/components/ProcessFlow.vue'
+import LecturerAlliance from '@/components/LecturerAlliance.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import CaseShowcase from '@/components/CaseShowcase.vue'
 import PartnerWall from '@/components/PartnerWall.vue'
@@ -22,8 +22,8 @@ const snap = useSectionSnap(root)
     <HeroSection data-snap="首頁" />
     <!-- 02 三大服務 -->
     <ServiceCards data-snap="服務項目" />
-    <!-- 03 合作流程 -->
-    <ProcessFlow data-snap="合作流程" />
+    <!-- 03 講師顧問聯盟 -->
+    <LecturerAlliance data-snap="講師顧問" />
     <!-- 04 案例分享（Swiper） -->
     <section id="cases" class="section" data-snap="案例分享">
       <div class="container">

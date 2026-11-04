@@ -37,13 +37,6 @@ defineEmits<{ go: [index: number] }>()
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 8px 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 30px -14px rgba(34, 34, 34, 0.35);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
 }
 
 .dots__btn {
@@ -59,18 +52,23 @@ defineEmits<{ go: [index: number] }>()
   cursor: pointer;
 }
 
+/* 白點加細框與陰影，在黑色 Hero 與淺色區塊上都看得到 */
 .dots__dot {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--c-gray-300);
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(34, 34, 34, 0.28),
+    0 1px 4px rgba(0, 0, 0, 0.3);
   transition:
     height 0.4s var(--ease-out),
-    background-color 0.3s;
+    background-color 0.3s,
+    transform 0.3s var(--ease-out);
 }
 
 .dots__btn:hover .dots__dot {
-  background: var(--c-gray);
+  transform: scale(1.25);
 }
 
 .dots__btn.is-active .dots__dot {
@@ -103,8 +101,19 @@ defineEmits<{ go: [index: number] }>()
   transform: translate(0, -50%);
 }
 
-/* 側邊留白不足時隱藏，避免壓到內容與案例箭頭（快捷捲動仍可使用） */
+/* 側邊留白較窄時貼近右緣，與案例箭頭保持距離 */
 @media (max-width: 1399px) {
+  .dots {
+    right: 4px;
+  }
+
+  .dots__btn {
+    width: 20px;
+  }
+}
+
+/* 平板與手機不顯示（觸控為一般捲動） */
+@media (max-width: 1023px) {
   .dots {
     display: none;
   }

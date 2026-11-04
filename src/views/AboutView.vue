@@ -41,7 +41,7 @@ const values = [
         </div>
         <div class="intro__body">
           <p v-reveal="100" class="intro__text">
-            {{ brand.name }}（{{ brand.company }}）主要提供教育培訓、專業課程規劃及相關合作服務，核心服務包含政府計畫、企業內訓與品牌服務，並涵蓋產學合作與
+            {{ brand.name }}（{{ brand.company }}）主要提供教育培訓、專業課程規劃及相關合作服務，核心服務包含教育訓練、講師經紀與企業品牌顧問，並涵蓋產學合作與
             AI、行銷等專業課程領域。
           </p>
           <div v-reveal="200" class="intro__pending">
