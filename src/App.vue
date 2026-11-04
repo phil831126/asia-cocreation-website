@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
+import FaqWidget from './components/FaqWidget.vue'
 </script>
 
 <template>
@@ -10,6 +11,7 @@ import AppFooter from './components/AppFooter.vue'
     <RouterView :key="$route.path" />
   </main>
   <AppFooter />
+  <FaqWidget />
 </template>
 
 <style>

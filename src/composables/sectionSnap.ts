@@ -107,7 +107,11 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
     if (top !== undefined) animateTo(top)
   }
 
+  /** 浮動視窗（例如 FAQ 小幫手）內的捲動與按鍵不觸發區塊跳轉 */
+  const isIgnored = (e: Event) => e.target instanceof Element && !!e.target.closest('[data-snap-ignore]')
+
   function onWheel(e: WheelEvent) {
+    if (isIgnored(e)) return
     if (e.ctrlKey || e.deltaY === 0 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return
     const now = performance.now()
     const gestureStart = now - lastWheel > QUIET_MS
@@ -124,7 +128,7 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || isIgnored(e)) return
     const target = e.target as HTMLElement
     if (target.closest('input, textarea, select, [contenteditable="true"]')) return
 
