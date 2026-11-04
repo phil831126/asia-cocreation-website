@@ -38,6 +38,16 @@ src/
 └─ composables/     捲動淡入等動態工具
 ```
 
+## 用 Google 試算表管理講師與案例
+
+「講師聯盟」與「案例分享」的內容由 Google 試算表管理，改完格子約 5 分鐘內網站自動更新，不需要重新部署。
+
+- 試算表：Google 雲端硬碟「亞創網站內容 / 亞創網站｜講師與案例」（範本另存於 `docs/content-sheet-template.xlsx`）
+- 圖片：上傳到同資料夾內的「亞創網站圖片」，把分享連結貼到 `photo` / `cover` 欄
+- 填寫規則：見試算表的「使用說明」分頁
+- 連接設定：`src/data/sheets.ts`（填入「講師」「案例」兩個分頁「發布到網路」的 CSV 網址；留空則使用內建資料）
+- 讀取程式：`src/composables/sheetData.ts`；讀不到試算表時自動改用 `src/data/lecturers.ts`、`cases.ts` 的內建備用資料
+
 ## 如何更新資料
 
 | 項目 | 檔案 | 做法 |

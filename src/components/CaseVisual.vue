@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Landmark, GraduationCap, Building2 } from '@lucide/vue'
 import type { CaseItem } from '@/data/cases'
 
-/** 案例圖片；未提供圖片時顯示抽象示意圖（非真實照片） */
+/** 案例圖片；未提供圖片或圖片載入失敗時，顯示抽象示意圖（非真實照片） */
 const props = defineProps<{ item: CaseItem }>()
 const icons = { government: Landmark, academia: GraduationCap, enterprise: Building2 }
 const icon = computed(() => icons[props.item.category])
+const broken = ref(false)
+watch(() => props.item.image, () => (broken.value = false))
 </script>
 
 <template>
   <div class="cv" :class="`cv--${item.category}`">
-    <img v-if="item.image" :src="item.image" :alt="item.imageAlt" class="cv__img" loading="lazy" />
+    <img
+      v-if="item.image && !broken"
+      :src="item.image"
+      :alt="item.imageAlt"
+      class="cv__img"
+      loading="lazy"
+      @error="broken = true"
+    />
     <div v-else class="cv__ph" role="img" :aria-label="`${item.imageAlt}（待補）`">
       <span class="cv__ring cv__ring--a"></span>
       <span class="cv__ring cv__ring--b"></span>

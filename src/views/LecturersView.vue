@@ -5,16 +5,17 @@ import { Search, X, UserRound, ArrowRight, SearchX } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
-import {
-  lecturers,
-  lecturerAudiences,
-  lecturerFields,
-  lecturerFormats,
-  type Lecturer,
-} from '@/data/lecturers'
+import { lecturerAudiences, lecturerFields, lecturerFormats, type Lecturer } from '@/data/lecturers'
+import { useLecturers } from '@/composables/sheetData'
 
 const route = useRoute()
 const router = useRouter()
+const { lecturers, loading, hasSample } = useLecturers()
+
+/** 照片網址失效時改顯示預設頭像 */
+const brokenPhotos = ref(new Set<string>())
+const showPhoto = (l: Lecturer) => !!l.photo && !brokenPhotos.value.has(l.id)
+const markBroken = (id: string) => (brokenPhotos.value = new Set(brokenPhotos.value).add(id))
 
 /* ---------- 篩選條件（同步到網址，篩選結果可以分享或加入書籤） ---------- */
 const groups = [
@@ -63,10 +64,12 @@ watch(
 /* ---------- 搜尋與篩選 ---------- */
 const normalize = (s: string) => s.normalize('NFKC').toLowerCase().replace(/\s+/g, '')
 
-const indexed = lecturers.map((l) => ({
-  lecturer: l,
-  text: normalize([l.name, l.title, l.bio, ...l.fields, ...l.topics, ...l.audiences, ...l.formats].join('|')),
-}))
+const indexed = computed(() =>
+  lecturers.value.map((l) => ({
+    lecturer: l,
+    text: normalize([l.name, l.title, l.bio, ...l.fields, ...l.topics, ...l.audiences, ...l.formats].join('|')),
+  })),
+)
 
 /** 同一組內「任一符合」，不同組之間「全部符合」 */
 function matchesGroup(values: readonly string[], picked: string[]) {
@@ -75,7 +78,7 @@ function matchesGroup(values: readonly string[], picked: string[]) {
 
 const results = computed(() => {
   const words = keyword.value.split(/\s+/).map(normalize).filter(Boolean)
-  return indexed
+  return indexed.value
     .filter(({ lecturer: l, text }) =>
       words.every((w) => text.includes(w)) &&
       matchesGroup(l.fields, selected.value.field) &&
@@ -142,7 +145,7 @@ const inviteLink = computed(() =>
       desc="集結逾百位合作業師，依專業領域、適合對象與授課形式，找到最適合貴單位的講師。"
       :crumbs="[{ label: '講師聯盟' }]"
     >
-      <span class="pending-tag">講師資料待補（目前為示意內容）</span>
+      <span v-if="hasSample" class="pending-tag">講師資料待補（目前為示意內容）</span>
     </PageHeader>
 
     <section class="section">
@@ -185,17 +188,23 @@ const inviteLink = computed(() =>
         </div>
 
         <div class="bar" aria-live="polite">
-          <p class="bar__count">共 <strong class="num">{{ results.length }}</strong> 位講師</p>
+          <p v-if="loading" class="bar__count">講師資料載入中…</p>
+          <p v-else class="bar__count">共 <strong class="num">{{ results.length }}</strong> 位講師</p>
           <button v-if="hasFilters" type="button" class="bar__clear" @click="clearAll">清除全部條件</button>
         </div>
 
+        <!-- 載入中：先放空白卡片，避免版面跳動 -->
+        <ul v-if="loading" class="grid" aria-hidden="true">
+          <li v-for="n in 6" :key="n"><span class="card card--skeleton"></span></li>
+        </ul>
+
         <!-- 講師列表 -->
-        <ul v-if="results.length" class="grid">
+        <ul v-else-if="results.length" class="grid">
           <li v-for="l in results" :key="l.id">
             <button type="button" class="card" :aria-label="`查看 ${l.name} 的介紹`" @click="openLecturer(l, $event)">
               <span v-if="l.placeholder" class="card__badge">示意</span>
               <span class="card__photo">
-                <img v-if="l.photo" :src="l.photo" :alt="`${l.name} 照片`" loading="lazy" />
+                <img v-if="showPhoto(l)" :src="l.photo" :alt="`${l.name} 照片`" loading="lazy" @error="markBroken(l.id)" />
                 <span v-else class="card__ph" aria-hidden="true"><UserRound :size="38" :stroke-width="1.3" /></span>
               </span>
               <span class="card__name">{{ l.name }}</span>
@@ -239,7 +248,7 @@ const inviteLink = computed(() =>
 
         <header class="detail__head">
           <span class="card__photo detail__photo">
-            <img v-if="current.photo" :src="current.photo" :alt="`${current.name} 照片`" />
+            <img v-if="showPhoto(current)" :src="current.photo" :alt="`${current.name} 照片`" @error="markBroken(current.id)" />
             <span v-else class="card__ph" aria-hidden="true"><UserRound :size="44" :stroke-width="1.3" /></span>
           </span>
           <div>
@@ -470,6 +479,31 @@ const inviteLink = computed(() =>
   border-color: transparent;
   box-shadow: var(--shadow-md);
   transform: translateY(-4px);
+}
+
+.card--skeleton {
+  min-height: 300px;
+  cursor: default;
+  background: linear-gradient(100deg, #fff 30%, var(--c-bg-alt) 50%, #fff 70%) 0 0 / 300% 100%;
+  animation: skeleton 1.4s ease-in-out infinite;
+}
+
+.card--skeleton:hover {
+  border-color: var(--c-line);
+  box-shadow: none;
+  transform: none;
+}
+
+@keyframes skeleton {
+  to {
+    background-position: -150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card--skeleton {
+    animation: none;
+  }
 }
 
 .card__badge {

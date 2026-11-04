@@ -1,5 +1,8 @@
 /* =========================================================
    講師聯盟
+   ※ 講師內容平常改 Google 試算表「亞創網站｜講師與案例」的「講師」分頁即可，
+     網址設定在 src/data/sheets.ts。本檔是讀不到試算表時的「內建備用資料」，
+     篩選選項（lecturerFields 等）則一律以本檔為準。
    - 首頁「講師顧問聯盟」顯示 featured: true 的講師（建議 3 位）
    - 「講師聯盟」頁（/lecturers）列出全部講師，可搜尋與篩選
 
@@ -24,16 +27,17 @@ export type LecturerField = (typeof lecturerFields)[number]
 export type LecturerAudience = (typeof lecturerAudiences)[number]
 export type LecturerFormat = (typeof lecturerFormats)[number]
 
+/** 欄位用 string：試算表若填了清單以外的字，仍會顯示，只是不會被篩選按鈕選到 */
 export interface Lecturer {
   id: string
   name: string
   title: string
   /** 主要專業領域（首頁卡片顯示這一個） */
-  field: LecturerField
+  field: string
   /** 全部專業領域（含主要領域） */
-  fields: LecturerField[]
-  audiences: LecturerAudience[]
-  formats: LecturerFormat[]
+  fields: string[]
+  audiences: string[]
+  formats: string[]
   photo: string
   bio: string
   experience: string[]
@@ -94,6 +98,3 @@ export const lecturers: Lecturer[] = [
   sample(11, ['領導管理', 'AI 應用'], ['企業內訓'], ['演講', '顧問輔導']),
   sample(12, ['職涯探索', '品牌行銷'], ['學校／產學合作', '政府計畫'], ['系列課程', '工作坊']),
 ]
-
-/** 首頁「講師顧問聯盟」要顯示的講師 */
-export const featuredLecturers = lecturers.filter((l) => l.featured)

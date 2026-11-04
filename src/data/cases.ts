@@ -1,5 +1,7 @@
 /* =========================================================
    案例資料
+   ※ 案例內容平常改 Google 試算表「亞創網站｜講師與案例」的「案例」分頁即可，
+     網址設定在 src/data/sheets.ts。本檔是讀不到試算表時的「內建備用資料」。
    ※ 目前尚未提供實際案例，以下全部為「示意內容／待補案例」。
      取得真實案例後，請替換 title / excerpt / image，並將 placeholder 改為 false。
      image 請放在 public/cases/，填入路徑例如 '/cases/case-01.jpg'。
@@ -27,6 +29,13 @@ export interface CaseItem {
   excerpt: string
   image: string
   imageAlt: string
+  /** 案例詳情頁三個區塊；未填時顯示「待補」 */
+  background?: string
+  execution?: string
+  result?: string
+  /** 合作單位、日期（選填） */
+  partner?: string
+  date?: string
   /** true＝示意資料，畫面會顯示「示意內容／待補案例」 */
   placeholder: boolean
 }

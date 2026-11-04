@@ -2,22 +2,24 @@
 import { computed, ref } from 'vue'
 import CaseCard from './CaseCard.vue'
 import CaseSwiper from './CaseSwiper.vue'
-import { cases, caseCategories, type CaseCategory } from '@/data/cases'
+import { caseCategories, type CaseCategory } from '@/data/cases'
+import { useCases } from '@/composables/sheetData'
 
 const props = withDefaults(defineProps<{ limit?: number; layout?: 'grid' | 'swiper' }>(), {
   limit: 0,
   layout: 'grid',
 })
 
+const { cases, loading } = useCases()
 const active = ref<'all' | CaseCategory>('all')
 
 const filtered = computed(() => {
-  const list = active.value === 'all' ? cases : cases.filter((c) => c.category === active.value)
+  const list = active.value === 'all' ? cases.value : cases.value.filter((c) => c.category === active.value)
   return props.limit ? list.slice(0, props.limit) : list
 })
 
 function countOf(key: 'all' | CaseCategory) {
-  return key === 'all' ? cases.length : cases.filter((c) => c.category === key).length
+  return key === 'all' ? cases.value.length : cases.value.filter((c) => c.category === key).length
 }
 </script>
 
@@ -47,8 +49,10 @@ function countOf(key: 'all' | CaseCategory) {
 
     <p class="sr-only" aria-live="polite">目前顯示 {{ filtered.length }} 則案例</p>
 
-    <Transition name="cs-fade" mode="out-in">
-      <CaseSwiper v-if="layout === 'swiper'" :key="`swiper-${active}`" :items="filtered">
+    <p v-if="loading" class="cs__loading">案例資料載入中…</p>
+
+    <Transition v-else name="cs-fade" mode="out-in">
+      <CaseSwiper v-if="layout === 'swiper'" :key="`swiper-${active}-${filtered.length}`" :items="filtered">
         <template #aside><slot name="actions" /></template>
       </CaseSwiper>
       <ul v-else :key="active" class="cs__grid">
@@ -63,6 +67,15 @@ function countOf(key: 'all' | CaseCategory) {
 <style scoped>
 .cs__top {
   margin-bottom: var(--block-gap);
+}
+
+.cs__loading {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  border: 1px dashed var(--c-line-strong);
+  border-radius: var(--radius-lg);
+  color: var(--c-text-3);
 }
 
 .cs__top--row {

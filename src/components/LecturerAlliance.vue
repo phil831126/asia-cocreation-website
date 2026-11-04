@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { UserRound, ArrowRight } from '@lucide/vue'
 import SectionHeading from './SectionHeading.vue'
-import { featuredLecturers as lecturers } from '@/data/lecturers'
+import { useLecturers } from '@/composables/sheetData'
 import { lecturersSection as copy } from '@/data/home'
+
+const { featured: lecturers, loading } = useLecturers()
+
+/** 照片網址失效時改顯示預設頭像 */
+const broken = ref(new Set<string>())
+const markBroken = (id: string) => (broken.value = new Set(broken.value).add(id))
 </script>
 
 <template>
@@ -10,11 +17,27 @@ import { lecturersSection as copy } from '@/data/home'
     <div class="container">
       <SectionHeading :eyebrow="copy.eyebrow" :title="copy.title" :highlight="copy.highlight" :desc="copy.desc" />
 
-      <ul class="la__grid">
+      <!-- 載入中：先放三張空白卡片，避免版面跳動 -->
+      <ul v-if="loading" class="la__grid" aria-hidden="true">
+        <li v-for="n in 3" :key="n">
+          <article class="lc lc--loading">
+            <div class="lc__photo"><div class="lc__ph"></div></div>
+            <p class="lc__name">&nbsp;</p>
+          </article>
+        </li>
+      </ul>
+
+      <ul v-else class="la__grid">
         <li v-for="(l, i) in lecturers" :key="l.id" v-reveal="i * 120">
           <article class="lc">
             <div class="lc__photo">
-              <img v-if="l.photo" :src="l.photo" :alt="`${l.name} 照片`" loading="lazy" />
+              <img
+                v-if="l.photo && !broken.has(l.id)"
+                :src="l.photo"
+                :alt="`${l.name} 照片`"
+                loading="lazy"
+                @error="markBroken(l.id)"
+              />
               <div v-else class="lc__ph" role="img" aria-label="講師照片（待補）">
                 <UserRound :size="52" :stroke-width="1.3" aria-hidden="true" />
               </div>
@@ -115,6 +138,15 @@ import { lecturersSection as copy } from '@/data/home'
   font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: 0.06em;
+}
+
+.lc--loading {
+  opacity: 0.55;
+}
+
+.lc--loading:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .la__more {
