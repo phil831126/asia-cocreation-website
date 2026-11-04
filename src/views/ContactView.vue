@@ -19,12 +19,14 @@ const needOptions = [
 ]
 
 const topic = String(route.query.topic ?? '')
+/** 從講師聯盟點「邀請這位講師」過來時，留言預先帶入講師名稱 */
+const lecturer = String(route.query.lecturer ?? '').slice(0, 40)
 const form = reactive({
   name: '',
   org: '',
   email: '',
   need: needOptions.some((o) => o.value === topic) ? topic : '',
-  message: '',
+  message: lecturer ? `想邀請講師「${lecturer}」，活動主題／日期／人數：` : '',
 })
 const errors = reactive<Record<string, string>>({})
 const checked = ref(false)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowUp } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
-import { brand, navItems, contact, contactFields } from '@/data/site'
+import { brand, footerNavItems, contact, contactFields } from '@/data/site'
 import { prefersReducedMotion } from '@/composables/motion'
 
 const year = new Date().getFullYear()
@@ -32,7 +32,7 @@ function backToTop() {
         <nav class="foot__col" aria-labelledby="foot-sitemap">
           <h2 id="foot-sitemap" class="foot__heading">網站地圖</h2>
           <ul>
-            <li v-for="item in navItems" :key="item.to">
+            <li v-for="item in footerNavItems" :key="item.to">
               <RouterLink :to="item.to" class="foot__link">{{ item.label }}</RouterLink>
             </li>
           </ul>

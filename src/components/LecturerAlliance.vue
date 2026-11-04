@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { UserRound } from '@lucide/vue'
+import { UserRound, ArrowRight } from '@lucide/vue'
 import SectionHeading from './SectionHeading.vue'
-import { lecturers } from '@/data/lecturers'
+import { featuredLecturers as lecturers } from '@/data/lecturers'
 import { lecturersSection as copy } from '@/data/home'
 </script>
 
@@ -25,6 +25,10 @@ import { lecturersSection as copy } from '@/data/home'
           </article>
         </li>
       </ul>
+
+      <p class="la__more">
+        <RouterLink to="/lecturers" class="link-arrow">查看全部講師 <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
+      </p>
     </div>
   </section>
 </template>
@@ -111,6 +115,11 @@ import { lecturersSection as copy } from '@/data/home'
   font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: 0.06em;
+}
+
+.la__more {
+  margin-top: clamp(16px, 3vh, 28px);
+  text-align: center;
 }
 
 @media (max-width: 960px) {

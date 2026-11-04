@@ -105,8 +105,8 @@ export const faqs: FaqItem[] = [
     answer:
       '我們集結逾百位合作業師，涵蓋職涯探索、品牌行銷與自媒體經營等領域，會依課程主題與對象推薦合適的講師。指定講師的方式待確認。',
     keywords: ['講師', '業師', '師資', '指定', '背景', '經歷'],
-    pages: ['home'],
-    actions: [{ label: '看講師顧問聯盟', to: '/#lecturers' }],
+    pages: ['home', 'lecturers'],
+    actions: [{ label: '搜尋講師聯盟', to: '/lecturers' }],
     related: ['custom-training', 'academia-how'],
     pending: true,
   },
@@ -233,6 +233,7 @@ export const synonyms: string[][] = [
 export const pageGreetings: Record<string, string> = {
   home: '想了解亞洲共創能為貴單位做些什麼嗎？',
   about: '想更認識我們的服務嗎？',
+  lecturers: '在找合適的講師嗎？也可以直接請我們推薦。',
   'learning-map': '正在找適合的課程主題嗎？',
   cases: '想看看和貴單位類似的合作經驗嗎？',
   'case-detail': '對這類合作有興趣嗎？',

@@ -20,13 +20,17 @@ export interface NavItem {
   to: string
 }
 
+/** 頂部導覽列（「聯絡我們」由右側「洽詢合作」按鈕前往，不重複列出） */
 export const navItems: NavItem[] = [
   { label: '首頁', to: '/' },
   { label: '關於我們', to: '/about' },
+  { label: '講師聯盟', to: '/lecturers' },
   { label: '學習地圖', to: '/learning-map' },
   { label: '案例分享', to: '/cases' },
-  { label: '聯絡我們', to: '/contact' },
 ]
+
+/** 頁尾網站地圖：保留「聯絡我們」 */
+export const footerNavItems: NavItem[] = [...navItems, { label: '聯絡我們', to: '/contact' }]
 
 /** 聯絡資訊：尚未提供，請勿填入未經確認的資料 */
 export const contact = {
@@ -55,6 +59,10 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   about: {
     title: '關於我們｜亞洲共創學院',
     description: '認識亞洲共創學院的品牌定位、服務對象與核心服務。',
+  },
+  lecturers: {
+    title: '講師聯盟｜亞洲共創學院',
+    description: '搜尋亞洲共創學院合作講師，依專業領域、適合對象與授課形式找到合適的講師。',
   },
   learningMap: {
     title: '學習地圖｜亞洲共創學院',
