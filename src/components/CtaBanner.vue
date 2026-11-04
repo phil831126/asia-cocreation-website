@@ -1,32 +1,60 @@
 <script setup lang="ts">
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import BaseButton from './BaseButton.vue'
 import { ctaSection as copy } from '@/data/home'
+
+const box = ref<HTMLElement | null>(null)
+const lens = ref<SVGCircleElement | null>(null)
+const nodes: HTMLElement[] = []
+const size = reactive({ w: 0, h: 0 })
+const route = ref('')
+let observer: ResizeObserver | null = null
+
+/**
+ * 虛線路徑：依序穿過四個流程節點，再彎進右側放大鏡的鏡片中心，
+ * 讓流程與放大鏡的動態軌跡成為同一條線。
+ */
+function layoutRoute() {
+  if (!box.value || !lens.value || nodes.length < 2) return
+  const b = box.value.getBoundingClientRect()
+  size.w = Math.round(b.width)
+  size.h = Math.round(b.height)
+  const center = (el: Element) => {
+    const r = el.getBoundingClientRect()
+    return { x: r.left - b.left + r.width / 2, y: r.top - b.top + r.height / 2 }
+  }
+  const pts = nodes.map(center)
+  const first = pts[0]
+  const last = pts[pts.length - 1]
+  // 節點不在同一列（手機版換行）時不畫連線
+  if (Math.abs(first.y - last.y) > 2) {
+    route.value = ''
+    return
+  }
+  const end = center(lens.value)
+  const mid = (last.x + end.x) / 2
+  route.value = `M ${first.x} ${first.y} L ${last.x} ${last.y} C ${mid} ${last.y}, ${mid} ${end.y}, ${end.x} ${end.y}`
+}
+
+onMounted(async () => {
+  await nextTick()
+  layoutRoute()
+  if (box.value && 'ResizeObserver' in window) {
+    observer = new ResizeObserver(layoutRoute)
+    observer.observe(box.value)
+  }
+})
+
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
   <section class="section cta-wrap" aria-labelledby="cta-title">
     <div class="container">
-      <div v-reveal class="cta">
-        <!-- 放大鏡與科技軌跡的視覺延伸 -->
-        <svg class="cta__art" viewBox="0 0 520 420" aria-hidden="true">
-          <path
-            class="cta__trail"
-            d="M-20 360 C 120 300, 160 140, 300 150 S 470 260, 540 90"
-            fill="none"
-            stroke="#222222"
-            stroke-opacity="0.22"
-            stroke-width="1.5"
-            stroke-dasharray="3 8"
-          />
-          <path d="M-20 400 C 160 340, 240 250, 380 260 S 520 330, 560 250" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2" />
-          <circle cx="330" cy="170" r="92" fill="rgba(255,255,255,0.28)" stroke="#222222" stroke-width="10" />
-          <circle cx="330" cy="170" r="80" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.5" />
-          <path d="M398 238 L470 310" stroke="#222222" stroke-width="22" stroke-linecap="round" />
-          <circle cx="300" cy="150" r="8" fill="#222222" />
-          <circle cx="360" cy="190" r="5" fill="#222222" fill-opacity="0.5" />
-          <line x1="300" y1="150" x2="360" y2="190" stroke="#222222" stroke-opacity="0.5" />
-          <circle cx="120" cy="320" r="4" fill="#222222" fill-opacity="0.5" />
-          <circle cx="490" cy="120" r="5" fill="#ffffff" />
+      <div ref="box" v-reveal class="cta">
+        <!-- 流程與放大鏡共用的虛線軌跡 -->
+        <svg class="cta__route" :viewBox="`0 0 ${size.w || 1} ${size.h || 1}`" aria-hidden="true">
+          <path v-if="route" class="cta__trail" :d="route" />
         </svg>
         <span class="cta__glass" aria-hidden="true"></span>
 
@@ -34,7 +62,27 @@ import { ctaSection as copy } from '@/data/home'
           <span class="eyebrow cta__eyebrow">{{ copy.eyebrow }}</span>
           <h2 id="cta-title" class="cta__title">{{ copy.title }}</h2>
           <p class="cta__desc">{{ copy.desc }}</p>
-          <BaseButton :to="copy.button.to" variant="dark">{{ copy.button.label }}</BaseButton>
+
+          <ol class="cta__flow" aria-label="合作流程">
+            <li v-for="(step, i) in copy.steps" :key="step" class="cta__step">
+              <span :ref="(el) => { if (el) nodes[i] = el as HTMLElement }" class="num cta__node">0{{ i + 1 }}</span>
+              <span class="cta__step-title">{{ step }}</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="cta__side">
+          <svg class="cta__art" viewBox="0 0 520 420" aria-hidden="true">
+            <path d="M-20 400 C 160 340, 240 250, 380 260 S 520 330, 560 250" fill="none" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2" />
+            <circle cx="330" cy="170" r="92" fill="rgba(255,255,255,0.28)" stroke="#222222" stroke-width="10" />
+            <circle cx="330" cy="170" r="80" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.5" />
+            <path d="M398 238 L470 310" stroke="#222222" stroke-width="22" stroke-linecap="round" />
+            <circle ref="lens" cx="300" cy="150" r="8" fill="#222222" />
+            <circle cx="360" cy="190" r="5" fill="#222222" fill-opacity="0.5" />
+            <line x1="300" y1="150" x2="360" y2="190" stroke="#222222" stroke-opacity="0.5" />
+            <circle cx="490" cy="120" r="5" fill="#ffffff" />
+          </svg>
+          <BaseButton :to="copy.button.to" variant="dark" class="cta__btn">{{ copy.button.label }}</BaseButton>
         </div>
       </div>
     </div>
@@ -49,7 +97,11 @@ import { ctaSection as copy } from '@/data/home'
 .cta {
   position: relative;
   isolation: isolate;
-  padding: clamp(40px, 6vw, 72px) clamp(28px, 6vw, 80px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(36px, 5vw, 64px) clamp(28px, 5vw, 72px);
   border-radius: var(--radius-xl);
   background:
     radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.45), transparent 40%),
@@ -61,29 +113,37 @@ import { ctaSection as copy } from '@/data/home'
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   background-image: radial-gradient(rgba(34, 34, 34, 0.14) 1px, transparent 1.2px);
   background-size: 18px 18px;
   -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000);
   mask-image: linear-gradient(90deg, transparent 30%, #000);
 }
 
-.cta__art {
+/* 虛線軌跡（流程 → 放大鏡） */
+.cta__route {
   position: absolute;
-  right: -2%;
-  top: 50%;
+  inset: 0;
   z-index: -1;
-  width: min(54%, 560px);
-  transform: translateY(-50%);
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .cta__trail {
+  fill: none;
+  stroke: #222222;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
   animation: trail 6s linear infinite;
 }
 
 @keyframes trail {
   to {
-    stroke-dashoffset: -110;
+    stroke-dashoffset: -120;
   }
 }
 
@@ -105,8 +165,7 @@ import { ctaSection as copy } from '@/data/home'
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
-  max-width: 700px;
+  gap: 16px;
 }
 
 .cta__eyebrow {
@@ -119,7 +178,7 @@ import { ctaSection as copy } from '@/data/home'
 }
 
 .cta__title {
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   text-wrap: balance;
   font-weight: 900;
   line-height: 1.25;
@@ -127,19 +186,97 @@ import { ctaSection as copy } from '@/data/home'
 }
 
 .cta__desc {
-  margin-bottom: 10px;
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   color: #3a3a3a;
 }
 
-@media (max-width: 768px) {
+/* 流程：節點與階段主題 */
+.cta__flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.cta__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.cta__node {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 10px 24px -12px rgba(120, 80, 0, 0.5),
+    inset 0 1px 0 #fff;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.cta__step:hover .cta__node {
+  transform: translateY(-3px);
+}
+
+.cta__step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* 右側：放大鏡與按鈕 */
+.cta__side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta__art {
+  width: 100%;
+  max-width: 420px;
+}
+
+.cta__btn {
+  margin-top: -8px;
+}
+
+@media (max-width: 900px) {
+  .cta {
+    grid-template-columns: 1fr;
+  }
+
+  .cta__side {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
   .cta__art {
-    top: auto;
-    bottom: -40px;
-    right: -60px;
-    width: 300px;
-    transform: none;
-    opacity: 0.6;
+    width: 46%;
+    max-width: 240px;
+    order: 2;
+  }
+
+  .cta__btn {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .cta__flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 18px;
   }
 }
 </style>
