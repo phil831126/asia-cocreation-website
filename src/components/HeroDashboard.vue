@@ -5,7 +5,8 @@ import { kpis } from '@/data/dashboard'
 import { useInView } from '@/composables/motion'
 
 const root = ref<HTMLElement | null>(null)
-const inView = useInView(root, 0.2)
+/** 每次捲回成果區（往上或往下）都重新滾動數字 */
+const inView = useInView(root, 0.2, { repeat: true })
 </script>
 
 <template>

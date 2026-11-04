@@ -40,8 +40,10 @@ export const vReveal: Directive<HTMLElement, number | undefined> = {
   },
 }
 
-/* ---------- useInView：元素是否已進入畫面（只觸發一次） ---------- */
-export function useInView(target: Ref<HTMLElement | null>, threshold = 0.3) {
+/* ---------- useInView：元素是否進入畫面 ----------
+   預設只觸發一次；repeat: true 時，元素完全離開畫面會變回 false，
+   下次（不論往上或往下捲）再進入畫面又會變成 true，可讓動畫重播 */
+export function useInView(target: Ref<HTMLElement | null>, threshold = 0.3, options: { repeat?: boolean } = {}) {
   const inView = ref(false)
   let observer: IntersectionObserver | null = null
 
@@ -52,12 +54,15 @@ export function useInView(target: Ref<HTMLElement | null>, threshold = 0.3) {
     }
     observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= threshold) {
           inView.value = true
-          observer?.disconnect()
+          if (!options.repeat) observer?.disconnect()
+        } else if (options.repeat && !entry.isIntersecting) {
+          // 完全看不到時才重設，避免使用者看到數字倒轉
+          inView.value = false
         }
       },
-      { threshold },
+      { threshold: options.repeat ? [0, threshold] : threshold },
     )
     observer.observe(target.value)
   })

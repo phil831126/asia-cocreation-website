@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 /**
  * 滾輪式數字：每一位數由 0 向上滾動，最後停在指定數字。
- * active 由 false 變為 true 時開始滾動。
+ * active 由 false 變為 true 時開始滾動；變回 false 時瞬間歸零，可再次播放。
  */
 const props = withDefaults(defineProps<{ value: number; active: boolean; suffix?: string }>(), { suffix: '' })
 
@@ -53,6 +53,11 @@ const chars = computed(() =>
   display: flex;
   flex-direction: column;
   transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 重設回 0 時瞬間歸位（在畫面外進行），下次進入畫面才重新滾動 */
+.roll:not(.is-active) .roll__strip {
+  transition: none;
 }
 
 .roll__digit,
