@@ -1,7 +1,39 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import BaseButton from './BaseButton.vue'
-import { ctaSection as copy } from '@/data/home'
+import { ctaSection } from '@/data/home'
+
+interface CtaLink {
+  label: string
+  to: string
+}
+
+/**
+ * 合作邀請橫幅。不傳 content 時使用首頁預設文案（含合作流程）；
+ * 個別頁面可傳入自己的標題、內文、標語與按鈕（例如關於我們頁）。
+ */
+const props = defineProps<{
+  content?: {
+    eyebrow?: string
+    title: string
+    desc: string
+    slogan?: string
+    steps?: string[]
+    primary: CtaLink
+    secondary?: CtaLink
+  }
+}>()
+
+const copy = computed(
+  () =>
+    props.content ?? {
+      eyebrow: ctaSection.eyebrow,
+      title: ctaSection.title,
+      desc: ctaSection.desc,
+      steps: ctaSection.steps,
+      primary: ctaSection.button,
+    },
+)
 
 const box = ref<HTMLElement | null>(null)
 const lens = ref<SVGCircleElement | null>(null)
@@ -59,11 +91,12 @@ onBeforeUnmount(() => observer?.disconnect())
         <span class="cta__glass" aria-hidden="true"></span>
 
         <div class="cta__content">
-          <span class="eyebrow cta__eyebrow">{{ copy.eyebrow }}</span>
+          <span v-if="copy.eyebrow" class="eyebrow cta__eyebrow">{{ copy.eyebrow }}</span>
           <h2 id="cta-title" class="cta__title">{{ copy.title }}</h2>
           <p class="cta__desc">{{ copy.desc }}</p>
+          <p v-if="copy.slogan" class="cta__slogan">{{ copy.slogan }}</p>
 
-          <ol class="cta__flow" aria-label="合作流程">
+          <ol v-if="copy.steps?.length" class="cta__flow" aria-label="合作流程">
             <li v-for="(step, i) in copy.steps" :key="step" class="cta__step">
               <span :ref="(el) => { if (el) nodes[i] = el as HTMLElement }" class="num cta__node">0{{ i + 1 }}</span>
               <span class="cta__step-title">{{ step }}</span>
@@ -82,7 +115,10 @@ onBeforeUnmount(() => observer?.disconnect())
             <line x1="300" y1="150" x2="360" y2="190" stroke="#222222" stroke-opacity="0.5" />
             <circle cx="490" cy="120" r="5" fill="#ffffff" />
           </svg>
-          <BaseButton :to="copy.button.to" variant="dark" class="cta__btn">{{ copy.button.label }}</BaseButton>
+          <div class="cta__btns">
+            <BaseButton :to="copy.primary.to" variant="dark">{{ copy.primary.label }}</BaseButton>
+            <BaseButton v-if="copy.secondary" :to="copy.secondary.to" variant="ghost">{{ copy.secondary.label }}</BaseButton>
+          </div>
         </div>
       </div>
     </div>
@@ -247,8 +283,31 @@ onBeforeUnmount(() => observer?.disconnect())
   max-width: 420px;
 }
 
-.cta__btn {
+.cta__btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
   margin-top: -8px;
+}
+
+/* 標語：黃底上的深色粗體，左側一道深色短線 */
+.cta__slogan {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cta__slogan::before {
+  content: '';
+  flex: none;
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--c-text);
 }
 
 @media (max-width: 900px) {
@@ -268,7 +327,9 @@ onBeforeUnmount(() => observer?.disconnect())
     order: 2;
   }
 
-  .cta__btn {
+  .cta__btns {
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 0;
   }
 }

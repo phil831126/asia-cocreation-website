@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowUp } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
-import { brand, footerNavItems, contact, contactFields } from '@/data/site'
+import { brand, footerNavItems, contact, footerContactFields } from '@/data/site'
 import { prefersReducedMotion } from '@/composables/motion'
 
 const year = new Date().getFullYear()
@@ -41,11 +41,20 @@ function backToTop() {
         <div class="foot__col">
           <h2 class="foot__heading">聯絡資訊</h2>
           <dl class="foot__contact">
-            <div v-for="f in contactFields" :key="f.key">
+            <div>
+              <dt>公司名稱</dt>
+              <dd>{{ brand.company }}</dd>
+            </div>
+            <div>
+              <dt>品牌名稱</dt>
+              <dd>{{ brand.name }}</dd>
+            </div>
+            <!-- 只顯示已確認的項目（電子郵件、服務時間待確認，暫不顯示） -->
+            <div v-for="f in footerContactFields" :key="f.key">
               <dt>{{ f.label }}</dt>
               <dd>
-                <template v-if="contact[f.key]">{{ contact[f.key] }}</template>
-                <span v-else class="pending-tag">待補</span>
+                <a v-if="f.href" :href="f.href" class="foot__tel">{{ contact[f.key] }}</a>
+                <template v-else>{{ contact[f.key] }}</template>
               </dd>
             </div>
           </dl>
@@ -158,8 +167,8 @@ function backToTop() {
 
 .foot__contact div {
   display: grid;
-  grid-template-columns: 80px 1fr;
-  align-items: center;
+  grid-template-columns: 96px 1fr;
+  align-items: start;
   gap: 12px;
 }
 
@@ -170,6 +179,20 @@ function backToTop() {
 
 .foot__contact dd {
   margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* 點擊撥號：與全站文字連結相同，滑過時黃色底線展開 */
+.foot__tel {
+  padding-bottom: 2px;
+  font-weight: 600;
+  background: linear-gradient(var(--c-yellow), var(--c-yellow)) left bottom / 0 2px no-repeat;
+  transition: background-size 0.4s var(--ease-out);
+}
+
+.foot__tel:hover,
+.foot__tel:focus-visible {
+  background-size: 100% 2px;
 }
 
 .foot__bottom {

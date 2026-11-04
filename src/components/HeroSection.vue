@@ -47,7 +47,7 @@ function splitLine(line: string) {
 
         <ul class="hero__tags hero__in" style="--d: 0.72s" aria-label="核心服務">
           <li v-for="s in services" :key="s.id">
-            <RouterLink :to="`/about#service-${s.id}`" class="hero__tag">
+            <RouterLink to="/about#services" class="hero__tag">
               <ServiceIcon :name="s.icon" :size="16" />
               {{ s.title }}
               <ArrowRight :size="14" class="hero__tag-arrow" aria-hidden="true" />

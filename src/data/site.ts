@@ -32,20 +32,33 @@ export const navItems: NavItem[] = [
 /** 頁尾網站地圖：保留「聯絡我們」 */
 export const footerNavItems: NavItem[] = [...navItems, { label: '聯絡我們', to: '/contact' }]
 
-/** 聯絡資訊：尚未提供，請勿填入未經確認的資料 */
+/* ---------- 聯絡資訊（全站共用：頁尾、聯絡我們頁） ----------
+   ※ 請勿自行增加未經提供的聯絡資料。空字串＝尚未確認。
+   - 電話：來自第三方公開電話簿，尚未取得公司直接確認
+   - 地址：來自公開工商登記資料（公司登記地址），尚未確認是否為實際辦公地點，
+     因此只以文字顯示，不提供地圖導航連結
+   - 電子郵件、服務時間：尚未確認，頁尾不顯示 */
 export const contact = {
-  phone: '',
+  phone: '02-2704-2040',
   email: '',
-  address: '',
+  address: '臺北市大安區仁愛路4段396之1號1樓',
   hours: '',
 }
 
-export const contactFields: { key: keyof typeof contact; label: string }[] = [
-  { key: 'phone', label: '聯絡電話' },
-  { key: 'email', label: '電子郵件' },
-  { key: 'address', label: '公司地址' },
-  { key: 'hours', label: '服務時間' },
+/** 點擊撥號連結（國際格式） */
+export const phoneHref = 'tel:+886227042040'
+
+export type ContactKey = keyof typeof contact
+
+export const contactFields: { key: ContactKey; label: string; href?: string; footer: boolean }[] = [
+  { key: 'phone', label: '聯絡電話', href: phoneHref, footer: true },
+  { key: 'email', label: '電子郵件', footer: false },
+  { key: 'address', label: '公司登記地址', footer: true },
+  { key: 'hours', label: '服務時間', footer: false },
 ]
+
+/** 頁尾顯示的聯絡項目：只列出已確認、且允許顯示在頁尾的資料 */
+export const footerContactFields = contactFields.filter((f) => f.footer && contact[f.key])
 
 export const PENDING_TEXT = '待補'
 
@@ -58,7 +71,8 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   about: {
     title: '關於我們｜亞洲共創學院',
-    description: '認識亞洲共創學院的品牌定位、服務對象與核心服務。',
+    description:
+      '以教育連結未來，讓學習創造更多可能。認識亞洲共創學院的品牌理念「共創・共享・共好」、專業服務與特色。',
   },
   lecturers: {
     title: '講師聯盟｜亞洲共創學院',

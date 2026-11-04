@@ -71,12 +71,13 @@ function onSubmit() {
               <span class="info__icon"><component :is="fieldIcons[f.key]" :size="20" aria-hidden="true" /></span>
               <div>
                 <span class="info__label">{{ f.label }}</span>
-                <span v-if="contact[f.key]" class="info__value">{{ contact[f.key] }}</span>
+                <a v-if="contact[f.key] && f.href" :href="f.href" class="info__value">{{ contact[f.key] }}</a>
+                <span v-else-if="contact[f.key]" class="info__value">{{ contact[f.key] }}</span>
                 <span v-else class="pending-tag">待補</span>
               </div>
             </li>
           </ul>
-          <p class="info__note">實際聯絡電話、電子郵件與地址待企業提供後更新。</p>
+          <p class="info__note">電子郵件與服務時間待企業確認後更新；地址為公司登記地址。</p>
         </aside>
 
         <div class="form-card">

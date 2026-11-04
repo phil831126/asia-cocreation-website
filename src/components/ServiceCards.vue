@@ -25,7 +25,7 @@ import { servicesSection as copy } from '@/data/home'
             </ul>
             <div class="card__foot">
               <span v-if="s.pending" class="pending-tag">內容待企業補充</span>
-              <RouterLink :to="`/about#service-${s.id}`" class="link-arrow card__link">
+              <RouterLink to="/about#services" class="link-arrow card__link">
                 了解更多<span class="sr-only">：{{ s.title }}</span>
                 <ArrowRight :size="16" aria-hidden="true" />
               </RouterLink>

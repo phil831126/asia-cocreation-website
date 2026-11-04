@@ -1,37 +1,39 @@
 <script setup lang="ts">
-import { Landmark, Building2, UserRound, Search, Crosshair, Network, Sparkle } from '@lucide/vue'
+import {
+  ArrowRight,
+  BrainCircuit,
+  Building2,
+  Crosshair,
+  Handshake,
+  Landmark,
+  Network,
+  Share2,
+  SlidersHorizontal,
+  Sprout,
+  TrendingUp,
+  Wrench,
+} from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
-import ServiceIcon from '@/components/ServiceIcon.vue'
-import BaseButton from '@/components/BaseButton.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
 import { brand } from '@/data/site'
-import { services } from '@/data/services'
+import { aboutFeatures, aboutHero, aboutIntro, aboutInvite, aboutServices, aboutValues } from '@/data/about'
 
-const audiences = [
-  { icon: Landmark, tag: 'B2G', title: '政府機關與委辦計畫', desc: '政府機關、政府委辦計畫承辦人。' },
-  { icon: Building2, tag: 'B2B', title: '企業人才發展部門', desc: '企業人資、教育訓練及人才發展部門。' },
-  { icon: UserRound, tag: 'B2C', title: '專業學習者', desc: '有專業學習需求的個人與學員。' },
-]
-
-const values = [
-  { icon: Search, title: '探索知識', desc: '持續探索專業知識與學習方法。' },
-  { icon: Crosshair, title: '聚焦需求', desc: '從合作單位的實際需求出發。' },
-  { icon: Network, title: '連結資源', desc: '連結政府、企業與人才培育資源。' },
-  { icon: Sparkle, title: '共創未來', desc: '與合作夥伴共同創造學習價值。' },
-]
+const valueIcons: Record<string, unknown> = { create: Handshake, share: Share2, good: Sprout }
+const serviceIcons: Record<string, unknown> = { gov: Landmark, enterprise: Building2, ai: BrainCircuit, career: TrendingUp }
+const featureIcons: Record<string, unknown> = {
+  need: Crosshair,
+  integrate: Network,
+  practice: Wrench,
+  flexible: SlidersHorizontal,
+}
 </script>
 
 <template>
   <div class="page">
-    <PageHeader
-      eyebrow="About Us"
-      title="關於我們"
-      desc="以專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。"
-      :crumbs="[{ label: '關於我們' }]"
-    />
+    <PageHeader :eyebrow="aboutHero.eyebrow" :title="aboutHero.title" :crumbs="[{ label: '關於我們' }]" />
 
-    <!-- 品牌介紹 -->
+    <!-- 1. 品牌介紹 -->
     <section class="section">
       <div class="container intro">
         <div v-reveal class="intro__lead">
@@ -40,90 +42,105 @@ const values = [
           <p class="intro__company">{{ brand.company }}</p>
         </div>
         <div class="intro__body">
-          <p v-reveal="100" class="intro__text">
-            {{ brand.name }}（{{ brand.company }}）主要提供教育培訓、專業課程規劃及相關合作服務，核心服務包含教育訓練、講師經紀與企業品牌顧問，並涵蓋產學合作與
-            AI、行銷等專業課程領域。
+          <p
+            v-for="(p, i) in aboutIntro"
+            :key="i"
+            v-reveal="i * 100"
+            class="intro__text"
+            :class="{ 'intro__text--lead': i === 0 }"
+          >
+            {{ p }}
           </p>
-          <div v-reveal="200" class="intro__pending">
-            <span class="pending-tag">待補</span>
-            <p>品牌故事、成立沿革、團隊介紹等內容，待企業提供後補充。</p>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- 企業定位 / 服務對象 -->
+    <!-- 2. 品牌核心理念 -->
     <section class="section section--alt">
       <div class="container">
-        <SectionHeading eyebrow="Positioning" title="服務對象與企業定位" highlight="企業定位" desc="以政府、企業與專業學習者為主要服務對象。" />
-        <ul class="aud">
-          <li v-for="(a, i) in audiences" :key="a.title" v-reveal="i * 100" class="aud__item">
-            <div class="aud__top">
-              <span class="aud__icon"><component :is="a.icon" :size="22" :stroke-width="1.6" aria-hidden="true" /></span>
-              <span class="num aud__tag">{{ a.tag }}</span>
-            </div>
-            <span class="aud__rank">優先順序 0{{ i + 1 }}</span>
-            <h3 class="aud__title">{{ a.title }}</h3>
-            <p class="aud__desc">{{ a.desc }}</p>
+        <SectionHeading :eyebrow="aboutValues.eyebrow" :title="aboutValues.title" align="center" />
+        <ul class="values">
+          <li v-for="(v, i) in aboutValues.items" :key="v.key" v-reveal="i * 120" class="value">
+            <span class="value__icon">
+              <component :is="valueIcons[v.key]" :size="26" :stroke-width="1.6" aria-hidden="true" />
+            </span>
+            <p class="value__word"><span class="highlight">{{ v.word }}</span></p>
+            <h3 class="value__title">{{ v.title }}</h3>
+            <p class="value__desc">{{ v.desc }}</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- 核心服務 -->
+    <!-- 3. 我們的專業服務（圖文交錯） -->
     <section id="services" class="section">
       <div class="container">
-        <SectionHeading eyebrow="Services" title="核心服務" highlight="核心服務" />
-        <div class="svc-rows">
-          <article v-for="s in services" :id="`service-${s.id}`" :key="s.id" v-reveal class="svc-row">
-            <span class="num svc-row__no">{{ s.no }}</span>
-            <div class="svc-row__head">
-              <span class="svc-row__icon"><ServiceIcon :name="s.icon" :size="26" /></span>
-              <h3 class="svc-row__title">{{ s.title }}</h3>
+        <SectionHeading
+          :eyebrow="aboutServices.eyebrow"
+          :title="aboutServices.title"
+          :highlight="aboutServices.highlight"
+          :desc="aboutServices.desc"
+        />
+        <div class="svc">
+          <article
+            v-for="(s, i) in aboutServices.items"
+            :id="`service-${s.id}`"
+            :key="s.id"
+            class="svc__row"
+            :class="{ 'svc__row--flip': i % 2 === 1 }"
+          >
+            <!-- 示意圖：以品牌色與服務圖示組成，不使用與內容無關的照片 -->
+            <div v-reveal class="svc__visual" aria-hidden="true">
+              <span class="svc__ring svc__ring--a"></span>
+              <span class="svc__ring svc__ring--b"></span>
+              <span class="num svc__big">{{ s.no }}</span>
+              <span class="svc__icon glass">
+                <component :is="serviceIcons[s.id]" :size="34" :stroke-width="1.5" />
+              </span>
             </div>
-            <div class="svc-row__body">
-              <p>{{ s.summary }}</p>
-              <ul class="svc-row__points">
-                <li v-for="p in s.points" :key="p">{{ p }}</li>
+            <div v-reveal="120" class="svc__body">
+              <span class="num svc__no">{{ s.no }}</span>
+              <h3 class="svc__title">{{ s.title }}</h3>
+              <p class="svc__desc">{{ s.desc }}</p>
+              <ul class="svc__tags">
+                <li v-for="t in s.tags" :key="t">{{ t }}</li>
               </ul>
-              <div class="svc-row__foot">
-                <span class="pending-tag">詳細服務內容待補</span>
-                <BaseButton :to="{ path: '/contact', query: { topic: s.id } }" size="sm" variant="ghost">洽詢{{ s.title }}</BaseButton>
-              </div>
+              <RouterLink :to="{ path: '/contact', query: { topic: s.contactTopic } }" class="link-arrow svc__link">
+                洽詢此服務 <ArrowRight :size="16" aria-hidden="true" />
+              </RouterLink>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- 品牌理念 -->
+    <!-- 4. 我們的特色 -->
     <section class="section section--alt">
       <div class="container">
-        <SectionHeading
-          eyebrow="Concept"
-          title="以放大鏡為意象，聚焦每一份需求"
-          highlight="聚焦每一份需求"
-          desc="品牌視覺以放大鏡傳達探索、聚焦、連結與共創的精神。"
-        />
-        <ul class="values">
-          <li v-for="(v, i) in values" :key="v.title" v-reveal="i * 90" class="values__item glass">
-            <span class="num values__no">0{{ i + 1 }}</span>
-            <component :is="v.icon" :size="26" :stroke-width="1.6" class="values__icon" aria-hidden="true" />
-            <h3>{{ v.title }}</h3>
-            <p>{{ v.desc }}</p>
+        <SectionHeading :eyebrow="aboutFeatures.eyebrow" :title="aboutFeatures.title" :highlight="aboutFeatures.highlight" />
+        <ul class="features">
+          <li v-for="(f, i) in aboutFeatures.items" :key="f.key" v-reveal="i * 90" class="feature glass">
+            <span class="num feature__no">0{{ i + 1 }}</span>
+            <span class="feature__icon">
+              <component :is="featureIcons[f.key]" :size="24" :stroke-width="1.6" aria-hidden="true" />
+            </span>
+            <h3 class="feature__title">{{ f.title }}</h3>
+            <p class="feature__desc">{{ f.desc }}</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <CtaBanner />
+    <!-- 5. 合作邀請 -->
+    <CtaBanner :content="aboutInvite" />
   </div>
 </template>
 
 <style scoped>
+/* ---------- 1. 品牌介紹 ---------- */
 .intro {
   display: grid;
-  grid-template-columns: 1fr 1.4fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: clamp(32px, 6vw, 96px);
 }
 
@@ -144,218 +161,313 @@ const values = [
   letter-spacing: 0.1em;
 }
 
+.intro__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .intro__text {
-  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  color: var(--c-text-2);
+  font-size: clamp(1rem, 1.3vw, 1.08rem);
   line-height: 2;
 }
 
-.intro__pending {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-top: 32px;
-  padding: 20px 22px;
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--c-gray-300);
-  color: var(--c-text-2);
-  font-size: 0.95rem;
+.intro__text--lead {
+  color: var(--c-text);
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.85;
 }
 
-.aud {
+/* ---------- 2. 品牌核心理念 ---------- */
+.values {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-top: var(--block-gap);
 }
 
-.aud__item {
-  padding: 30px;
+.value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(26px, 3vw, 36px);
+  border: 1px solid var(--c-line);
   border-radius: var(--radius-lg);
   background: #fff;
   transition:
     transform 0.5s var(--ease-out),
-    box-shadow 0.5s var(--ease-out);
+    box-shadow 0.5s var(--ease-out),
+    border-color 0.3s;
 }
 
-.aud__item:hover {
-  transform: translateY(-6px);
+.value:hover {
+  border-color: transparent;
   box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
 }
 
-.aud__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.aud__icon {
+.value__icon {
   display: grid;
   place-items: center;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-md);
   background: var(--c-yellow-tint);
+  transition: background-color 0.3s;
 }
 
-.aud__tag {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--c-gray-300);
+.value:hover .value__icon {
+  background: var(--c-yellow);
 }
 
-.aud__rank {
-  display: block;
-  margin-top: 28px;
-  font-size: 0.8rem;
+.value__word {
+  margin-top: 22px;
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+  font-weight: 900;
   letter-spacing: 0.12em;
-  color: var(--c-text-3);
+  line-height: 1.2;
 }
 
-.aud__title {
-  margin-top: 6px;
-  font-size: 1.25rem;
+.value__title {
+  margin-top: 10px;
+  font-size: 1.15rem;
 }
 
-.aud__desc {
+.value__desc {
   margin-top: 8px;
   color: var(--c-text-2);
 }
 
-.svc-rows {
-  margin-top: var(--block-gap);
-  border-top: 1px solid var(--c-line-strong);
-}
-
-.svc-row {
-  display: grid;
-  grid-template-columns: 90px 1fr 1.5fr;
-  gap: 24px;
-  padding: 40px 0;
-  border-bottom: 1px solid var(--c-line-strong);
-}
-
-.svc-row__no {
-  font-size: 2.4rem;
-  font-weight: 300;
-  line-height: 1;
-  color: var(--c-gray);
-}
-
-.svc-row__head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  align-self: start;
-}
-
-.svc-row__icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-md);
-  background: var(--c-yellow);
-}
-
-.svc-row__title {
-  font-size: 1.6rem;
-  letter-spacing: 0.08em;
-}
-
-.svc-row__body {
+/* ---------- 3. 專業服務（圖文交錯） ---------- */
+.svc {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  color: var(--c-text-2);
+  gap: clamp(40px, 6vw, 72px);
+  margin-top: var(--block-gap);
 }
 
-.svc-row__points {
+.svc__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+  scroll-margin-top: calc(var(--nav-h) + 24px);
+}
+
+.svc__row--flip .svc__visual {
+  order: 2;
+}
+
+.svc__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(140deg, var(--c-yellow-soft), var(--c-yellow) 55%, var(--c-yellow-deep));
+}
+
+.svc__row:nth-child(even) .svc__visual {
+  background:
+    radial-gradient(circle at 22% 25%, rgba(248, 190, 32, 0.35), transparent 50%),
+    linear-gradient(140deg, #5c5c5c, #3e3e3e);
+}
+
+.svc__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+}
+
+.svc__ring--a {
+  width: 62%;
+  aspect-ratio: 1;
+}
+
+.svc__ring--b {
+  width: 40%;
+  aspect-ratio: 1;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.svc__big {
+  position: absolute;
+  right: 6%;
+  bottom: -4%;
+  font-size: clamp(5rem, 11vw, 9rem);
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.svc__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  color: var(--c-text);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.svc__row:hover .svc__icon {
+  transform: translateY(-6px) rotate(-4deg);
+}
+
+.svc__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.svc__no {
+  color: var(--c-yellow-deep);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.svc__title {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  letter-spacing: 0.04em;
+}
+
+.svc__desc {
+  color: var(--c-text-2);
+  line-height: 1.95;
+}
+
+.svc__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.svc-row__points li {
-  padding: 4px 12px;
+.svc__tags li {
+  padding: 4px 14px;
   border-radius: 999px;
   background: var(--c-bg-alt);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
 }
 
-.svc-row__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
+.svc__link {
+  margin-top: 6px;
 }
 
-.values {
+/* ---------- 4. 我們的特色 ---------- */
+.features {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   margin-top: var(--block-gap);
 }
 
-.values__item {
+.feature {
   position: relative;
   padding: 28px 24px;
   border-radius: var(--radius-lg);
+  transition:
+    transform 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
 }
 
-.values__no {
+.feature:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+}
+
+.feature__no {
   position: absolute;
-  right: 20px;
   top: 18px;
-  font-size: 0.85rem;
+  right: 20px;
   color: var(--c-text-3);
+  font-size: 0.85rem;
 }
 
-.values__icon {
-  padding: 10px;
+.feature__icon {
+  display: grid;
+  place-items: center;
   width: 48px;
   height: 48px;
   border-radius: 50%;
   background: var(--c-yellow);
 }
 
-.values__item h3 {
+.feature__title {
   margin-top: 22px;
   font-size: 1.2rem;
   letter-spacing: 0.1em;
 }
 
-.values__item p {
+.feature__desc {
   margin-top: 6px;
-  font-size: 0.95rem;
   color: var(--c-text-2);
+  font-size: 0.95rem;
 }
 
+/* ---------- 平板 ---------- */
 @media (max-width: 960px) {
   .intro {
     grid-template-columns: 1fr;
-  }
-
-  .aud {
-    grid-template-columns: 1fr;
-    margin-top: var(--block-gap);
-  }
-
-  .svc-row {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 32px 0;
+    gap: 24px;
   }
 
   .values {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .svc__row {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  /* 手機與平板一律圖在上、文在下 */
+  .svc__row--flip .svc__visual {
+    order: 0;
+  }
+
+  .svc__visual {
+    aspect-ratio: 16 / 7;
+  }
+
+  .features {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 560px) {
+@media (min-width: 640px) and (max-width: 960px) {
   .values {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- 手機 ---------- */
+@media (max-width: 560px) {
+  .features {
     grid-template-columns: 1fr;
+  }
+
+  .svc__icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .value,
+  .feature,
+  .svc__icon {
+    transition: none;
   }
 }
 </style>

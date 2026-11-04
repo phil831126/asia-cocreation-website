@@ -88,7 +88,8 @@ export function imageUrl(raw = '') {
   if (!url) return ''
   if (/^https?:\/\/(drive|docs)\.google\.com\//.test(url)) {
     const id = url.match(/\/d\/([\w-]{20,})/)?.[1] ?? url.match(/[?&]id=([\w-]{20,})/)?.[1]
-    return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w1600` : ''
+    // 直接用 Google 的圖片主機：不經轉址、不受訪客的 Google 登入狀態影響（需「知道連結的人可檢視」）
+    return id ? `https://lh3.googleusercontent.com/d/${id}=w1600` : ''
   }
   return /^https:\/\//.test(url) || url.startsWith('/') ? url : ''
 }
