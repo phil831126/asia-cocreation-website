@@ -28,7 +28,7 @@ src/
 │  ├─ services.ts   三大服務項目
 │  ├─ lecturers.ts  講師顧問聯盟（首頁三張講師卡）
 │  ├─ cases.ts      案例資料與分類
-│  ├─ partners.ts   合作單位 Logo 牆
+│  ├─ partners.ts   合作單位 Logo（首頁四排跑馬燈）
 │  └─ courses.ts    學習地圖課程分類
 ├─ styles/
 │  ├─ tokens.css    品牌主題色、字體、圓角、間距（修改此檔即可統一調整視覺）
@@ -45,7 +45,7 @@ src/
 | 正式 Logo | `src/data/site.ts` | 檔案放到 `public/brand/`，填入 `logoSrc: '/brand/logo.svg'` |
 | 聯絡資訊 | `src/data/site.ts` | 填寫 `contact` 的 phone / email / address / hours |
 | 成果數據 | `src/data/dashboard.ts` | 修改 `kpis` 的 `value`（「逾」以 `suffix: '+'` 表示），滾輪式數字動畫自動套用 |
-| 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，填寫 `name`、`logo`（可選 `url`） |
+| 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，在清單加入編號與名稱；依序平均分到四排跑馬燈 |
 | 案例 | `src/data/cases.ts` | 替換標題、簡介、圖片（`public/cases/`），並將 `placeholder` 改為 `false` |
 | 課程 | `src/data/courses.ts` | 在各分類 `courses` 陣列加入課程 |
 | 品牌色 | `src/styles/tokens.css` | 依原始 Logo 色碼調整 `--c-yellow`、`--c-gray` 等變數 |
@@ -62,7 +62,7 @@ src/
 6. **三大服務詳細介紹**：關於我們頁的服務細節。
 7. **講師顧問聯盟**：三位講師的圓形照片、姓名、頭銜與專業領域（目前為示意卡片，需取得講師授權）。
 8. **案例**：標題、分類、照片、簡介、合作背景／執行內容／成果（目前 9 則皆為示意）。
-9. **合作單位 Logo**：需取得授權的正式 Logo 與單位名稱（目前 10 個佔位卡片）。
+9. **合作單位 Logo**：已依「服務品牌」簡報頁放上 34 個 Logo（由簡報裁切，如有原始檔可替換以提高清晰度）；p17「青年事務局」與 p31「青年雙手・人類希望」的單位全名待確認。
 10. **學習地圖課程**：AI、行銷、其他類別的課程名稱、程度、簡介。
 11. **關於我們**：品牌故事、成立沿革、團隊介紹。
 12. **聯絡資訊**：電話、電子郵件、地址、服務時間。

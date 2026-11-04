@@ -38,7 +38,7 @@ export const partnerWallSection = {
   eyebrow: 'Partners',
   title: '攜手合作，共創更多可能',
   highlight: '共創更多可能',
-  desc: '合作單位 Logo 將於企業提供並確認授權後更新。',
+  desc: '與政府機關、大專院校及企業品牌攜手，推動教育培訓與人才發展。',
 }
 
 export const ctaSection = {
