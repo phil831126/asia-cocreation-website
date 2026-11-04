@@ -72,7 +72,8 @@ function splitLine(line: string) {
   justify-content: center;
   min-height: min(100svh, 960px);
   padding: calc(var(--nav-h) + 24px) 0 88px;
-  background: radial-gradient(ellipse 80% 60% at 75% 40%, #232323 0%, #111111 60%, #0b0b0b 100%);
+  /* 深灰背景：維持白字的閱讀對比（白字對最淺處約 6.6:1） */
+  background: radial-gradient(ellipse 80% 60% at 75% 40%, #5c5c5c 0%, #4b4b4b 60%, #424242 100%);
   color: #fff;
   overflow: hidden;
 }

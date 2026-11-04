@@ -28,7 +28,7 @@ src/
 │  ├─ services.ts   三大服務項目
 │  ├─ lecturers.ts  講師顧問聯盟（首頁三張講師卡）
 │  ├─ cases.ts      案例資料與分類
-│  ├─ partners.ts   合作單位 Logo（首頁四排跑馬燈）
+│  ├─ partners.ts   合作單位 Logo（首頁 Logo 牆）
 │  └─ courses.ts    學習地圖課程分類
 ├─ styles/
 │  ├─ tokens.css    品牌主題色、字體、圓角、間距（修改此檔即可統一調整視覺）
@@ -45,7 +45,7 @@ src/
 | 正式 Logo | `src/data/site.ts` | 檔案放到 `public/brand/`，填入 `logoSrc: '/brand/logo.svg'` |
 | 聯絡資訊 | `src/data/site.ts` | 填寫 `contact` 的 phone / email / address / hours |
 | 成果數據 | `src/data/dashboard.ts` | 修改 `kpis` 的 `value`（「逾」以 `suffix: '+'` 表示），滾輪式數字動畫自動套用 |
-| 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，在清單加入編號與名稱；依序平均分到四排跑馬燈 |
+| 合作單位 | `src/data/partners.ts` | Logo 放到 `public/partners/`，在清單加入編號與名稱；桌面每排 7 個，依清單順序排列 |
 | 案例 | `src/data/cases.ts` | 替換標題、簡介、圖片（`public/cases/`），並將 `placeholder` 改為 `false` |
 | 課程 | `src/data/courses.ts` | 在各分類 `courses` 陣列加入課程 |
 | 品牌色 | `src/styles/tokens.css` | 依原始 Logo 色碼調整 `--c-yellow`、`--c-gray` 等變數 |

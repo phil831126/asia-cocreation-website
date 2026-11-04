@@ -61,6 +61,7 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
     if (Math.abs(distance) < 2) return
     if (prefersReducedMotion()) {
       window.scrollTo(0, top)
+      onScroll()
       return
     }
     animating = true
@@ -70,7 +71,11 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
       const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
       window.scrollTo(0, start + distance * eased)
       if (p < 1) frame = requestAnimationFrame(tick)
-      else animating = false
+      else {
+        animating = false
+        // 動畫結束時重新判斷所在區塊：最後一次捲動事件可能早於動畫結束，側邊圓點會停在上一區
+        onScroll()
+      }
     }
     frame = requestAnimationFrame(tick)
   }
@@ -104,7 +109,10 @@ export function useSectionSnap(root: Ref<HTMLElement | null>) {
 
   function goTo(index: number) {
     const top = targets()[index]
-    if (top !== undefined) animateTo(top)
+    if (top === undefined) return
+    // 點圓點時立刻把亮起的圓點移到目標，不必等捲動結束
+    if (index < sections.value.length) active.value = index
+    animateTo(top)
   }
 
   /** 浮動視窗（例如 FAQ 小幫手）內的捲動與按鍵不觸發區塊跳轉 */

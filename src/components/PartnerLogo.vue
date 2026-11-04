@@ -31,30 +31,15 @@ defineProps<{ partner: Partner; index: number }>()
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: none;
   gap: 8px;
-  width: 172px;
-  /* 四排跑馬燈要在一個畫面內放得下，依螢幕高度微調 */
-  height: clamp(70px, 9.5vh, 92px);
-  padding: 0 14px;
+  width: 100%;
+  /* 五排要在一個畫面內放得下，依螢幕高度微調 */
+  height: clamp(64px, 11vh, 104px);
   border-radius: var(--radius-md);
-  /* 不加卡片外框，Logo 直接放在區塊背景上（圖片背景已去白） */
+  /* 不加卡片外框，Logo 直接放在大框的白底上（圖片背景已去白） */
   background: transparent;
   border: 1px solid transparent;
   text-align: center;
-  transition:
-    border-color 0.3s,
-    background-color 0.3s,
-    transform 0.4s var(--ease-out),
-    box-shadow 0.4s var(--ease-out);
-}
-
-.pl:hover {
-  transform: translateY(-3px);
-}
-
-.pl:hover .pl__img {
-  transform: scale(1.06);
 }
 
 .pl--empty {
@@ -69,21 +54,14 @@ defineProps<{ partner: Partner; index: number }>()
 
 /* 保留各單位 Logo 原色，不做灰階或透明處理 */
 .pl__img {
-  max-width: 140px;
-  max-height: clamp(46px, 6.6vh, 66px);
+  max-width: 90%;
+  max-height: 82%;
   object-fit: contain;
-  transition: transform 0.4s var(--ease-out);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .pl {
-    width: 128px;
-    height: 72px;
-  }
-
-  .pl__img {
-    max-width: 104px;
-    max-height: 48px;
+    height: 76px;
   }
 }
 

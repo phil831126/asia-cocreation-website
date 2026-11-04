@@ -85,13 +85,14 @@ const inView = useInView(root, 0.2)
   aspect-ratio: 1;
   border-radius: 50%;
   text-align: center;
-  color: #fff;
-  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.03));
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  /* 白色毛玻璃：在灰色主視覺上更明亮，文字改深色維持對比 */
+  color: var(--c-text);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.58));
+  border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -18px 36px rgba(0, 0, 0, 0.22),
-    0 24px 48px -24px rgba(0, 0, 0, 0.8);
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -18px 36px rgba(34, 34, 34, 0.08),
+    0 24px 48px -24px rgba(0, 0, 0, 0.6);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
   animation: orb-float 9s ease-in-out infinite;
@@ -169,7 +170,7 @@ const inView = useInView(root, 0.2)
 .orb__label {
   margin-top: 4px;
   font-size: clamp(11px, 2.4cqw, 14px);
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(34, 34, 34, 0.72);
 }
 
 .orb--main .orb__label {
