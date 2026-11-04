@@ -1,215 +1,179 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { BookOpen, GraduationCap, Users, Handshake } from '@lucide/vue'
 import RollingNumber from './RollingNumber.vue'
 import { kpis } from '@/data/dashboard'
-import { dashboardCopy } from '@/data/home'
 import { useInView } from '@/composables/motion'
 
-const panel = ref<HTMLElement | null>(null)
-const inView = useInView(panel, 0.2)
-
-const kpiIcons: Record<string, unknown> = { courses: BookOpen, learners: GraduationCap, teachers: Users, partners: Handshake }
+const root = ref<HTMLElement | null>(null)
+const inView = useInView(root, 0.2)
 </script>
 
 <template>
-  <div ref="panel" class="dash">
-    <span class="dash__glow" aria-hidden="true"></span>
+  <section ref="root" class="dash" aria-label="成果總覽">
+    <span class="dash__glow dash__glow--a" aria-hidden="true"></span>
+    <span class="dash__glow dash__glow--b" aria-hidden="true"></span>
+    <span class="dash__dots" aria-hidden="true"></span>
 
-    <section class="dash__panel" aria-labelledby="dash-title">
-      <header class="dash__head">
-        <h2 id="dash-title" class="dash__title">
-          <span class="dash__live" aria-hidden="true"></span>{{ dashboardCopy.title }}
-        </h2>
-        <span class="dash__badge">{{ dashboardCopy.badge }}</span>
-      </header>
-
-      <dl class="kpis">
-        <div v-for="(k, i) in kpis" :key="k.key" class="kpi" :class="{ 'kpi--featured': i === 0 }">
-          <dt class="kpi__label">
-            <component :is="kpiIcons[k.key]" :size="16" aria-hidden="true" />
-            {{ k.label }}
-          </dt>
-          <dd class="kpi__value">
-            <RollingNumber class="num kpi__num" :value="k.value" :suffix="k.suffix" :active="inView" />
-            <span class="kpi__unit" aria-hidden="true">{{ k.unit }}</span>
-            <span class="sr-only">逾 {{ k.value.toLocaleString('zh-TW') }} {{ k.unit }}</span>
-          </dd>
-          <dd class="kpi__note">{{ k.note }}</dd>
-        </div>
-      </dl>
-    </section>
-  </div>
+    <dl class="dash__orbs">
+      <div v-for="(k, i) in kpis" :key="k.key" class="orb" :class="i === 0 ? 'orb--main' : `orb--s${i}`">
+        <dt class="orb__label">{{ k.label }}<template v-if="i === 0">（{{ k.unit }}）</template></dt>
+        <dd class="orb__value">
+          <RollingNumber class="num orb__num" :value="k.value" :suffix="k.suffix" :active="inView" />
+          <span class="sr-only">逾 {{ k.value.toLocaleString('zh-TW') }} {{ k.unit }}</span>
+        </dd>
+      </div>
+    </dl>
+  </section>
 </template>
 
 <style scoped>
 .dash {
   position: relative;
   width: 100%;
-  animation: dash-float 10s ease-in-out infinite;
+  aspect-ratio: 1.15;
+  container-type: inline-size;
 }
 
-@keyframes dash-float {
+/* 背景光暈與點陣：讓毛玻璃有東西可以透出來 */
+.dash__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.dash__glow--a {
+  left: 6%;
+  top: 14%;
+  width: 52%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(248, 190, 32, 0.55), transparent 70%);
+}
+
+.dash__glow--b {
+  right: 2%;
+  top: 30%;
+  width: 34%;
+  height: 46%;
+  background: radial-gradient(circle, rgba(248, 190, 32, 0.28), transparent 70%);
+}
+
+.dash__dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.28) 1px, transparent 1.3px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(ellipse at 60% 50%, #000, transparent 70%);
+  mask-image: radial-gradient(ellipse at 60% 50%, #000, transparent 70%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.dash__orbs {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+
+/* 毛玻璃圓 */
+.orb {
+  position: absolute;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.07) 55%, rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -18px 36px rgba(0, 0, 0, 0.22),
+    0 24px 48px -24px rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  animation: orb-float 9s ease-in-out infinite;
+}
+
+/* 左上的玻璃反光 */
+.orb::before {
+  content: '';
+  position: absolute;
+  left: 16%;
+  top: 9%;
+  width: 46%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.35), transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes orb-float {
   50% {
     transform: translateY(-8px);
   }
 }
 
-.dash__glow {
-  position: absolute;
-  left: 10%;
-  top: 6%;
-  z-index: -1;
-  width: 70%;
-  height: 80%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(248, 190, 32, 0.35), transparent 70%);
-  filter: blur(40px);
-  pointer-events: none;
-}
-
-.dash__panel {
-  position: relative;
-  padding: 22px;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
-  border: 1px solid rgba(255, 255, 255, 0.14);
+.orb--main {
+  left: 0;
+  top: 50%;
+  width: 64%;
+  margin-top: -32%;
+  color: var(--c-text);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 224, 128, 0.88), rgba(248, 190, 32, 0.62) 50%, rgba(224, 165, 0, 0.5));
+  border-color: rgba(255, 228, 150, 0.7);
   box-shadow:
-    0 30px 60px -30px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
-  color: #fff;
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -24px 48px rgba(160, 110, 0, 0.3),
+    0 30px 60px -28px rgba(0, 0, 0, 0.85);
 }
 
-.dash__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+.orb--s1 {
+  right: 5%;
+  top: 1%;
+  width: 27%;
+  animation-delay: -2s;
 }
 
-.dash__title {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  letter-spacing: 0.12em;
+.orb--s2 {
+  right: 0;
+  top: 36%;
+  width: 26%;
+  animation-delay: -4s;
 }
 
-.dash__live {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--c-yellow);
-  box-shadow: 0 0 0 0 rgba(248, 190, 32, 0.6);
-  animation: live 2.4s ease-out infinite;
+.orb--s3 {
+  right: 13%;
+  top: 70%;
+  width: 25%;
+  animation-delay: -6s;
 }
 
-@keyframes live {
-  70%,
-  100% {
-    box-shadow: 0 0 0 8px rgba(248, 190, 32, 0);
-  }
-}
-
-.dash__badge {
-  padding: 3px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.kpis {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.orb__value {
   margin: 0;
 }
 
-.kpi {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 22px 20px;
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition:
-    background-color 0.3s,
-    transform 0.4s var(--ease-out);
-}
-
-.kpi:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
-.kpi--featured {
-  background: linear-gradient(140deg, #ffd24d, var(--c-yellow) 55%, #eaa900);
-  border-color: transparent;
-  color: var(--c-text);
-}
-
-.kpi--featured:hover {
-  background: linear-gradient(140deg, #ffd960, #ffc62e 55%, #f0b000);
-}
-
-.kpi__label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.kpi--featured .kpi__label {
-  color: rgba(34, 34, 34, 0.75);
-}
-
-.kpi__value {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  margin: 6px 0 0;
-}
-
-.kpi__num {
-  font-size: clamp(2.1rem, 3.4vw, 3rem);
+.orb__num {
+  font-size: clamp(16px, 5cqw, 30px);
   font-weight: 600;
   line-height: 1.1;
+}
+
+.orb--main .orb__num {
+  font-size: clamp(32px, 11cqw, 76px);
   letter-spacing: -0.01em;
 }
 
-.kpi__unit {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.7);
+.orb__label {
+  margin-top: 4px;
+  font-size: clamp(11px, 2.4cqw, 14px);
+  color: rgba(255, 255, 255, 0.72);
 }
 
-.kpi--featured .kpi__unit {
+.orb--main .orb__label {
+  font-size: clamp(12px, 2.8cqw, 16px);
   color: rgba(34, 34, 34, 0.75);
-}
-
-.kpi__note {
-  margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.kpi--featured .kpi__note {
-  color: rgba(34, 34, 34, 0.7);
-}
-
-@media (max-width: 560px) {
-  .dash__panel {
-    padding: 16px;
-  }
-
-  .kpi {
-    padding: 16px 14px;
-  }
 }
 </style>

@@ -11,13 +11,6 @@ export const hero = {
   titleHighlight: '連結學習與產業',
   subtitle: '亞洲共創透過專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。',
   primaryCta: { label: '了解合作服務', sectionId: 'services' },
-  secondaryCta: { label: '洽詢合作', to: '/contact' },
-}
-
-/** Hero 右側 Dashboard 的標題文字（數據在 data/dashboard.ts） */
-export const dashboardCopy = {
-  title: '成果總覽',
-  badge: '累計至今',
 }
 
 export const servicesSection = {
@@ -52,5 +45,7 @@ export const ctaSection = {
   eyebrow: "Let's Co-create",
   title: '下一段合作，從共創開始',
   desc: '從需求交流到專業培訓規劃，讓我們一起探索合作的可能。',
+  /** 合作流程（建議的展示方式，實際作業依各合作案調整） */
+  steps: ['需求了解', '課程規劃', '專案執行', '成果回饋'],
   button: { label: '聯絡我們', to: '/contact' },
 }

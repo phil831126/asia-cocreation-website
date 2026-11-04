@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, ArrowDown } from '@lucide/vue'
+import { ArrowRight } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
 import HeroDashboard from './HeroDashboard.vue'
 import ServiceIcon from './ServiceIcon.vue'
@@ -43,7 +43,6 @@ function splitLine(line: string) {
           <BaseButton :href="`#${hero.primaryCta.sectionId}`" @click.prevent="scrollToSection(hero.primaryCta.sectionId)">
             {{ hero.primaryCta.label }}
           </BaseButton>
-          <BaseButton :to="hero.secondaryCta.to" variant="ghost" class="hero__ghost">{{ hero.secondaryCta.label }}</BaseButton>
         </div>
 
         <ul class="hero__tags hero__in" style="--d: 0.72s" aria-label="核心服務">
@@ -165,29 +164,6 @@ function splitLine(line: string) {
   margin-top: 6px;
 }
 
-/* 深色背景上的次要按鈕 */
-.hero__ghost.btn--ghost {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.28);
-  color: #fff;
-}
-
-.hero__ghost.btn--ghost::before {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.hero__ghost.btn--ghost:hover {
-  border-color: #fff;
-}
-
-.hero__ghost.btn--ghost :deep(.btn__icon) {
-  background: rgba(255, 255, 255, 0.14);
-}
-
-.hero__ghost.btn--ghost:hover :deep(.btn__icon) {
-  background: var(--c-yellow);
-  color: var(--c-text);
-}
 
 .hero__tags {
   display: flex;
@@ -256,38 +232,6 @@ function splitLine(line: string) {
   }
 }
 
-.hero__scroll {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.55);
-  transform: translateX(-50%);
-}
-
-.hero__scroll-line {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 46px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-}
-
-.hero__scroll-line svg {
-  animation: nudge 2s ease-in-out infinite;
-}
-
-@keyframes nudge {
-  50% {
-    transform: translateY(6px);
-  }
-}
 
 @media (max-width: 1080px) {
   .hero__grid {
@@ -306,10 +250,6 @@ function splitLine(line: string) {
     right: 0;
     top: auto;
     bottom: 0;
-  }
-
-  .hero__scroll {
-    display: none;
   }
 
   .hero {
