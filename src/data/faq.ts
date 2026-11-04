@@ -1,5 +1,5 @@
 /* =========================================================
-   右下角 FAQ 小幫手
+   右下角 FAQ 小幫手「共創諮詢台」
    ※ 主要服務對象為「企業」與「學校／產學合作單位」。
      答案依網站現有資料（服務項目、成果數據、講師聯盟）撰寫；
      pending: true 代表內容尚待企業確認，畫面會顯示「待補」標記。
@@ -240,9 +240,13 @@ export const pageGreetings: Record<string, string> = {
 }
 
 export const faqCopy = {
-  title: '常見問題',
-  subtitle: '亞洲共創學院 合作小幫手',
-  launcher: '常見問題',
+  /** 小幫手名稱：視窗標題、水滴按鈕的提示文字 */
+  title: '共創諮詢台',
+  subtitle: '亞洲共創學院',
+  /** 水滴旁的提示泡泡（客人按 ✕ 關掉後就不再出現） */
+  hintTitle: '有合作上的疑問嗎？',
+  hintText: '服務、費用、產學合作都可以在這裡詢問。',
+  hintClose: '關閉提示',
   askAudience: '請問您代表哪一類單位？我會優先列出相關的問題。',
   skipAudience: '先隨意看看',
   afterAudience: (label: string) => `了解！以下是${label}最常詢問的問題：`,
