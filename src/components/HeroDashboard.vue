@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { BookOpen, Handshake, Presentation, GraduationCap } from '@lucide/vue'
 import RollingNumber from './RollingNumber.vue'
 import { kpis } from '@/data/dashboard'
 import { useInView } from '@/composables/motion'
@@ -7,6 +8,14 @@ import { useInView } from '@/composables/motion'
 const root = ref<HTMLElement | null>(null)
 /** 每次捲回成果區（往上或往下）都重新滾動數字 */
 const inView = useInView(root, 0.2, { repeat: true })
+
+/** 各數據的圖示：開課＝書本、合作單位＝握手、業師＝授課簡報、學員＝學士帽 */
+const icons: Record<string, unknown> = {
+  courses: BookOpen,
+  partners: Handshake,
+  teachers: Presentation,
+  learners: GraduationCap,
+}
 </script>
 
 <template>
@@ -19,6 +28,7 @@ const inView = useInView(root, 0.2, { repeat: true })
       <div v-for="(k, i) in kpis" :key="k.key" class="orb" :class="i === 0 ? 'orb--main' : `orb--s${i}`">
         <dt class="orb__label">{{ k.label }}<template v-if="i === 0">（{{ k.unit }}）</template></dt>
         <dd class="orb__value">
+          <component :is="icons[k.key]" class="orb__icon" :size="24" :stroke-width="1.8" aria-hidden="true" />
           <RollingNumber class="num orb__num" :value="k.value" :suffix="k.suffix" :active="inView" />
           <span class="sr-only">逾 {{ k.value.toLocaleString('zh-TW') }} {{ k.unit }}</span>
         </dd>
@@ -76,9 +86,10 @@ const inView = useInView(root, 0.2, { repeat: true })
   margin: 0;
 }
 
-/* 毛玻璃圓 */
+/* 毛玻璃圓：無外框，以柔和的內側光暈表現玻璃邊緣 */
 .orb {
   position: absolute;
+  isolation: isolate;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
@@ -88,14 +99,13 @@ const inView = useInView(root, 0.2, { repeat: true })
   text-align: center;
   /* 白色毛玻璃：在灰色主視覺上更明亮，文字改深色維持對比 */
   color: var(--c-text);
-  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.74) 55%, rgba(255, 255, 255, 0.58));
-  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.87), rgba(255, 255, 255, 0.69) 55%, rgba(255, 255, 255, 0.53));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -18px 36px rgba(34, 34, 34, 0.08),
+    inset 0 10px 22px rgba(255, 255, 255, 0.45),
+    inset 0 -18px 36px rgba(34, 34, 34, 0.1),
     0 24px 48px -24px rgba(0, 0, 0, 0.6);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  backdrop-filter: blur(26px) saturate(170%);
   animation: orb-float 9s ease-in-out infinite;
 }
 
@@ -105,10 +115,24 @@ const inView = useInView(root, 0.2, { repeat: true })
   position: absolute;
   left: 16%;
   top: 9%;
+  z-index: -1;
   width: 46%;
   height: 26%;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.35), transparent 70%);
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.5), transparent 70%);
+  pointer-events: none;
+}
+
+/* 右下的折射光：讓圓球更有玻璃的厚度 */
+.orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 72% 82%, rgba(255, 255, 255, 0.32), transparent 38%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.18), transparent 45%);
   pointer-events: none;
 }
 
@@ -124,10 +148,9 @@ const inView = useInView(root, 0.2, { repeat: true })
   width: 64%;
   margin-top: -32%;
   color: var(--c-text);
-  background: radial-gradient(circle at 30% 25%, rgba(255, 224, 128, 0.88), rgba(248, 190, 32, 0.62) 50%, rgba(224, 165, 0, 0.5));
-  border-color: rgba(255, 228, 150, 0.7);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 224, 128, 0.83), rgba(248, 190, 32, 0.57) 50%, rgba(224, 165, 0, 0.45));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 14px 30px rgba(255, 240, 190, 0.45),
     inset 0 -24px 48px rgba(160, 110, 0, 0.3),
     0 30px 60px -28px rgba(0, 0, 0, 0.85);
 }
@@ -154,7 +177,24 @@ const inView = useInView(root, 0.2, { repeat: true })
 }
 
 .orb__value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0;
+}
+
+/* 數字上方的圖示 */
+.orb__icon {
+  width: clamp(16px, 3.6cqw, 24px);
+  height: clamp(16px, 3.6cqw, 24px);
+  margin-bottom: clamp(4px, 1cqw, 8px);
+  color: rgba(34, 34, 34, 0.72);
+}
+
+.orb--main .orb__icon {
+  width: clamp(24px, 6cqw, 40px);
+  height: clamp(24px, 6cqw, 40px);
+  color: rgba(34, 34, 34, 0.75);
 }
 
 .orb__num {

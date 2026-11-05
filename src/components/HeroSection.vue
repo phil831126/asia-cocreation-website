@@ -22,9 +22,7 @@ function splitLine(line: string) {
       <svg class="hero__lines" viewBox="0 0 1440 900" preserveAspectRatio="none">
         <path d="M-40 720 C 260 640, 420 820, 720 700 S 1180 420, 1480 520" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
         <path d="M-40 780 C 300 700, 480 880, 780 760 S 1200 500, 1480 600" fill="none" stroke="#F8BE20" stroke-opacity="0.45" />
-        <line x1="0" y1="140" x2="1440" y2="140" stroke="#ffffff" stroke-opacity="0.05" />
-        <line x1="760" y1="0" x2="760" y2="900" stroke="#ffffff" stroke-opacity="0.05" />
-      </svg>
+        <line x1="0" y1="140" x2="1440" y2="140" stroke="#ffffff" stroke-opacity="0.05" />      </svg>
     </div>
 
     <div class="container hero__grid">
