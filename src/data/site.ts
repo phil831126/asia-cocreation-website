@@ -24,7 +24,7 @@ export interface NavItem {
 /** 頂部導覽列（「聯絡我們」由右側按鈕前往，不重複列出） */
 export const navItems: NavItem[] = [
   { label: '首頁', to: '/' },
-  { label: '關於我們', to: '/about' },
+  { label: '關於亞創', to: '/about' },
   { label: '講師聯盟', to: '/lecturers' },
   { label: '學習地圖', to: '/learning-map' },
   { label: '案例分享', to: '/cases' },
@@ -71,7 +71,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
       '亞洲共創學院（亞洲共創股份有限公司）提供教育訓練、講師經紀與企業品牌顧問服務，透過專業課程規劃與教育培訓，連結政府、企業與人才發展需求。',
   },
   about: {
-    title: '關於我們｜亞洲共創學院',
+    title: '關於亞創｜亞洲共創學院',
     description:
       '以教育連結未來，讓學習創造更多可能。認識亞洲共創學院的品牌理念「共創・共享・共好」、專業服務與特色。',
   },

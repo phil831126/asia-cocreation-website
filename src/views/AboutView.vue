@@ -31,7 +31,7 @@ const featureIcons: Record<string, unknown> = {
 
 <template>
   <div class="page">
-    <PageHeader :eyebrow="aboutHero.eyebrow" :title="aboutHero.title" :crumbs="[{ label: '關於我們' }]" />
+    <PageHeader :eyebrow="aboutHero.eyebrow" :title="aboutHero.title" :crumbs="[{ label: '關於亞創' }]" />
 
     <!-- 1. 品牌介紹 -->
     <section class="section">
