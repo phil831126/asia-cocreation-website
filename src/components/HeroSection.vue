@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { ArrowRight } from '@lucide/vue'
-import BaseButton from './BaseButton.vue'
+import { Sparkles } from '@lucide/vue'
 import HeroDashboard from './HeroDashboard.vue'
-import ServiceIcon from './ServiceIcon.vue'
+import HeroCases from './HeroCases.vue'
 import { hero } from '@/data/home'
-import { services } from '@/data/services'
-import { scrollToSection } from '@/composables/motion'
 
 function splitLine(line: string) {
   const i = line.indexOf(hero.titleHighlight)
@@ -17,42 +14,47 @@ function splitLine(line: string) {
 <template>
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__bg" aria-hidden="true">
+      <div class="hero__glow"></div>
       <div class="hero__dots"></div>
-      <div class="hero__orb"></div>
-      <svg class="hero__lines" viewBox="0 0 1440 900" preserveAspectRatio="none">
-        <path d="M-40 720 C 260 640, 420 820, 720 700 S 1180 420, 1480 520" fill="none" stroke="#ffffff" stroke-opacity="0.1" />
-        <path d="M-40 780 C 300 700, 480 880, 780 760 S 1200 500, 1480 600" fill="none" stroke="#F8BE20" stroke-opacity="0.45" />
-        <line x1="0" y1="140" x2="1440" y2="140" stroke="#ffffff" stroke-opacity="0.05" />      </svg>
     </div>
+    <Sparkles class="hero__spark" :size="26" :stroke-width="1.8" aria-hidden="true" />
 
+    <!-- 版面：左上文字、右上主視覺插圖、左下案例輪播、右下成果數據 -->
     <div class="container hero__grid">
+      <!-- 波浪色帶：以下排為基準定位，色帶上緣在右側維持於圓球上方 -->
+      <div class="hero__wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 140" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="hero-dash-fade" gradientUnits="userSpaceOnUse" x1="560" y1="0" x2="760" y2="0">
+              <stop offset="0" stop-color="#f8be20" stop-opacity="1" />
+              <stop offset="1" stop-color="#f8be20" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 70 C 240 20, 470 120, 700 70 S 1100 30, 1440 40 L1440 140 L0 140Z" fill="#f6f4ee" />
+          <!-- 黃虛線只走左半部（案例卡片後方），在圓球前淡出 -->
+          <path class="hero__dash" d="M0 90 C 240 40, 470 140, 700 90" fill="none" stroke="url(#hero-dash-fade)" />
+        </svg>
+      </div>
+
       <div class="hero__copy">
         <h1 id="hero-title" class="hero__title">
           <span v-for="(line, i) in hero.titleLines" :key="line" class="hero__line hero__in" :style="{ '--d': `${0.15 + i * 0.12}s` }">
             {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="hero__mark">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
           </span>
         </h1>
-
         <p class="hero__sub hero__in" style="--d: 0.45s">{{ hero.subtitle }}</p>
-
-        <div class="hero__actions hero__in" style="--d: 0.58s">
-          <BaseButton :href="`#${hero.primaryCta.sectionId}`" @click.prevent="scrollToSection(hero.primaryCta.sectionId)">
-            {{ hero.primaryCta.label }}
-          </BaseButton>
-        </div>
-
-        <ul class="hero__tags hero__in" style="--d: 0.72s" aria-label="核心服務">
-          <li v-for="s in services" :key="s.id">
-            <RouterLink to="/about#services" class="hero__tag">
-              <ServiceIcon :name="s.icon" :size="16" />
-              {{ s.title }}
-              <ArrowRight :size="14" class="hero__tag-arrow" aria-hidden="true" />
-            </RouterLink>
-          </li>
-        </ul>
       </div>
 
-      <div class="hero__visual hero__in" style="--d: 0.25s">
+      <!-- 主視覺：去框並融入白色背景；不撐高上排（高度由左側文字決定） -->
+      <figure class="hero__art">
+        <img :src="hero.illustration.src" :alt="hero.illustration.alt" width="1672" height="941" />
+      </figure>
+
+      <div class="hero__cases hero__in" style="--d: 0.6s">
+        <HeroCases />
+      </div>
+
+      <div class="hero__stats hero__in" style="--d: 0.5s">
         <HeroDashboard />
       </div>
     </div>
@@ -67,10 +69,9 @@ function splitLine(line: string) {
   flex-direction: column;
   justify-content: center;
   min-height: min(100svh, 960px);
-  padding: calc(var(--nav-h) + 24px) 0 88px;
-  /* 深灰背景：維持白字的閱讀對比（白字對最淺處約 6.6:1） */
-  background: radial-gradient(ellipse 80% 60% at 75% 40%, #5c5c5c 0%, #4b4b4b 60%, #424242 100%);
-  color: #fff;
+  padding: calc(var(--nav-h) + 24px) 0 48px;
+  background: #fff;
+  color: var(--c-text);
   overflow: hidden;
 }
 
@@ -81,58 +82,116 @@ function splitLine(line: string) {
   pointer-events: none;
 }
 
-/* 黃色漸層點陣 */
+/* 插圖後方的淡黃光暈與點陣，讓插圖與背景融為一體 */
+.hero__glow {
+  position: absolute;
+  right: 8%;
+  top: 6%;
+  width: 46%;
+  height: 62%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248, 190, 32, 0.16), transparent 68%);
+}
+
 .hero__dots {
   position: absolute;
-  right: -4%;
-  top: 6%;
-  width: 62%;
-  height: 90%;
-  background-image: radial-gradient(rgba(248, 190, 32, 0.55) 1.3px, transparent 1.5px);
+  right: 0;
+  top: 0;
+  width: 55%;
+  height: 70%;
+  background-image: radial-gradient(rgba(224, 165, 0, 0.35) 1.2px, transparent 1.4px);
   background-size: 18px 18px;
-  -webkit-mask-image: radial-gradient(ellipse at 55% 45%, #000 0%, transparent 62%);
-  mask-image: radial-gradient(ellipse at 55% 45%, #000 0%, transparent 62%);
-  opacity: 0.35;
+  -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000, transparent 65%);
+  mask-image: radial-gradient(ellipse at 70% 30%, #000, transparent 65%);
+  opacity: 0.5;
 }
 
-.hero__orb {
+.hero__spark {
   position: absolute;
-  left: -10%;
-  bottom: -30%;
-  width: 50%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(248, 190, 32, 0.14), transparent 65%);
+  left: 45%;
+  top: calc(var(--nav-h) + 5vh);
+  color: var(--c-yellow);
+  animation: spark 4s ease-in-out infinite;
 }
 
-.hero__lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+@keyframes spark {
+  50% {
+    transform: rotate(12deg) scale(1.1);
+    opacity: 0.7;
+  }
 }
 
+/* 2 × 2 格局：上下兩排靠攏，尺寸依畫面高度縮放 */
 .hero__grid {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(32px, 5vw, 80px);
+  grid-template-areas:
+    'copy art'
+    'cases stats';
+  align-content: start;
+  column-gap: clamp(32px, 4vw, 56px);
+  row-gap: 1.5vh;
+}
+
+/* 色帶：放在第二排、橫跨整個畫面寬度 */
+.hero__wave {
+  position: absolute;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  top: -24px;
+  z-index: -1;
+  height: 140px;
+  pointer-events: none;
+}
+
+.hero__wave svg {
+  display: block;
+  width: 100%;
+  height: 140px;
+}
+
+/* 色帶下方的底色延伸到畫面最底 */
+.hero__wave::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 139px;
+  height: 100vh;
+  background: #f6f4ee;
+}
+
+.hero__dash {
+  stroke-width: 2.5;
+  stroke-dasharray: 4 10;
+  stroke-linecap: round;
+  animation: dash-flow 6s linear infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -140;
+  }
 }
 
 .hero__copy {
+  grid-area: copy;
+  align-self: start;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 26px;
+  padding-top: 1vh;
 }
-
 
 .hero__title {
   display: flex;
   flex-direction: column;
-  font-size: clamp(2.5rem, 5.2vw, 4.6rem);
+  font-size: clamp(34px, 8.6vh, 62px);
   font-weight: 900;
-  line-height: 1.18;
+  line-height: 1.2;
   letter-spacing: 0.03em;
 }
 
@@ -140,76 +199,69 @@ function splitLine(line: string) {
   display: block;
 }
 
+/* 黃色螢光底線（黃字放在白底上對比不足） */
 .hero__mark {
-  color: var(--c-yellow);
+  background: linear-gradient(transparent 58%, rgba(248, 190, 32, 0.7) 58%, rgba(248, 190, 32, 0.7) 90%, transparent 90%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.06em;
 }
 
 .hero__sub {
-  max-width: 520px;
-  font-size: clamp(1.02rem, 1.3vw, 1.15rem);
-  line-height: 1.9;
-  color: rgba(255, 255, 255, 0.72);
+  max-width: 500px;
+  margin-top: 2vh;
+  font-size: clamp(13px, 2.4vh, 16px);
+  line-height: 1.85;
+  color: var(--c-text-2);
 }
 
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 6px;
-}
-
-
-.hero__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  padding-top: 26px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.hero__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  transition:
-    background-color 0.3s,
-    color 0.3s,
-    transform 0.3s var(--ease-out);
-}
-
-.hero__tag:hover {
-  background: var(--c-yellow);
-  color: var(--c-text);
-  transform: translateY(-2px);
-}
-
-.hero__tag-arrow {
-  width: 0;
-  opacity: 0;
-  margin-left: -8px;
-  transition:
-    width 0.3s var(--ease-out),
-    opacity 0.3s,
-    margin 0.3s var(--ease-out);
-}
-
-.hero__tag:hover .hero__tag-arrow {
-  width: 14px;
-  opacity: 1;
-  margin-left: 0;
-}
-
-.hero__visual {
-  width: 100%;
-  max-width: 560px;
+/* 主視覺插圖：放大、往左移；以白色混合＋邊緣淡出融入背景，並降低飽和度 */
+.hero__art {
+  grid-area: art;
+  position: relative;
+  align-self: stretch;
   justify-self: end;
+  width: min(calc(100% + 40px), calc(44vh * 1672 / 941), 540px);
+  margin: 0 3.5vw 0 0;
+}
+
+.hero__art img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+  filter: saturate(0.68) brightness(1.03);
+  -webkit-mask-image: radial-gradient(ellipse 72% 70% at 52% 48%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 72% 70% at 52% 48%, #000 58%, transparent 100%);
+  animation: art-in 1.1s var(--ease-out) both 0.25s;
+}
+
+/* 只淡入圖片本身（父層若有 filter 會讓混合模式失效） */
+@keyframes art-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.hero__cases {
+  grid-area: cases;
+  align-self: start;
+  width: 100%;
+  /* 依可用高度限制寬度，讓 16:9 圖片仍完整放進一個畫面 */
+  max-width: min(560px, calc((57vh - 200px) * 32 / 9 + 14px));
+}
+
+.hero__stats {
+  grid-area: stats;
+  align-self: center;
+  justify-self: end;
+  position: relative;
+  top: 12px;
+  padding-top: 2vh;
 }
 
 /* 載入時逐步淡入 */
@@ -226,45 +278,86 @@ function splitLine(line: string) {
   }
 }
 
-
-@media (max-width: 1080px) {
-  .hero__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 48px;
-  }
-
-  .hero__visual {
-    max-width: 640px;
-    justify-self: stretch;
-  }
-
-  .hero__dots {
-    width: 100%;
-    height: 60%;
-    right: 0;
-    top: auto;
-    bottom: 0;
-  }
-
-  .hero {
-    min-height: auto;
-    padding-bottom: 80px;
+/* 很矮的視窗：插圖略縮，避免底部壓到右下圓球 */
+@media (min-width: 1081px) and (max-height: 600px) {
+  .hero__art {
+    width: min(calc(100% + 40px), calc(40vh * 1672 / 941), 540px);
   }
 }
 
-@media (max-width: 560px) {
+/* 側邊留白不足時，讓出右下角「共創諮詢台」按鈕的位置 */
+@media (min-width: 1081px) and (max-width: 1500px) {
+  .hero__stats {
+    padding-right: 56px;
+  }
+}
+
+/* 平板與手機：上下堆疊（文字 → 插圖 → 數據 → 案例） */
+@media (max-width: 1080px) {
   .hero {
-    padding-top: calc(var(--nav-h) + 24px);
-    padding-bottom: 64px;
+    min-height: auto;
+    padding-bottom: 56px;
   }
 
-  .hero__actions {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'copy'
+      'art'
+      'stats'
+      'cases';
+    row-gap: 28px;
+  }
+
+  .hero__wave {
+    display: none;
+  }
+
+  .hero__title {
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+  }
+
+  .hero__sub {
+    font-size: 1rem;
+  }
+
+  .hero__art {
+    justify-self: center;
     width: 100%;
+    max-width: 640px;
+    margin: 0;
   }
 
-  .hero__actions :deep(.btn) {
-    flex: 1 1 100%;
-    justify-content: space-between;
+  .hero__art img {
+    position: static;
+  }
+
+  .hero__stats {
+    justify-self: stretch;
+    top: 0;
+    padding-top: 0;
+  }
+
+  .hero__cases {
+    max-width: none;
+  }
+
+  .hero__spark {
+    display: none;
+  }
+
+  /* 直式長頁面：光暈固定為圓形，只放在插圖後方 */
+  .hero__glow {
+    right: 0;
+    top: 240px;
+    width: 90vw;
+    max-width: 640px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .hero__dots {
+    height: 640px;
   }
 }
 </style>

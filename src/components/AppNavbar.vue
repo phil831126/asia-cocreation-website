@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu, X, ArrowUpRight } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
@@ -10,9 +10,6 @@ const route = useRoute()
 const scrolled = ref(false)
 const open = ref(false)
 const headerEl = ref<HTMLElement | null>(null)
-
-/** 首頁頂端為黑色 Hero，未捲動時導覽改用淺色文字 */
-const onDark = computed(() => route.path === '/' && !scrolled.value && !open.value)
 
 function isActive(to: string) {
   return to === '/' ? route.path === '/' : route.path.startsWith(to)
@@ -52,7 +49,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header ref="headerEl" class="nav" :class="{ 'is-scrolled': scrolled || open, 'is-open': open, 'is-dark': onDark }">
+  <header ref="headerEl" class="nav" :class="{ 'is-scrolled': scrolled || open, 'is-open': open }">
     <div class="nav__wrap">
       <div class="nav__bar">
         <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
@@ -74,7 +71,7 @@ onBeforeUnmount(() => {
           </ul>
         </nav>
 
-        <BaseButton to="/contact" size="sm" :variant="onDark ? 'primary' : 'dark'" class="nav__cta">聯絡我們</BaseButton>
+        <BaseButton to="/contact" size="sm" variant="dark" class="nav__cta">聯絡我們</BaseButton>
 
         <button
           type="button"
@@ -272,35 +269,6 @@ onBeforeUnmount(() => {
   background: var(--c-yellow);
   padding: 0 6px;
   border-radius: 6px;
-}
-
-/* 深色 Hero 上方 */
-.nav.is-dark {
-  color: #fff;
-}
-
-.nav.is-dark .nav__pill ul {
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.nav.is-dark .nav__link {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.nav.is-dark .nav__link:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.nav.is-dark .nav__link.is-active {
-  color: var(--c-text);
-  background: var(--c-yellow);
-}
-
-.nav.is-dark .nav__toggle {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .menu-enter-active,
