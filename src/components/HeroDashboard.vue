@@ -185,15 +185,15 @@ const icons: Record<string, unknown> = {
 
 /* 數字上方的圖示 */
 .orb__icon {
-  width: clamp(16px, 3.6cqw, 24px);
-  height: clamp(16px, 3.6cqw, 24px);
+  width: clamp(16.5px, 3.7cqw, 24.7px);
+  height: clamp(16.5px, 3.7cqw, 24.7px);
   margin-bottom: clamp(4px, 1cqw, 8px);
   color: rgba(34, 34, 34, 0.72);
 }
 
 .orb--main .orb__icon {
-  width: clamp(24px, 6cqw, 40px);
-  height: clamp(24px, 6cqw, 40px);
+  width: clamp(26.4px, 6.6cqw, 44px);
+  height: clamp(26.4px, 6.6cqw, 44px);
   color: rgba(34, 34, 34, 0.75);
 }
 

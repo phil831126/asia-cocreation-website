@@ -175,17 +175,13 @@ onBeforeUnmount(() => {
   padding: 5px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(34, 34, 34, 0.07);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  transition:
-    background-color 0.4s,
-    border-color 0.4s;
+  transition: background-color 0.4s;
 }
 
 .nav.is-scrolled .nav__pill ul {
   background: rgba(239, 239, 236, 0.7);
-  border-color: transparent;
 }
 
 .nav__link {
@@ -285,7 +281,6 @@ onBeforeUnmount(() => {
 
 .nav.is-dark .nav__pill ul {
   background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .nav.is-dark .nav__link {
