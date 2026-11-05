@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Phone, Mail, MapPin, Clock, Info } from '@lucide/vue'
+import { Phone, Mail, MapPin, Clock, Info, CircleCheck, CircleAlert } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import { contact, contactFields } from '@/data/site'
+import { contact, contactFields, phoneHref } from '@/data/site'
+import { contactFormEndpoint } from '@/data/sheets'
+
+/** 有設定送出網址才真的送出；否則維持「展示版本」 */
+const live = !!contactFormEndpoint
+const SEND_TIMEOUT_MS = 15000
 
 const route = useRoute()
 const fieldIcons = { phone: Phone, email: Mail, address: MapPin, hours: Clock }
@@ -29,7 +34,14 @@ const form = reactive({
   message: lecturer ? `想邀請講師「${lecturer}」，活動主題／日期／人數：` : '',
 })
 const errors = reactive<Record<string, string>>({})
-const checked = ref(false)
+
+/** idle：尚未送出｜checked：展示版本檢查完成｜sending：送出中｜sent：成功｜error：失敗 */
+const status = ref<'idle' | 'checked' | 'sending' | 'sent' | 'error'>('idle')
+const sending = computed(() => status.value === 'sending')
+
+/** 防垃圾訊息：真人看不到、不會填的欄位，以及開始填寫到送出的時間 */
+const honeypot = ref('')
+const startedAt = Date.now()
 
 function validate() {
   for (const k of Object.keys(errors)) delete errors[k]
@@ -41,15 +53,51 @@ function validate() {
   return Object.keys(errors).length === 0
 }
 
-function onSubmit() {
-  checked.value = false
+async function onSubmit() {
+  if (sending.value) return
+  status.value = 'idle'
   if (!validate()) {
     const first = Object.keys(errors)[0]
     document.getElementById(`f-${first}`)?.focus()
     return
   }
-  // 尚未串接後端或電子郵件服務：不送出任何資料，也不顯示「已送出」
-  checked.value = true
+
+  // 未設定送出網址：不送出任何資料，也不顯示「已送出」
+  if (!live) {
+    status.value = 'checked'
+    return
+  }
+
+  status.value = 'sending'
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), SEND_TIMEOUT_MS)
+  try {
+    // 以純文字送出 JSON：屬於「簡單請求」，Apps Script 不需要額外的跨網域設定
+    const res = await fetch(contactFormEndpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: form.name.trim(),
+        org: form.org.trim(),
+        email: form.email.trim(),
+        need: needOptions.find((o) => o.value === form.need)?.label ?? form.need,
+        message: form.message.trim(),
+        page: location.pathname + location.search,
+        website: honeypot.value,
+        elapsed: Date.now() - startedAt,
+      }),
+      signal: ctrl.signal,
+    })
+    const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+    if (!res.ok || !data?.ok) throw new Error(data?.error ?? `HTTP ${res.status}`)
+
+    status.value = 'sent'
+    Object.assign(form, { name: '', org: '', email: '', need: '', message: '' })
+  } catch (err) {
+    console.warn('[聯絡表單] 送出失敗：', err)
+    status.value = 'error'
+  } finally {
+    clearTimeout(timer)
+  }
 }
 </script>
 
@@ -81,7 +129,7 @@ function onSubmit() {
         </aside>
 
         <div class="form-card">
-          <div class="demo-note" role="note">
+          <div v-if="!live" class="demo-note" role="note">
             <Info :size="20" aria-hidden="true" />
             <p><strong>展示版本：</strong>此表單尚未串接後端或電子郵件寄送服務，按下按鈕不會送出任何資料。</p>
           </div>
@@ -121,14 +169,37 @@ function onSubmit() {
               <span id="e-message" class="field__err">{{ errors.message }}</span>
             </div>
 
+            <!-- 防垃圾訊息：真人看不到這個欄位，機器人常會自動填寫 -->
+            <div class="hp" aria-hidden="true">
+              <label for="f-website">網站</label>
+              <input id="f-website" v-model="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <p v-if="live" class="form__privacy">
+              送出即表示您同意亞洲共創股份有限公司依個人資料保護法，使用您提供的資料聯繫並回覆本次洽詢。
+            </p>
+
             <div class="form__foot">
               <p class="form__hint"><span aria-hidden="true">*</span> 為必填欄位</p>
-              <BaseButton type="submit" variant="dark">檢查表單（展示）</BaseButton>
+              <BaseButton type="submit" variant="dark" :disabled="sending" :aria-busy="sending">
+                {{ live ? (sending ? '送出中…' : '送出洽詢') : '檢查表單（展示）' }}
+              </BaseButton>
             </div>
 
             <div aria-live="polite">
-              <p v-if="checked" class="form__result">
+              <p v-if="status === 'checked'" class="form__result">
                 欄位檢查完成。<strong>此為展示版本，訊息並未送出</strong>，正式上線前需串接表單寄送服務。
+              </p>
+              <p v-else-if="status === 'sent'" class="form__result form__result--ok">
+                <CircleCheck :size="20" aria-hidden="true" />
+                <span><strong>已收到您的洽詢！</strong>我們會盡快與您聯繫，謝謝您。</span>
+              </p>
+              <p v-else-if="status === 'error'" class="form__result form__result--error">
+                <CircleAlert :size="20" aria-hidden="true" />
+                <span>
+                  <strong>送出失敗</strong>，請稍後再試一次，或直接來電
+                  <a :href="phoneHref">{{ contact.phone }}</a>。您填寫的內容仍保留在表單中。
+                </span>
               </p>
             </div>
           </form>
@@ -322,6 +393,58 @@ function onSubmit() {
   background: var(--c-bg-alt);
   border: 1px dashed var(--c-gray);
   font-size: 0.94rem;
+}
+
+.form__result--ok,
+.form__result--error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-style: solid;
+}
+
+.form__result--ok svg,
+.form__result--error svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.form__result--ok {
+  border-color: var(--c-yellow-deep);
+  background: var(--c-yellow-tint);
+}
+
+.form__result--error {
+  border-color: rgba(180, 35, 24, 0.35);
+  background: #fef3f2;
+  color: #7a271a;
+}
+
+.form__result--error a {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form__privacy {
+  color: var(--c-text-3);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+/* 防垃圾訊息欄位：移出畫面，真人看不到也不會用鍵盤跳到 */
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+:deep(.btn[disabled]) {
+  opacity: 0.6;
+  cursor: progress;
+  transform: none;
 }
 
 @media (max-width: 900px) {

@@ -17,3 +17,12 @@ export const sheetSources = {
   /** 「案例」分頁的 CSV 網址 */
   cases: `${PUBLISHED}?gid=1046939079&single=true&output=csv`,
 }
+
+/**
+ * 「聯絡我們」表單送出網址：試算表的 Apps Script 網頁應用程式（…/exec）
+ * - 程式碼與安裝步驟：docs/contact-form-apps-script.gs
+ * - 資料寫入另一份私人試算表「亞創網站｜聯絡表單紀錄（含個資，請勿公開）」，與網站內容分開
+ * - 留空字串＝表單維持「展示版本」，只檢查欄位、不送出
+ */
+export const contactFormEndpoint =
+  'https://script.google.com/macros/s/AKfycby3x8JPsA3UHRvIs1xAVnc8cvEKwf5OU4yKnUxiBxq4ltJYKSng0uciTmGvMifRbj0OcQ/exec'
