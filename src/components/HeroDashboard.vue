@@ -168,14 +168,17 @@ const inView = useInView(root, 0.2, { repeat: true })
   letter-spacing: -0.01em;
 }
 
+/* 標籤：放大加粗，但各尺寸都維持比上方數字小 */
 .orb__label {
   margin-top: 4px;
-  font-size: clamp(11px, 2.4cqw, 14px);
-  color: rgba(34, 34, 34, 0.72);
+  font-size: clamp(13px, 3.3cqw, 19px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(34, 34, 34, 0.85);
 }
 
 .orb--main .orb__label {
-  font-size: clamp(12px, 2.8cqw, 16px);
-  color: rgba(34, 34, 34, 0.75);
+  font-size: clamp(16px, 4.2cqw, 26px);
+  color: rgba(34, 34, 34, 0.85);
 }
 </style>

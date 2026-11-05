@@ -6,9 +6,10 @@
 export const brand = {
   name: '亞洲共創學院',
   company: '亞洲共創股份有限公司',
+  /** 品牌標誌圖示（不含文字），顯示在「亞洲共創學院」字樣左側；留空時使用暫代的放大鏡圖示 */
+  markSrc: '/brand/logo-mark.png',
   /**
-   * 正式 Logo：請將檔案放在 public/brand/ 後填入路徑，例如 '/brand/logo.svg'
-   * 留空時使用暫代的放大鏡標誌（非正式 Logo）
+   * 含文字的完整 Logo（圖文一體）：填入後會取代「圖示＋文字」整組，例如 '/brand/logo.svg'
    */
   logoSrc: '',
   logoAlt: '亞洲共創學院 Logo',
@@ -20,7 +21,7 @@ export interface NavItem {
   to: string
 }
 
-/** 頂部導覽列（「聯絡我們」由右側「洽詢合作」按鈕前往，不重複列出） */
+/** 頂部導覽列（「聯絡我們」由右側按鈕前往，不重複列出） */
 export const navItems: NavItem[] = [
   { label: '首頁', to: '/' },
   { label: '關於我們', to: '/about' },

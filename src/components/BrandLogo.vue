@@ -8,8 +8,9 @@ withDefaults(defineProps<{ showCompany?: boolean }>(), { showCompany: false })
   <span class="logo">
     <img v-if="brand.logoSrc" :src="brand.logoSrc" :alt="brand.logoAlt" class="logo__img" />
     <template v-else>
-      <!-- 暫代標誌：取得正式 Logo 後於 data/site.ts 設定 logoSrc -->
-      <svg class="logo__mark" viewBox="0 0 44 44" aria-hidden="true">
+      <img v-if="brand.markSrc" :src="brand.markSrc" alt="" class="logo__mark" />
+      <!-- 暫代標誌：未設定 markSrc 時使用 -->
+      <svg v-else class="logo__mark" viewBox="0 0 44 44" aria-hidden="true">
         <circle cx="19" cy="19" r="13" fill="none" stroke="#888888" stroke-width="4.5" />
         <circle cx="19" cy="19" r="6.5" fill="#F8BE20" />
         <path d="M29 29 L39 39" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
@@ -38,11 +39,12 @@ withDefaults(defineProps<{ showCompany?: boolean }>(), { showCompany: false })
   width: 38px;
   height: 38px;
   flex: none;
+  object-fit: contain;
   transition: transform 0.5s var(--ease-out);
 }
 
 .logo:hover .logo__mark {
-  transform: rotate(-12deg) scale(1.04);
+  transform: scale(1.06);
 }
 
 .logo__text {

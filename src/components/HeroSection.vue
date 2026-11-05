@@ -29,8 +29,6 @@ function splitLine(line: string) {
 
     <div class="container hero__grid">
       <div class="hero__copy">
-        <span class="eyebrow hero__eyebrow hero__in" style="--d: 0.05s">{{ hero.eyebrow }}</span>
-
         <h1 id="hero-title" class="hero__title">
           <span v-for="(line, i) in hero.titleLines" :key="line" class="hero__line hero__in" :style="{ '--d': `${0.15 + i * 0.12}s` }">
             {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="hero__mark">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
@@ -130,9 +128,6 @@ function splitLine(line: string) {
   gap: 26px;
 }
 
-.hero__eyebrow {
-  color: rgba(255, 255, 255, 0.7);
-}
 
 .hero__title {
   display: flex;

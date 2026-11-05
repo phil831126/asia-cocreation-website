@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
           </ul>
         </nav>
 
-        <BaseButton to="/contact" size="sm" :variant="onDark ? 'primary' : 'dark'" class="nav__cta">洽詢合作</BaseButton>
+        <BaseButton to="/contact" size="sm" :variant="onDark ? 'primary' : 'dark'" class="nav__cta">聯絡我們</BaseButton>
 
         <button
           type="button"
@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
               </RouterLink>
             </li>
           </ul>
-          <BaseButton to="/contact" variant="primary" block>洽詢合作</BaseButton>
+          <BaseButton to="/contact" variant="primary" block>聯絡我們</BaseButton>
         </nav>
       </Transition>
     </div>
