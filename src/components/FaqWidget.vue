@@ -564,12 +564,16 @@ function restart() {
   transform-origin: bottom right;
 }
 
-/* ---------- 視窗：與導覽列相同的毛玻璃 ---------- */
+/* ---------- 視窗：與導覽列相同的毛玻璃 ----------
+   桌面版放在浮動按鈕左側、底部與按鈕對齊，高度避開上方導覽列 */
 .faq__panel {
+  position: absolute;
+  right: calc(64px + 14px);
+  bottom: 0;
   display: flex;
   flex-direction: column;
   width: 380px;
-  height: min(600px, calc(100dvh - 130px));
+  height: min(600px, calc(100dvh - var(--nav-h) - var(--faq-gap) - 16px));
   overflow: hidden;
   border: 1px solid var(--faq-glass-border);
   border-radius: 28px;
