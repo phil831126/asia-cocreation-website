@@ -134,14 +134,9 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   overflow: hidden;
 }
 
+/* 首頁輪播不顯示案例摘要 */
 .hc__slide :deep(.cc__excerpt) {
-  margin-top: 6px;
-  font-size: 0.9rem;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
+  display: none;
 }
 
 .hc__slide :deep(.cc__more) {

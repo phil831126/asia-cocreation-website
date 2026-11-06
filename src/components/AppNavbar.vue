@@ -2,9 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu, X, ArrowUpRight } from '@lucide/vue'
-import BrandLogo from './BrandLogo.vue'
 import BaseButton from './BaseButton.vue'
-import { navItems } from '@/data/site'
+import { brand, navItems } from '@/data/site'
 import { NAV_DOCK_QUERY, navDockEl } from '@/composables/navDock'
 
 const route = useRoute()
@@ -91,7 +90,7 @@ onBeforeUnmount(() => {
     <div class="nav__wrap">
       <div class="nav__bar">
         <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
-          <BrandLogo />
+          <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="282" height="240" />
         </RouterLink>
 
         <nav class="nav__pill" aria-label="主要導覽">
@@ -201,6 +200,22 @@ onBeforeUnmount(() => {
 .nav__brand {
   display: inline-flex;
   border-radius: 12px;
+}
+
+/* 圖文一體的 Logo（字樣在圖示下方），高度接近導覽列本體 */
+.nav__logo {
+  display: block;
+  width: auto;
+  height: 60px;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.nav__brand:hover .nav__logo {
+  transform: scale(1.04);
+}
+
+.nav.is-scrolled .nav__logo {
+  height: 54px;
 }
 
 /* 膠囊式導覽 */

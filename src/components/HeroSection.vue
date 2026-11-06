@@ -63,7 +63,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   min-height: max(100svh, 640px);
-  background: #fff;
+  /* 透明底，讓首頁最底層的點綴透出來（頁面本身為白底） */
+  background: transparent;
   color: var(--c-text);
   overflow: hidden;
 }
@@ -135,6 +136,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  /* 讓說明文字依左欄寬度縮放字級（cqi） */
+  container-type: inline-size;
 }
 
 .hero__title {
@@ -158,11 +161,12 @@ onBeforeUnmount(() => {
   padding-inline: 0.06em;
 }
 
+/* 說明文字固定一行：字級依左欄寬度縮放（全文 35 字），最大 17px */
 .hero__sub {
-  max-width: 520px;
   margin-top: 2.6vh;
-  font-size: clamp(14px, 2.3vh, 17px);
+  font-size: min(17px, 2.3vh + 2px, calc(100cqi / 35.6));
   line-height: 1.85;
+  white-space: nowrap;
   color: var(--c-text-2);
 }
 
@@ -237,7 +241,7 @@ onBeforeUnmount(() => {
   }
 
   .hero__sub {
-    font-size: 1rem;
+    font-size: min(17px, calc(100cqi / 35.6));
   }
 
   .hero__cases {

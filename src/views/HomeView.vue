@@ -9,6 +9,7 @@ import CaseShowcase from '@/components/CaseShowcase.vue'
 import PartnerWall from '@/components/PartnerWall.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
 import SectionDots from '@/components/SectionDots.vue'
+import HomeBackdrop from '@/components/HomeBackdrop.vue'
 import { casesSection } from '@/data/home'
 import { useSectionSnap } from '@/composables/sectionSnap'
 
@@ -18,6 +19,8 @@ const snap = useSectionSnap(root)
 
 <template>
   <div ref="root" class="page home">
+    <!-- 最底層的背景點綴（網點、虛線、幾何圖形） -->
+    <HomeBackdrop />
     <!-- 01 主視覺（含成果 Dashboard） -->
     <HeroSection data-snap="首頁" />
     <!-- 02 三大服務 -->
@@ -58,6 +61,12 @@ const snap = useSectionSnap(root)
 </template>
 
 <style scoped>
+/* 讓背景點綴（HomeBackdrop）留在所有區塊後方 */
+.home {
+  position: relative;
+  isolation: isolate;
+}
+
 /* 桌面：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列（搭配區塊快捷捲動）
    Hero 自行處理版面（桌機版導覽列在 Hero 底部），不套用這裡的留白 */
 @media (min-width: 1024px) {
