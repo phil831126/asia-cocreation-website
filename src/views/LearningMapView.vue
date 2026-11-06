@@ -11,7 +11,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
   <div class="page">
     <PageHeader eyebrow="Learning Map" title="學習地圖" :crumbs="[{ label: '學習地圖' }]" />
 
-    <!-- 1. 課程的起點：桌機左文右圖 -->
+    <!-- 1. 從自媒體課堂開始的學習旅程：桌機左文右圖 -->
     <section class="section origin" aria-labelledby="origin-title">
       <div class="container origin__grid">
         <div class="origin__copy">
@@ -48,7 +48,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
       </div>
     </section>
 
-    <!-- 2. 課程如何演進：垂直時間軸 -->
+    <!-- 2. 亞洲共創的課程發展歷程：垂直時間軸 -->
     <section :id="anchors.evolution" class="section section--alt">
       <div class="container">
         <SectionHeading :title="evolution.title" />
@@ -68,7 +68,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
       </div>
     </section>
 
-    <!-- 3. 上課會學什麼？：七個學習主題 -->
+    <!-- 3. 學習行銷的七大主題 -->
     <section :id="anchors.topics" class="section">
       <div class="container">
         <SectionHeading :title="topics.title" :desc="topics.intro" />
@@ -85,6 +85,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
             </span>
             <div class="topic__body">
               <h3 class="topic__title">{{ t.title }}</h3>
+              <p class="topic__sub">{{ t.subtitle }}</p>
               <p v-for="(p, j) in t.paragraphs" :key="j" class="topic__text">{{ p }}</p>
             </div>
           </li>
@@ -97,7 +98,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
 </template>
 
 <style scoped>
-/* ---------- 1. 課程的起點 ---------- */
+/* ---------- 1. 從自媒體課堂開始的學習旅程 ---------- */
 .origin__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -250,7 +251,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
   font-size: 0.9rem;
 }
 
-/* ---------- 2. 課程如何演進 ---------- */
+/* ---------- 2. 課程發展歷程（時間軸） ---------- */
 .tl {
   margin-top: var(--block-gap);
   max-width: 980px;
@@ -324,7 +325,7 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
   margin-left: calc(168px + 28px + 48px);
 }
 
-/* ---------- 3. 上課會學什麼？ ---------- */
+/* ---------- 3. 七大學習主題 ---------- */
 .topics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -374,9 +375,18 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
 }
 
 .topic__title {
-  padding-top: 12px;
+  padding-top: 2px;
   font-size: 1.2rem;
   letter-spacing: 0.04em;
+}
+
+/* 主題名稱下方的小標題：字級較小、顏色較淡，不搶主題名稱 */
+.topic__sub {
+  margin-top: 4px;
+  color: var(--c-text-2);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .topic__text {
@@ -385,8 +395,10 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
   line-height: 1.95;
 }
 
-.topic__title + .topic__text {
-  margin-top: 12px;
+.topic__sub + .topic__text {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-line);
 }
 
 /* 跨兩欄的卡片：兩段內文並排 */
@@ -396,8 +408,16 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
   column-gap: 32px;
 }
 
-.topic--wide .topic__title {
+.topic--wide .topic__title,
+.topic--wide .topic__sub {
   grid-column: 1 / -1;
+}
+
+/* 跨欄卡片的兩段內文並排，上方細線一起對齊 */
+.topic--wide .topic__text {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-line);
 }
 
 /* ---------- 平板 ---------- */
@@ -416,6 +436,13 @@ import { anchors, evolution, origin, topics } from '@/data/courseMap'
 
   .topic--wide .topic__body {
     display: block;
+  }
+
+  /* 單欄時兩段內文上下排，第二段不再加分隔線 */
+  .topic--wide .topic__text + .topic__text {
+    margin-top: 10px;
+    padding-top: 0;
+    border-top: 0;
   }
 }
 
