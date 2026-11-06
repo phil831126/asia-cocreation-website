@@ -73,7 +73,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   about: {
     title: '關於亞創｜亞洲共創學院',
     description:
-      '以教育連結未來，讓學習創造更多可能。認識亞洲共創學院的品牌理念「共創・共享・共好」、專業服務與特色。',
+      '2020 年，亞洲共創在台灣成立，從自媒體工作坊起步，逐步與政府機關、大專院校及企業展開培訓合作。認識亞創的創辦故事、教學理念、合作服務與培訓案例。',
   },
   lecturers: {
     title: '講師聯盟｜亞洲共創學院',
