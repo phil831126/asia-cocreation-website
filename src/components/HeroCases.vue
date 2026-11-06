@@ -9,8 +9,8 @@ import { useCases } from '@/composables/sheetData'
 import { prefersReducedMotion } from '@/composables/motion'
 
 /**
- * 首頁 Hero 左下角的案例迷你輪播：
- * 與「讓每一次合作，成為共創的成果」相同的卡片格式，圖片 16:9、一次兩張。
+ * 首頁 Hero 右側的案例輪播：
+ * 與「讓每一次合作，成為共創的成果」相同的卡片格式，放大為一次一張、圖片 16:10。
  */
 const { cases, loading } = useCases()
 const items = computed(() => cases.value.slice(0, 6))
@@ -27,8 +27,8 @@ function init() {
   const reduced = prefersReducedMotion()
   swiper = new Swiper(root.value, {
     modules: [Navigation, Pagination, A11y, Autoplay],
-    slidesPerView: 1.15,
-    spaceBetween: 14,
+    slidesPerView: 1,
+    spaceBetween: 16,
     speed: reduced ? 0 : 600,
     grabCursor: true,
     watchOverflow: true,
@@ -41,9 +41,6 @@ function init() {
       nextSlideMessage: '下一則案例',
       paginationBulletMessage: '前往第 {{index}} 則案例',
     },
-    // 依輪播本身的寬度切換張數
-    breakpointsBase: 'container',
-    breakpoints: { 440: { slidesPerView: 2 } },
   })
 }
 
@@ -75,8 +72,8 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
     <div class="hc__foot">
       <div ref="pagination" class="hc__pagination"></div>
       <div class="hc__nav">
-        <button ref="prevBtn" type="button" class="hc__arrow" aria-label="上一則案例"><ArrowLeft :size="15" aria-hidden="true" /></button>
-        <button ref="nextBtn" type="button" class="hc__arrow" aria-label="下一則案例"><ArrowRight :size="15" aria-hidden="true" /></button>
+        <button ref="prevBtn" type="button" class="hc__arrow" aria-label="上一則案例"><ArrowLeft :size="16" aria-hidden="true" /></button>
+        <button ref="nextBtn" type="button" class="hc__arrow" aria-label="下一則案例"><ArrowRight :size="16" aria-hidden="true" /></button>
         <RouterLink to="/cases" class="hc__all">全部案例</RouterLink>
       </div>
     </div>
@@ -101,7 +98,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 /* ---------- 案例卡：沿用案例區格式，圖片 16:9 ---------- */
 .hc__slide :deep(.cc) {
   border: 0;
-  border-radius: 14px;
+  border-radius: 18px;
   color: var(--c-text);
   box-shadow: 0 16px 30px -18px rgba(60, 50, 20, 0.45);
 }
@@ -111,17 +108,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 }
 
 .hc__slide :deep(.cv) {
-  aspect-ratio: 16 / 9;
-}
-
-.hc__slide :deep(.cv__icon) {
-  width: 40px;
-  height: 40px;
-}
-
-.hc__slide :deep(.cv__icon svg) {
-  width: 18px;
-  height: 18px;
+  aspect-ratio: 16 / 10;
 }
 
 .hc__slide :deep(.cv__label) {
@@ -129,21 +116,16 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 }
 
 .hc__slide :deep(.cc__body) {
-  padding: 1.6vh 14px 1.8vh;
+  padding: 2vh 22px 2.2vh;
 }
 
 .hc__slide :deep(.cc__meta .pending-tag) {
   display: none;
 }
 
-.hc__slide :deep(.cc__cat) {
-  padding: 2px 9px;
-  font-size: 0.7rem;
-}
-
 .hc__slide :deep(.cc__title) {
-  margin-top: 6px;
-  font-size: 0.9rem;
+  margin-top: 8px;
+  font-size: clamp(1rem, 2.2vh, 1.15rem);
   line-height: 1.45;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -153,12 +135,18 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 }
 
 .hc__slide :deep(.cc__excerpt) {
-  display: none;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .hc__slide :deep(.cc__more) {
-  padding-top: 4px;
-  font-size: 0.78rem;
+  padding-top: 8px;
+  font-size: 0.85rem;
 }
 
 /* ---------- 下方控制列 ---------- */
@@ -167,7 +155,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 1.4vh;
+  margin-top: 1.8vh;
 }
 
 .hc__pagination {
@@ -200,8 +188,8 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 .hc__arrow {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border: 0;
   border-radius: 50%;
   background: rgba(34, 34, 34, 0.07);

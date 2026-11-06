@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu, X, ArrowUpRight } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
 import BaseButton from './BaseButton.vue'
 import { navItems } from '@/data/site'
+import { NAV_DOCK_QUERY, navDockEl } from '@/composables/navDock'
 
 const route = useRoute()
 const scrolled = ref(false)
@@ -18,8 +19,34 @@ function isActive(to: string) {
 let openedAtY = 0
 watch(open, (v) => v && (openedAtY = window.scrollY))
 
+/* ---------- 首頁桌機版：導覽列停在 Hero 底部色帶，往下捲動時跟著上移，到頂端後固定 ---------- */
+/** 導覽列本體上方的留白（與 .nav 的 padding-top 相同） */
+const NAV_TOP_GAP = 14
+const dockOffset = ref(0)
+let dockMedia: MediaQueryList | null = null
+let dockObserver: ResizeObserver | null = null
+
+function updateDock() {
+  const el = navDockEl.value
+  dockOffset.value = el && dockMedia?.matches ? Math.max(0, Math.round(el.getBoundingClientRect().top - NAV_TOP_GAP)) : 0
+}
+
+/** 停在色帶中（尚未抵達頂端） */
+const docked = computed(() => dockOffset.value > 0)
+
+watch(navDockEl, (el) => {
+  dockObserver?.disconnect()
+  if (el && typeof ResizeObserver !== 'undefined') {
+    // Hero 內容（圖片、字型）載入後高度會變，重新對齊
+    dockObserver = new ResizeObserver(() => onScroll())
+    dockObserver.observe(el.closest('section') ?? el)
+  }
+  onScroll()
+})
+
 function onScroll() {
-  scrolled.value = window.scrollY > 24
+  updateDock()
+  scrolled.value = navDockEl.value && dockMedia?.matches ? !docked.value : window.scrollY > 24
   // 行動版選單開啟後捲動頁面即自動收合
   if (open.value && Math.abs(window.scrollY - openedAtY) > 60) open.value = false
 }
@@ -35,6 +62,9 @@ function onClickOutside(e: MouseEvent) {
 watch(() => route.fullPath, () => (open.value = false))
 
 onMounted(() => {
+  dockMedia = window.matchMedia(NAV_DOCK_QUERY)
+  dockMedia.addEventListener('change', onScroll)
+  window.addEventListener('resize', onScroll, { passive: true })
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKeydown)
@@ -42,6 +72,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  dockMedia?.removeEventListener('change', onScroll)
+  dockObserver?.disconnect()
+  window.removeEventListener('resize', onScroll)
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKeydown)
   document.removeEventListener('click', onClickOutside)
@@ -49,7 +82,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header ref="headerEl" class="nav" :class="{ 'is-scrolled': scrolled || open, 'is-open': open }">
+  <header
+    ref="headerEl"
+    class="nav"
+    :class="{ 'is-scrolled': scrolled || open, 'is-open': open, 'is-docked': docked }"
+    :style="docked ? { transform: `translateY(${dockOffset}px)` } : undefined"
+  >
     <div class="nav__wrap">
       <div class="nav__bar">
         <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
@@ -282,6 +320,13 @@ onBeforeUnmount(() => {
 .menu-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+/* 停在 Hero 底部時，讓出右下角「共創諮詢台」按鈕的位置 */
+@media (min-width: 1081px) and (max-width: 1500px) {
+  .nav.is-docked .nav__bar {
+    padding-right: 76px;
+  }
 }
 
 @media (max-width: 1080px) {

@@ -58,9 +58,10 @@ const snap = useSectionSnap(root)
 </template>
 
 <style scoped>
-/* 桌面：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列（搭配區塊快捷捲動） */
+/* 桌面：每個區塊佔滿一個畫面，內容垂直置中，頂端預留導覽列（搭配區塊快捷捲動）
+   Hero 自行處理版面（桌機版導覽列在 Hero 底部），不套用這裡的留白 */
 @media (min-width: 1024px) {
-  .home > [data-snap] {
+  .home > [data-snap]:not(.hero) {
     min-height: 100vh;
     min-height: 100svh;
     display: flex;
@@ -72,7 +73,7 @@ const snap = useSectionSnap(root)
 }
 
 @media (min-width: 1024px) and (max-height: 820px) {
-  .home > [data-snap] {
+  .home > [data-snap]:not(.hero) {
     padding-bottom: 16px;
   }
 }

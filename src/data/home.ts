@@ -9,11 +9,6 @@ export const hero = {
   /** 標題中以品牌黃底線強調的文字 */
   titleHighlight: '連結學習與產業',
   subtitle: '亞洲共創透過專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。',
-  /** 右上角主視覺插圖（檔案在 public/brand/） */
-  illustration: {
-    src: '/brand/hero-illustration.webp',
-    alt: '亞洲共創學院主視覺插圖：講師與學員在政府、企業與數位學習情境中一起學習與交流',
-  },
 }
 
 export const servicesSection = {
