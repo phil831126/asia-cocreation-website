@@ -188,7 +188,7 @@ export const faqs: FaqItem[] = [
   {
     id: 'courses',
     question: '有哪些課程主題？',
-    answer: '目前課程分為 AI、行銷與其他專業領域，詳細課程內容陸續更新中。',
+    answer: '課程把行銷工作拆成具體的練習，主題包含品牌行銷、內容發想與文案、社群經營、影音與視覺製作、數位廣告投放、行銷數據分析，以及用 AI 輔助行銷工作。',
     keywords: ['課程', '主題', '學習地圖', 'ai', '有什麼課'],
     pages: ['learning-map'],
     actions: [{ label: '看學習地圖', to: '/learning-map' }],

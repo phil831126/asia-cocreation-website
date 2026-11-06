@@ -81,7 +81,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   learningMap: {
     title: '學習地圖｜亞洲共創學院',
-    description: '探索亞洲共創學院 AI、行銷等專業課程領域，課程內容陸續更新。',
+    description: '從 2020 年的專業網紅培訓課程出發，看亞洲共創的課程如何從個人創作走向品牌社群、數據成效與 AI 應用，以及上課會學到的七個行銷主題。',
   },
   cases: {
     title: '案例分享｜亞洲共創學院',
