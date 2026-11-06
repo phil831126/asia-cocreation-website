@@ -30,6 +30,13 @@ import { aboutCases as copy } from '@/data/about'
             <h3 :id="`case-${c.key}`" class="case__course">{{ c.course }}</h3>
             <p class="case__label">課程內容</p>
             <p class="case__desc">{{ c.desc }}</p>
+            <!-- 延伸介紹：在 about.ts 的 more 陣列加入段落後顯示 -->
+            <div class="case__more">
+              <template v-if="c.more.length">
+                <p v-for="(p, j) in c.more" :key="j" class="case__desc">{{ p }}</p>
+              </template>
+              <span v-else class="pending-tag">{{ copy.morePending }}</span>
+            </div>
           </div>
         </article>
       </div>
@@ -112,6 +119,14 @@ import { aboutCases as copy } from '@/data/about'
   margin-top: 8px;
   color: var(--c-text-2);
   line-height: 1.95;
+}
+
+.case__more {
+  margin-top: 18px;
+}
+
+.case__more .case__desc:first-child {
+  margin-top: 0;
 }
 
 /* 平板與手機：照片在上、文字在下 */

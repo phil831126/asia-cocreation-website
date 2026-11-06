@@ -4,7 +4,6 @@ import SectionHeading from '@/components/SectionHeading.vue'
 import AboutPhoto from './AboutPhoto.vue'
 import { aboutStory as copy, type AboutImage } from '@/data/about'
 
-const isYear = (label: string) => /^\d{4}$/.test(label)
 const isPortrait = (img: AboutImage) => img.width < img.height
 </script>
 
@@ -24,7 +23,7 @@ const isPortrait = (img: AboutImage) => img.width < img.height
           <span class="story__node" aria-hidden="true"></span>
 
           <div class="story__card">
-            <span class="story__label" :class="{ num: isYear(c.label) }">{{ c.label }}</span>
+            <span class="story__label">{{ c.label }}</span>
             <h3 class="story__title">{{ c.title }}</h3>
             <p v-for="(p, j) in c.paragraphs" :key="j" class="story__text">{{ p }}</p>
           </div>
@@ -34,7 +33,7 @@ const isPortrait = (img: AboutImage) => img.width < img.height
             :class="{ 'story__aside--photo': c.image, 'story__aside--portrait': c.image && isPortrait(c.image) }"
           >
             <AboutPhoto v-if="c.image" :image="c.image" :ratio="isPortrait(c.image) ? '4 / 5' : '4 / 3'" />
-            <span v-else-if="isYear(c.label)" class="num story__bigyear" aria-hidden="true">{{ c.label }}</span>
+            <span v-else-if="c.decor" class="num story__bigyear" aria-hidden="true">{{ c.decor }}</span>
           </div>
         </li>
       </ol>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { splitPhrases } from '@/composables/phrases'
 
 const props = withDefaults(
   defineProps<{
@@ -15,19 +16,15 @@ const props = withDefaults(
   { align: 'left', as: 'h2' },
 )
 
-const parts = computed(() => {
-  const { title, highlight } = props
-  const i = highlight ? title.indexOf(highlight) : -1
-  if (!highlight || i < 0) return { before: title, mark: '', after: '' }
-  return { before: title.slice(0, i), mark: highlight, after: title.slice(i + highlight.length) }
-})
+/** 依標點切成短句，換行時不拆開詞語 */
+const phrases = computed(() => splitPhrases(props.title, props.highlight))
 </script>
 
 <template>
   <div class="sh" :class="`sh--${align}`">
     <span v-if="eyebrow" v-reveal class="eyebrow">{{ eyebrow }}</span>
     <component :is="as" :id="id" v-reveal="80" class="sh__title">
-      {{ parts.before }}<span v-if="parts.mark" class="highlight">{{ parts.mark }}</span>{{ parts.after }}
+<span v-for="(p, i) in phrases" :key="i" class="sh__phrase">{{ p.before }}<span v-if="p.mark" class="highlight">{{ p.mark }}</span>{{ p.after }}</span>
     </component>
     <p v-if="desc" v-reveal="160" class="sh__desc">{{ desc }}</p>
     <slot />
@@ -54,6 +51,10 @@ const parts = computed(() => {
   line-height: 1.3;
   letter-spacing: 0.02em;
   text-wrap: balance;
+}
+
+.sh__phrase {
+  display: inline-block;
 }
 
 .sh__desc {

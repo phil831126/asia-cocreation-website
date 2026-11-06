@@ -4,16 +4,21 @@
    ※ 換上照片：把檔案放到 public/about/，再把 aboutImages 裡
      對應項目的 src 改成 '/about/檔名.webp'。
      src 為空字串時，頁面會顯示「照片待補」的中性佔位區塊。
+   ※ 創辦人經歷依據：銘傳一週（2021 年 3 月 2 日）
+     https://www.week.mcu.edu.tw/39297/
    ========================================================= */
 
 import type { Component } from 'vue'
 import {
   Building2,
   ChartNoAxesColumnIncreasing,
-  GraduationCap,
+  Handshake,
   HeartHandshake,
+  Landmark,
+  MessagesSquare,
   MonitorPlay,
   PenLine,
+  Share2,
   WandSparkles,
 } from '@lucide/vue'
 
@@ -31,29 +36,29 @@ export interface AboutImage {
 export const aboutImages = {
   founder: {
     src: '',
-    alt: '亞洲共創創辦人',
+    alt: '亞洲共創學院創辦人張丞亞',
     pendingLabel: '創辦人照片待補',
     width: 900,
     height: 1100,
   },
-  earlyWorkshop: {
+  history: {
     src: '',
-    alt: '亞洲共創早期自媒體工作坊上課情形',
-    pendingLabel: '早期工作坊照片待補',
+    alt: '亞洲共創學院早期活動紀錄',
+    pendingLabel: '歷史活動照片待補',
     width: 1200,
     height: 900,
   },
   caseHsuanChuang: {
     src: '',
     alt: '2024 玄奘大學國際數位行銷暨社群經營人才培訓班上課情形',
-    pendingLabel: '課程照片待補',
+    pendingLabel: '活動照片待補',
     width: 1200,
     height: 800,
   },
   caseMingChuan: {
     src: '',
     alt: '2025 銘傳大學 AI 生成 × MarTech 國際數位行銷人才實戰班上課情形',
-    pendingLabel: '課程照片待補',
+    pendingLabel: '活動照片待補',
     width: 1200,
     height: 800,
   },
@@ -62,17 +67,22 @@ export const aboutImages = {
 /* ---------- SECTION 01｜品牌開場 ---------- */
 export const aboutOpening = {
   eyebrow: 'About Asia Co-creation',
-  title: '亞洲共創，從一個合作的想法開始',
+  title: '亞洲共創，讓不同的專長，成為一起前進的力量',
   /** 標題中以黃色螢光底線強調的字 */
-  highlight: '合作的想法',
+  highlight: '不同的專長',
   paragraphs: [
-    '2020 年，亞洲共創在台灣成立。創辦人過去在電視媒體、公關與品牌行銷領域工作，常與不同專長的人一起完成一個專案。創立亞創時，這個想法也跟著走進教育領域：如果能把產業的實務經驗、講師的專長和學習者的需求聚在一起，就能一起做出更貼近工作現場的課程。',
-    '亞創從自媒體工作坊起步，後來逐步與政府機關、大專院校及企業展開培訓合作。從一間教室開始，「共創」也成了亞創和不同夥伴一起規劃課程的方式。',
+    '亞洲共創的起點，來自一個簡單的信念：每個人都有不同的經驗與專長，而當彼此願意分享、交流與合作，就能創造更多可能。',
+    '創辦人張丞亞從傳播媒體、設計與品牌管理一路走進教育領域，在不同的工作環境中，看見跨領域合作的力量，也逐漸思考，如何讓知識不只停留在個人身上，而能透過分享，成為更多人成長的養分。',
+    '秉持著「共創、共享、共好」的精神，亞洲共創學院逐步發展教育培訓、品牌行銷與跨領域合作，期望讓每一次相遇，都成為彼此學習與成長的機會。',
   ],
-  /** 右側概念圖：三方匯聚成課程（文字取自上方內文） */
+  /** 右側概念圖：人與人透過分享、交流與合作連結成「共創」（文字取自上方內文） */
   visual: {
     center: '共創',
-    nodes: ['產業實務經驗', '講師專長', '學習者需求'],
+    nodes: [
+      { label: '分享', icon: Share2 as Component },
+      { label: '交流', icon: MessagesSquare as Component },
+      { label: '合作', icon: Handshake as Component },
+    ],
   },
 }
 
@@ -84,41 +94,54 @@ export interface StoryChapter {
   paragraphs: string[]
   /** 對應 aboutImages 的照片（選填） */
   image?: AboutImage
+  /** 沒有照片時，在另一側以大字裝飾（選填，例如年份） */
+  decor?: string
 }
 
 export const aboutStory = {
   eyebrow: 'Our Story',
-  title: '展店計畫停了下來，共創從教室開始',
+  title: '從新聞現場到教育現場，一路走來的跨界探索',
   chapters: [
     {
-      label: '2019',
-      title: '「亞洲共創」名字的由來',
+      label: '新聞媒體',
+      title: '傳播實務的起點',
       paragraphs: [
-        '2019 年返台時，創辦人和夥伴原本想從台灣出發，串聯不同地區的教育與商業資源，讓有不同專長的人有機會一起做事。這是「亞洲共創」這個名字的由來。',
+        '創辦人張丞亞的職涯，從新聞媒體開始。',
+        '曾在東森、中天及非凡新聞擔任編輯與記者的他，經歷過新聞工作的高壓與快速節奏，也在職涯轉折中重新思考自己想走的方向。',
       ],
       image: aboutImages.founder,
     },
     {
-      label: '2020',
-      title: '疫情之後，先從台灣的自媒體培訓做起',
+      label: '設計與創業',
+      title: '跨領域探索',
       paragraphs: [
-        '隔年，疫情打亂了海外展店計畫。團隊評估後決定停下原定的布局，而在 2020 年成立的亞洲共創，先從台灣的自媒體培訓做起。',
+        '離開媒體後，他持續進修傳播管理與設計相關領域，並將傳播與設計的經驗帶進創業，成立喜丞創意股份有限公司。',
       ],
     },
     {
-      label: '早期工作坊',
-      title: '把各自熟悉的工作，拆成學員能上手的練習',
+      label: '品牌管理',
+      title: '累積產業經驗',
       paragraphs: [
-        '在那之前，創辦人做過電視媒體，也創辦過公關公司，參與大型頒獎典禮、競賽與品牌活動。早期籌備自媒體課程時，創辦人邀集有主播、影音創作與節目製作經驗的夥伴，一起把各自熟悉的工作拆成學員能上手的練習。想經營個人品牌的人，可以從自己的經驗找一個題目，試著寫一段文案、拍一支影片，把原本只在腦中的想法說給別人聽。',
+        '之後，他受邀前往上海擔任品牌管理公司的總經理，在不同市場與產業之間，累積了更多品牌經營及團隊管理的經驗。',
+        '在上海、蘇州工作期間，他接觸到寓教於樂的親子產業，也開始對全人教育產生興趣。',
       ],
-      image: aboutImages.earlyWorkshop,
     },
     {
-      label: '後續發展',
-      title: '從工作坊走到培訓專班',
+      label: '2019 年返台',
+      title: '重新思考教育的可能',
       paragraphs: [
-        '疫情也讓實體工作坊的招生遇到困難。亞創後來把培訓延伸到政府人才培育與大專院校合作，接觸到更多正在找工作、準備轉職的學員。從早期的工作坊走到後來的培訓專班，「共創」有了一個更具體的樣子：把不同專長的人聚在一門課裡，讓學員有機會動手做，也有人可以一起討論。',
+        '2019 年返台後，他重新整理過去累積的經驗，也更加確定自己希望投入的方向：讓不同領域的知識與資源被串聯，讓學習不只是單向接收，更能在交流與實作中發生。',
       ],
+      decor: '2019',
+    },
+    {
+      label: '亞洲共創',
+      title: '共創、共享、共好',
+      paragraphs: [
+        '亞洲共創學院因此誕生。',
+        '對他而言，「共創」不只是品牌名稱，更是一種讓不同世代、不同專長的人彼此連結的方式。',
+      ],
+      image: aboutImages.history,
     },
   ] satisfies StoryChapter[],
 }
@@ -126,12 +149,11 @@ export const aboutStory = {
 /* ---------- SECTION 03｜教學理念 ---------- */
 export interface TeachingStage {
   key: string
-  /** 第幾階段 */
-  step: string
+  no: string
   /** 演進路徑上的短名稱 */
   pathLabel: string
   title: string
-  body: string
+  paragraphs: string[]
   icon: Component
   /** true＝未來想探索的方向，尚非正式開設的課程 */
   future?: boolean
@@ -139,38 +161,55 @@ export interface TeachingStage {
 
 export const aboutTeaching = {
   eyebrow: 'Teaching Approach',
-  title: '從寫下第一句文案，到做出自己的選擇',
+  title: '學習，不只是學會一項工具，而是找到更多可能',
+  intro: [
+    '亞洲共創的教育理念，來自創辦人多年跨領域工作的體會。',
+    '每個人都有不同的起點，也有不同的學習方式。比起單向傳授知識，亞創更重視如何讓學員在課程中實際參與、動手練習，並透過交流找到適合自己的方法。',
+    '從早期的品牌行銷與自媒體培訓，到數位行銷、數據分析與生成式 AI 應用，課程隨著產業環境持續發展，但重視實作與人的成長，始終是亞創希望延續的方向。',
+  ],
+  /** 四階段流程上方的核心理念 */
+  motto: '以人為起點，以實作為方法，讓學習成為持續成長的力量。',
+  stagesTitle: '教學方向的四個階段',
   stages: [
     {
-      key: 'content',
-      step: '第一階段',
-      pathLabel: '行銷內容',
-      title: '從行銷內容開始',
-      body: '亞創最早教行銷，是從一則貼文、一支影片開始。面對一張空白的草稿，學員有時只知道自己有個想法，還不知道怎麼說。我們就從一個簡單的問題聊起：你想把這件事說給誰聽？有了那個人，第一句話就比較容易寫下來。',
+      key: 'marketing',
+      no: '01',
+      pathLabel: '行銷表達',
+      title: '從行銷開始，學會表達想法',
+      paragraphs: [
+        '從一則貼文、一段文案或一支影片開始，讓學員試著把自己的想法說清楚，理解品牌如何與不同的人溝通。',
+      ],
       icon: PenLine,
     },
     {
       key: 'data',
-      step: '第二階段',
-      pathLabel: '行銷數據',
-      title: '從行銷數據找線索',
-      body: '等到內容真的發出去了，新的問題也跟著來了。有些貼文花了很多心力，看到的人卻不多。這時，行銷數據就能幫我們找線索。一起看看有多少人看到、多少人點進來，再想想是開頭可以說得更清楚，還是投放對象需要調整。一次一次回頭看，學員也慢慢知道，下一次可以從哪裡改起。',
+      no: '02',
+      pathLabel: '數據判讀',
+      title: '從數據觀察，學會理解與調整',
+      paragraphs: [
+        '當內容真正發布後，再透過觸及、互動與廣告數據尋找線索。讓學員不只學會執行，也能思考為什麼有效、還能如何改善。',
+      ],
       icon: ChartNoAxesColumnIncreasing,
     },
     {
       key: 'ai',
-      step: '第三階段',
+      no: '03',
       pathLabel: 'AI 輔助',
-      title: '讓 AI 成為工作上的幫手',
-      body: '後來，AI 成了行銷工作裡可以搭把手的工具。企劃卡在開頭，就請它幫忙想幾個角度。手上有了腳本，也能先生成一段影片試試看。有了初稿，大家就有東西可以一起看、一起討論。哪一句像這個品牌會說的話、哪個畫面可能讓人誤會，最後還是由學員自己決定。',
+      title: '讓 AI 成為學習與工作的幫手',
+      paragraphs: [
+        '隨著生成式 AI 的發展，亞創將工具應用帶入行銷教學。從企劃發想、內容製作到資料整理，協助學員練習運用 AI 提升工作效率，同時保有自己的思考與判斷。',
+      ],
       icon: WandSparkles,
     },
     {
       key: 'sel',
-      step: '第四階段',
+      no: '04',
       pathLabel: 'AI 素養 × SEL',
       title: 'AI 素養 × 社會情緒學習（SEL）',
-      body: '工具愈來愈快，創辦人反而想在教室裡多留一點時間。有人需要多試一次，有人需要先說出自己卡在哪裡，也有人是在聽了同伴的想法之後，才知道自己原來可以換個方式做。這是創辦人未來想探索的 AI 素養 × 社會情緒學習（SEL）：讓學員在學會使用工具的同時，也能理解自己的感受、聽進不同的意見，並為自己的選擇負責。',
+      paragraphs: [
+        '當工具變得更加便利，如何理解自己、與他人合作，以及做出負責任的選擇，也變得重要。',
+        '未來，亞創希望進一步探索 AI 素養與社會情緒學習的結合，讓學員不只懂得使用科技，也能保有同理、溝通與獨立思考的能力。',
+      ],
       icon: HeartHandshake,
       future: true,
     },
@@ -190,27 +229,27 @@ export interface AboutService {
 
 export const aboutServices = {
   eyebrow: 'Services',
-  title: '依學員和團隊的需要規劃課程',
+  title: '從不同的需求出發，一起設計適合的學習',
   items: [
     {
       key: 'gov-school',
       no: '01',
       title: '政府與學校人才培訓',
-      desc: '依計畫目標與學員背景，規劃青年職涯培訓、產學課程及實務講座，並安排適合課程主題的師資。',
-      icon: GraduationCap,
+      desc: '與政府機關及大專院校合作，依據培訓計畫與學員背景，規劃青年職涯、產學合作、專業技能與實務應用課程，協助學員累積進入職場需要的知識與能力。',
+      icon: Landmark,
     },
     {
       key: 'enterprise',
       no: '02',
       title: '企業內訓與顧問',
-      desc: '從團隊正在做的工作出發，例如規劃社群內容或整理行銷資料，設計能在課堂上動手練習的內訓。企業也可依需求洽詢品牌與行銷顧問服務。',
+      desc: '從企業的實際工作需求出發，結合品牌行銷、數位工具及專業講師資源，規劃具實作性的內部培訓，並依需求提供品牌與行銷顧問服務。',
       icon: Building2,
     },
     {
       key: 'ai-marketing',
       no: '03',
       title: 'AI 與行銷實作課程',
-      desc: '從品牌企劃、文案與影音製作，到數位廣告與數據判讀，讓學員在具體任務中練習使用數位工具與生成式 AI。',
+      desc: '從品牌企劃、社群經營、影音內容、數位廣告與數據分析，到生成式 AI 的應用，透過課堂練習與實際案例，協助學員把學到的方法帶回工作與生活。',
       icon: MonitorPlay,
     },
   ] satisfies AboutService[],
@@ -223,19 +262,23 @@ export interface AboutCase {
   school: string
   course: string
   desc: string
+  /** 延伸介紹（選填）；每個字串是一段，留空陣列時顯示「延伸介紹待補」 */
+  more: string[]
   image: AboutImage
 }
 
 export const aboutCases = {
   eyebrow: 'Training Cases',
-  title: '課堂上，學員實際學了什麼？',
+  title: '讓學習走進真實的工作情境',
+  morePending: '延伸介紹待補',
   items: [
     {
       key: 'hcu-2024',
       year: '2024',
       school: '玄奘大學',
       course: '國際數位行銷暨社群經營人才培訓班',
-      desc: '課程由學界與業界講師授課，內容包含品牌行銷企劃、創意文案、新媒體內容創作與個人形象建立。',
+      desc: '結合學界與業界講師，課程涵蓋品牌行銷企劃、創意文案、新媒體內容創作及個人形象建立，讓學員從實際練習中累積數位行銷能力。',
+      more: [],
       image: aboutImages.caseHsuanChuang,
     },
     {
@@ -243,7 +286,8 @@ export const aboutCases = {
       year: '2025',
       school: '銘傳大學',
       course: 'AI 生成 × MarTech：國際數位行銷人才實戰班',
-      desc: '課程把生成式 AI、Google Ads 與數據分析放進數位行銷培訓，也安排數位行銷證照相關學習。',
+      desc: '將生成式 AI、Google Ads 與數據分析帶入行銷培訓，結合數位行銷實作與證照相關學習，協助學員理解工具如何應用於工作任務。',
+      more: [],
       image: aboutImages.caseMingChuan,
     },
   ] satisfies AboutCase[],
@@ -252,7 +296,12 @@ export const aboutCases = {
 /* ---------- SECTION 06｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
 export const aboutContact = {
   eyebrow: "Let's Co-create",
-  title: '一起規劃下一場培訓',
-  desc: '如果你正在為政府計畫、學校課程或企業團隊規劃培訓，可以先告訴我們學員是誰、希望他們學會什麼，以及預計什麼時候開課。亞創會從這些需求出發，和你一起討論課程主題、師資與實作安排。',
-  primary: { label: '聯絡我們', to: '/contact' },
+  title: '讓下一段學習，從我們的交流開始',
+  /** 每個字串是一段 */
+  desc: [
+    '每一個培訓計畫，都有不同的目標與期待。',
+    '無論是政府人才培育、學校產學課程，或是企業團隊的專業成長，亞洲共創都期待先從理解需求開始，與合作夥伴共同討論課程主題、師資安排及實作方式。',
+  ],
+  slogan: '共創，不只是一起完成一件事，更是在過程中，讓彼此都能有所收穫。',
+  primary: { label: '與我們合作', to: '/contact' },
 }

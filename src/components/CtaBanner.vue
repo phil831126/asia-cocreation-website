@@ -16,7 +16,8 @@ const props = defineProps<{
   content?: {
     eyebrow?: string
     title: string
-    desc: string
+    /** 一段文字，或多段（字串陣列） */
+    desc: string | string[]
     slogan?: string
     steps?: string[]
     primary: CtaLink
@@ -34,6 +35,8 @@ const copy = computed(
       primary: ctaSection.button,
     },
 )
+
+const descParas = computed(() => (Array.isArray(copy.value.desc) ? copy.value.desc : [copy.value.desc]))
 
 const box = ref<HTMLElement | null>(null)
 const lens = ref<SVGCircleElement | null>(null)
@@ -93,7 +96,7 @@ onBeforeUnmount(() => observer?.disconnect())
         <div class="cta__content">
           <span v-if="copy.eyebrow" class="eyebrow cta__eyebrow">{{ copy.eyebrow }}</span>
           <h2 id="cta-title" class="cta__title">{{ copy.title }}</h2>
-          <p class="cta__desc">{{ copy.desc }}</p>
+          <p v-for="(p, i) in descParas" :key="i" class="cta__desc">{{ p }}</p>
           <p v-if="copy.slogan" class="cta__slogan">{{ copy.slogan }}</p>
 
           <ol v-if="copy.steps?.length" class="cta__flow" aria-label="合作流程">
@@ -224,6 +227,10 @@ onBeforeUnmount(() => observer?.disconnect())
 .cta__desc {
   font-size: 1.05rem;
   color: #3a3a3a;
+}
+
+.cta__desc + .cta__desc {
+  margin-top: 8px;
 }
 
 /* 流程：節點與階段主題 */

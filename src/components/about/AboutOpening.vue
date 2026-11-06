@@ -1,16 +1,13 @@
 <script setup lang="ts">
-/* SECTION 01｜品牌開場：左側標題與品牌介紹，右側「三方匯聚成共創」概念圖 */
-import { BriefcaseBusiness, ChevronRight, Presentation, Users } from '@lucide/vue'
+/* SECTION 01｜品牌開場：左側標題與品牌介紹，右側「分享、交流、合作匯聚成共創」概念圖 */
+import { ChevronRight } from '@lucide/vue'
 import { aboutOpening as copy } from '@/data/about'
+import { splitPhrases } from '@/composables/phrases'
 
-const titleParts = (() => {
-  const i = copy.title.indexOf(copy.highlight)
-  if (i < 0) return { before: copy.title, mark: '', after: '' }
-  return { before: copy.title.slice(0, i), mark: copy.highlight, after: copy.title.slice(i + copy.highlight.length) }
-})()
+/** 標題依逗號分段，換行時不拆開詞語 */
+const titlePhrases = splitPhrases(copy.title, copy.highlight)
 
 /** 概念圖的三個節點（位置以 480 × 440 的畫布座標計算） */
-const nodeIcons = [BriefcaseBusiness, Presentation, Users]
 const nodePos = [
   { x: 92, y: 96 },
   { x: 394, y: 132 },
@@ -37,7 +34,7 @@ const pct = (v: number, total: number) => `${(v / total) * 100}%`
         </nav>
         <span class="eyebrow opening__in" style="--d: 0.05s">{{ copy.eyebrow }}</span>
         <h1 id="about-title" class="opening__title opening__in" style="--d: 0.12s">
-          {{ titleParts.before }}<span v-if="titleParts.mark" class="highlight">{{ titleParts.mark }}</span>{{ titleParts.after }}
+<span v-for="(p, i) in titlePhrases" :key="i" class="opening__phrase">{{ p.before }}<span v-if="p.mark" class="highlight">{{ p.mark }}</span>{{ p.after }}</span>
         </h1>
         <p
           v-for="(p, i) in copy.paragraphs"
@@ -50,7 +47,7 @@ const pct = (v: number, total: number) => `${(v / total) * 100}%`
         </p>
       </div>
 
-      <!-- 概念圖：產業實務經驗、講師專長與學習者需求，匯聚成「共創」 -->
+      <!-- 概念圖：人與人透過分享、交流與合作，匯聚成「共創」 -->
       <div class="concept" aria-hidden="true">
         <svg class="concept__lines" viewBox="0 0 480 440">
           <!-- 三方彼此之間的細點線 -->
@@ -76,13 +73,13 @@ const pct = (v: number, total: number) => `${(v / total) * 100}%`
         </span>
 
         <span
-          v-for="(label, i) in copy.visual.nodes"
-          :key="label"
+          v-for="(node, i) in copy.visual.nodes"
+          :key="node.label"
           class="concept__node"
           :style="{ left: pct(nodePos[i].x, 480), top: pct(nodePos[i].y, 440), '--d': `${0.35 + i * 0.15}s` }"
         >
-          <span class="concept__bubble"><component :is="nodeIcons[i]" :size="26" :stroke-width="1.6" /></span>
-          <span class="concept__label">{{ label }}</span>
+          <span class="concept__bubble"><component :is="node.icon" :size="26" :stroke-width="1.6" /></span>
+          <span class="concept__label">{{ node.label }}</span>
         </span>
       </div>
     </div>
@@ -153,11 +150,15 @@ const pct = (v: number, total: number) => `${(v / total) * 100}%`
 
 .opening__title {
   margin-top: 18px;
-  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  font-size: clamp(2.1rem, 3.8vw, 3.2rem);
   font-weight: 900;
-  line-height: 1.28;
+  line-height: 1.32;
   letter-spacing: 0.03em;
   text-wrap: balance;
+}
+
+.opening__phrase {
+  display: inline-block;
 }
 
 .opening__text {
