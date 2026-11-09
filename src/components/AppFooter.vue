@@ -75,6 +75,9 @@ function backToTop() {
 
 <style scoped>
 .foot {
+  /* 頁尾文字統一：內文（簡介、網站地圖、聯絡資訊）同字級、同行高；版權列用較小一階 */
+  --foot-fs: 0.95rem;
+  --foot-lh: 1.8;
   position: relative;
   isolation: isolate;
   padding-top: var(--section-y);
@@ -120,7 +123,8 @@ function backToTop() {
 .foot__intro {
   max-width: 380px;
   margin-top: 22px;
-  font-size: 0.95rem;
+  font-size: var(--foot-fs);
+  line-height: var(--foot-lh);
   color: var(--c-text-2);
 }
 
@@ -139,6 +143,8 @@ function backToTop() {
 
 .foot__link {
   position: relative;
+  font-size: var(--foot-fs);
+  line-height: var(--foot-lh);
   font-weight: 500;
   transition: color 0.25s;
 }
@@ -174,19 +180,22 @@ function backToTop() {
 }
 
 .foot__contact dt {
-  font-size: 0.9rem;
+  font-size: var(--foot-fs);
+  line-height: var(--foot-lh);
   color: var(--c-text-2);
 }
 
 .foot__contact dd {
   margin: 0;
+  font-size: var(--foot-fs);
+  line-height: var(--foot-lh);
+  font-weight: 500;
   overflow-wrap: anywhere;
 }
 
 /* 點擊撥號：與全站文字連結相同，滑過時黃色底線展開 */
 .foot__tel {
   padding-bottom: 2px;
-  font-weight: 600;
   background: linear-gradient(var(--c-yellow), var(--c-yellow)) left bottom / 0 2px no-repeat;
   transition: background-size 0.4s var(--ease-out);
 }
