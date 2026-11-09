@@ -5,6 +5,7 @@ import { Search, X, UserRound, ArrowRight, SearchX } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
+import LecturerApply from '@/components/LecturerApply.vue'
 import { lecturerAudiences, lecturerFields, lecturerFormats, type Lecturer } from '@/data/lecturers'
 import { useLecturers } from '@/composables/sheetData'
 
@@ -232,6 +233,9 @@ const inviteLink = computed(() =>
         </div>
       </div>
     </section>
+
+    <!-- 邀請講師加入（與首頁「加入講師聯盟，讓專業走進更多課堂」相同內容） -->
+    <LecturerApply class="section--alt" :browse-link="false" />
 
     <CtaBanner />
 

@@ -1,20 +1,20 @@
 <script setup lang="ts">
 /*
- * 熱門課程圖卡（單張）：上方 16:10 封面、下方「熱門課程」標示／分類／課程名稱／摘要／連結。
- * 首頁 Hero 的固定圖卡（HotCourseCard）與課程總覽頁的輪播（HotCourseCarousel）共用。
- * course 為 null 時顯示載入中的佔位卡。
+ * 最新消息圖卡（單張）：上方 16:10 圖片、下方「最新消息」標示／類別／日期／標題／摘要／連結。
+ * 首頁主視覺與課程總覽頁的輪播（NewsCarousel）共用。
+ * item 為 null 時顯示載入中的佔位卡。
  */
 import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowRight, ArrowUpRight, Flame, ImageIcon } from '@lucide/vue'
-import type { HotCourse } from '@/data/hotCourse'
+import { ArrowRight, ArrowUpRight, ImageIcon, Megaphone } from '@lucide/vue'
+import type { NewsItem } from '@/data/news'
 
-const props = withDefaults(defineProps<{ course: HotCourse | null; titleTag?: 'h2' | 'h3' }>(), { titleTag: 'h2' })
+const props = withDefaults(defineProps<{ item: NewsItem | null; titleTag?: 'h2' | 'h3' }>(), { titleTag: 'h2' })
 
-const external = computed(() => /^https:\/\//.test(props.course?.link ?? ''))
-const linkTag = computed(() => (!props.course?.link ? 'div' : external.value ? 'a' : RouterLink))
+const external = computed(() => /^https:\/\//.test(props.item?.link ?? ''))
+const linkTag = computed(() => (!props.item?.link ? 'div' : external.value ? 'a' : RouterLink))
 const linkAttrs = computed(() => {
-  const link = props.course?.link
+  const link = props.item?.link
   if (!link) return {}
   return external.value ? { href: link, target: '_blank', rel: 'noopener' } : { to: link }
 })
@@ -22,37 +22,35 @@ const linkAttrs = computed(() => {
 /** 封面讀不到時改顯示佔位底圖 */
 const broken = ref(false)
 watch(
-  () => props.course?.cover,
+  () => props.item?.cover,
   () => (broken.value = false),
 )
 </script>
 
 <template>
-  <component :is="linkTag" v-if="course" v-bind="linkAttrs" class="hot__card">
+  <component :is="linkTag" v-if="item" v-bind="linkAttrs" class="hot__card">
     <div class="hot__media">
       <img
-        v-if="course.cover && !broken"
+        v-if="item.cover && !broken"
         class="hot__img"
-        :src="course.cover"
-        :alt="course.coverAlt"
+        :src="item.cover"
+        :alt="item.coverAlt"
         @error="broken = true"
       />
       <div v-else class="hot__ph" aria-hidden="true"><ImageIcon :size="32" :stroke-width="1.4" /></div>
     </div>
 
     <div class="hot__body">
-      <!-- 「熱門課程」標示放在文字區，不遮住課程海報 -->
+      <!-- 「最新消息」標示放在文字區，不遮住海報 -->
       <p class="hot__meta">
-        <span class="hot__badge"><Flame :size="14" :stroke-width="2.2" aria-hidden="true" />熱門課程</span>
-        <span v-if="course.tag" class="hot__tag">{{ course.tag }}</span>
+        <span class="hot__badge"><Megaphone :size="14" :stroke-width="2.2" aria-hidden="true" />最新消息</span>
+        <span v-if="item.tag" class="hot__tag">{{ item.tag }}</span>
+        <time v-if="item.date" class="num hot__date">{{ item.date }}</time>
       </p>
-      <component :is="titleTag" class="hot__title">{{ course.title }}</component>
-      <p v-if="course.summary" class="hot__summary">{{ course.summary }}</p>
-      <ul v-if="course.info.length" class="hot__info">
-        <li v-for="t in course.info" :key="t">{{ t }}</li>
-      </ul>
-      <span v-if="course.link" class="link-arrow hot__more">
-        {{ course.linkLabel }}
+      <component :is="titleTag" class="hot__title">{{ item.title }}</component>
+      <p v-if="item.summary" class="hot__summary">{{ item.summary }}</p>
+            <span v-if="item.link" class="link-arrow hot__more">
+        {{ item.linkLabel }}
         <ArrowUpRight v-if="external" :size="16" aria-hidden="true" />
         <ArrowRight v-else :size="16" aria-hidden="true" />
         <span v-if="external" class="sr-only">（另開新視窗）</span>
@@ -123,7 +121,7 @@ a.hot__card:hover .hot__img {
   gap: 8px;
 }
 
-/* 「熱門課程」標示：品牌黃底 */
+/* 「最新消息」標示：品牌黃底 */
 .hot__badge {
   display: inline-flex;
   align-items: center;
@@ -177,19 +175,10 @@ a.hot__card:hover .hot__img {
   overflow: hidden;
 }
 
-.hot__info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.hot__info li {
-  padding: 2px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--c-line-strong);
+.hot__date {
   color: var(--c-text-2);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
 }
 
 .hot__more {

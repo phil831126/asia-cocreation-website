@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /*
- * 首頁 Hero 左下：「快速導引」四張圖卡（2 × 2）：教育培訓、講師顧問聯盟、講師經紀、合作單位
+ * 首頁 Hero 左下：「服務項目」四張圖卡（2 × 2）：教育培訓、講師顧問聯盟、講師經紀、合作單位
  * 內容在 src/data/home.ts 的 quickGuide。
  * 桌機畫面高度不足時隱藏簡介，只留標題與分類標籤，讓 Hero 維持在第一個畫面內。
  */
@@ -9,7 +9,7 @@ import { quickGuide } from '@/data/home'
 </script>
 
 <template>
-  <ul class="hs" aria-label="快速導引">
+  <ul class="hs" aria-label="服務項目">
     <li v-for="(s, i) in quickGuide" :key="s.key" class="hs__item">
       <RouterLink :to="s.to" class="hs__card" :class="`hs__card--${i + 1}`">
         <div class="hs__head">

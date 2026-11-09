@@ -1,8 +1,9 @@
 /* =========================================================
    Google 試算表資料來源（偽後端）
-   - 講師、案例分頁（與另一份「熱門課程」試算表）在 Google 試算表「檔案 → 共用 → 發布到網路」，
+   - 各分頁在 Google 試算表「檔案 → 共用 → 發布到網路」，
      格式選「逗號分隔值 (.csv)」，把產生的網址貼在下面。
-   - 留空字串＝不讀試算表，直接使用 src/data/lecturers.ts、cases.ts、hotCourse.ts 的內建資料。
+     新增分頁後，也要到「發布到網路 → 已發布的內容與設定」勾選該分頁。
+   - 留空字串＝不讀試算表，直接使用 src/data/lecturers.ts、cases.ts、news.ts、trends.ts 的內建資料。
    - 讀取失敗（網路問題、取消發布）時，網站也會自動改用內建資料。
    - Google 發布有約 5 分鐘快取：試算表改完後，網站最晚約 5 分鐘更新。
    ========================================================= */
@@ -17,13 +18,17 @@ export const sheetSources = {
   /** 「案例」分頁的 CSV 網址 */
   cases: `${PUBLISHED}?gid=1046939079&single=true&output=csv`,
   /**
-   * 熱門課程的 CSV 網址：首頁 Hero 右側圖卡與課程總覽頁的輪播共用。
-   * 資料在另一份試算表「亞創網站｜熱門課程」（同一個「亞創網站內容」資料夾），
-   * 已發布到網路（格式 .csv），網址如下。
-   * 第 1 列欄位代號：show, order, tag, title, summary, cover, coverAlt, info, link, linkLabel
+   * 「最新消息」分頁：首頁主視覺與課程總覽頁的輪播（最多 5 則）
+   * 欄位：show, order, date, tag, title, summary, cover, coverAlt, link, linkLabel
    */
-  hotCourses:
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpp8koIFa3fXFt80FPTNWJSG1jP7UQCdhO8Cp17ypDZGF6UVcFUorc3lMIAvssOdPnnWgM1S2XG1-K/pub?gid=2068586822&single=true&output=csv',
+  news: `${PUBLISHED}?gid=1709610413&single=true&output=csv`,
+  /**
+   * 「趨勢專欄」分頁：文章列表與內頁
+   * 欄位：id, show, order, date, category, title, excerpt, cover, coverAlt, content, author, link
+   */
+  trends: `${PUBLISHED}?gid=1557806033&single=true&output=csv`,
+  /** 「設定」分頁：欄位 key, value（目前有 newsSort：最新消息超過 5 則時依「排序數字」或「日期最新」取捨） */
+  settings: `${PUBLISHED}?gid=310568720&single=true&output=csv`,
 }
 
 /**

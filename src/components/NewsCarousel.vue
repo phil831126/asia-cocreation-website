@@ -1,19 +1,21 @@
 <script setup lang="ts">
 /*
- * 課程總覽頁：熱門課程輪播
- * 卡片與首頁 Hero 的熱門課程圖卡相同（HotCourseItem），內容來自試算表「亞創網站｜熱門課程」，
- * 依排序欄位一次顯示一張；只有一筆時不顯示頁碼與箭頭。
+ * 最新消息輪播：首頁主視覺右側與課程總覽頁頁首右側共用
+ * 內容來自試算表「最新消息」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
+ * 只有一則時不顯示頁碼與箭頭。showAll＝在下方加上「課程總覽」連結（首頁使用）。
  */
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper'
 import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import { ArrowLeft, ArrowRight } from '@lucide/vue'
-import HotCourseItem from './HotCourseItem.vue'
-import { useHotCourse } from '@/composables/sheetData'
+import NewsItem from './NewsItem.vue'
+import { useNews } from '@/composables/sheetData'
 import { prefersReducedMotion } from '@/composables/motion'
 
-const { courses, loading } = useHotCourse()
+withDefaults(defineProps<{ showAll?: boolean; titleTag?: 'h2' | 'h3' }>(), { showAll: false, titleTag: 'h3' })
+
+const { news, loading } = useNews()
 
 const root = ref<HTMLElement | null>(null)
 const pagination = ref<HTMLElement | null>(null)
@@ -24,7 +26,7 @@ let swiper: Swiper | null = null
 function init() {
   swiper?.destroy(true, true)
   swiper = null
-  if (!root.value || courses.value.length < 2) return
+  if (!root.value || news.value.length < 2) return
   const reduced = prefersReducedMotion()
   swiper = new Swiper(root.value, {
     modules: [Navigation, Pagination, A11y, Autoplay],
@@ -32,21 +34,21 @@ function init() {
     spaceBetween: 16,
     speed: reduced ? 0 : 600,
     grabCursor: true,
-    loop: courses.value.length > 2,
+    loop: news.value.length > 2,
     autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
     pagination: { el: pagination.value, clickable: true, bulletClass: 'hcc__dot', bulletActiveClass: 'is-active' },
     a11y: {
-      prevSlideMessage: '上一個熱門課程',
-      nextSlideMessage: '下一個熱門課程',
-      paginationBulletMessage: '前往第 {{index}} 個熱門課程',
+      prevSlideMessage: '上一則消息',
+      nextSlideMessage: '下一則消息',
+      paginationBulletMessage: '前往第 {{index}} 則消息',
     },
   })
 }
 
 // 試算表載入完成後再建立輪播
 watch(
-  () => [loading.value, courses.value.length] as const,
+  () => [loading.value, news.value.length] as const,
   async ([isLoading]) => {
     if (isLoading) return
     await nextTick()
@@ -59,36 +61,40 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 </script>
 
 <template>
-  <section class="hcc" aria-label="熱門課程">
+  <section class="hcc" aria-label="最新消息">
     <div v-if="loading" class="hcc__single">
-      <HotCourseItem :course="null" />
+      <NewsItem :item="null" />
     </div>
 
-    <div v-else-if="courses.length === 1" class="hcc__single">
-      <HotCourseItem :course="courses[0]" title-tag="h3" />
+    <div v-else-if="news.length === 1" class="hcc__single">
+      <NewsItem :item="news[0]" :title-tag="titleTag" />
     </div>
 
     <template v-else>
       <div ref="root" class="swiper hcc__swiper">
         <ul class="swiper-wrapper">
-          <li v-for="(c, i) in courses" :key="`${i}-${c.title}`" class="swiper-slide hcc__slide">
-            <HotCourseItem :course="c" title-tag="h3" />
+          <li v-for="(c, i) in news" :key="`${i}-${c.title}`" class="swiper-slide hcc__slide">
+            <NewsItem :item="c" :title-tag="titleTag" />
           </li>
         </ul>
       </div>
+    </template>
 
-      <div class="hcc__foot">
-        <div ref="pagination" class="hcc__pagination"></div>
-        <div class="hcc__nav">
-          <button ref="prevBtn" type="button" class="hcc__arrow" aria-label="上一個熱門課程">
+    <!-- 下方控制列：頁碼、左右箭頭（兩則以上），以及首頁的「課程總覽」連結 -->
+    <div v-if="!loading && (news.length > 1 || showAll)" class="hcc__foot">
+      <div ref="pagination" class="hcc__pagination"></div>
+      <div class="hcc__nav">
+        <template v-if="news.length > 1">
+          <button ref="prevBtn" type="button" class="hcc__arrow" aria-label="上一則消息">
             <ArrowLeft :size="16" aria-hidden="true" />
           </button>
-          <button ref="nextBtn" type="button" class="hcc__arrow" aria-label="下一個熱門課程">
+          <button ref="nextBtn" type="button" class="hcc__arrow" aria-label="下一則消息">
             <ArrowRight :size="16" aria-hidden="true" />
           </button>
-        </div>
+        </template>
+        <RouterLink v-if="showAll" to="/cases" class="hcc__all">課程總覽</RouterLink>
       </div>
-    </template>
+    </div>
   </section>
 </template>
 
@@ -164,6 +170,19 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
 .hcc__arrow:hover {
   background: var(--c-yellow);
+}
+
+/* 首頁：前往課程總覽 */
+.hcc__all {
+  margin-left: 8px;
+  padding: 2px 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--c-yellow);
+}
+
+.hcc__all:hover {
+  color: var(--c-yellow-deep);
 }
 
 .hcc__arrow.is-disabled {

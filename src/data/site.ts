@@ -89,7 +89,11 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   trends: {
     title: '趨勢專欄｜亞洲共創學院',
-    description: '亞洲共創學院趨勢專欄，內容建置中。',
+    description: '亞洲共創學院趨勢專欄：AI 應用、品牌行銷與職涯發展的產業觀察與實務分享。',
+  },
+  trendDetail: {
+    title: '趨勢專欄｜亞洲共創學院',
+    description: '亞洲共創學院趨勢專欄文章。',
   },
   learningMap: {
     title: '學習地圖｜亞洲共創學院',

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 /*
- * 首頁「講師經紀申請區」：邀請講師加入講師聯盟（快速導引「講師經紀」卡片會捲到這裡）
+ * 「講師經紀申請區」：邀請講師加入講師聯盟
+ * 首頁（服務項目「講師經紀」卡片會捲到這裡）與講師聯盟頁的講師列表下方共用。
+ * 在講師聯盟頁使用時傳入 :browse-link="false"，不顯示「查看講師聯盟」連結。
  * 桌機左側標題與按鈕、右側三項合作內容，下方為四步驟申請流程；平板與手機改為上下排。
  * 文案在 src/data/home.ts 的 lecturerApplySection。
  */
@@ -8,6 +10,8 @@ import { ArrowRight } from '@lucide/vue'
 import SectionHeading from './SectionHeading.vue'
 import BaseButton from './BaseButton.vue'
 import { lecturerApplySection as copy } from '@/data/home'
+
+withDefaults(defineProps<{ browseLink?: boolean }>(), { browseLink: true })
 </script>
 
 <template>
@@ -18,7 +22,7 @@ import { lecturerApplySection as copy } from '@/data/home'
           <SectionHeading id="apply-title" :eyebrow="copy.eyebrow" :title="copy.title" :highlight="copy.highlight" :desc="copy.desc" />
           <div v-reveal="200" class="apply__actions">
             <BaseButton :to="copy.primary.to" variant="primary">{{ copy.primary.label }}</BaseButton>
-            <RouterLink :to="copy.secondary.to" class="link-arrow">
+            <RouterLink v-if="browseLink" :to="copy.secondary.to" class="link-arrow">
               {{ copy.secondary.label }} <ArrowRight :size="16" aria-hidden="true" />
             </RouterLink>
           </div>

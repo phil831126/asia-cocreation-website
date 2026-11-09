@@ -23,7 +23,7 @@ export const hero = {
   titleHighlight: '亞洲共創學院',
   subtitle: '我們相信，每一位迷惘的人都能透過系統性學習找到人生的方向。',
   /** 服務圖卡上方的小標籤（純標示，不是連結） */
-  servicesLabel: '快速導引',
+  servicesLabel: '服務項目',
 }
 
 export const lecturersSection = {
@@ -96,7 +96,7 @@ export const ctaSection = {
   button: { label: '聯絡我們', to: '/contact' },
 }
 
-/* ---------- Hero 左下「快速導引」四張圖卡（依序 01～04） ----------
+/* ---------- Hero 左下「服務項目」四張圖卡（依序 01～04） ----------
    ※ 教育培訓、講師經紀的簡介與標籤沿用 services.ts（與關於亞創的服務卡片一致）；
      講師顧問聯盟、合作單位沿用首頁對應區塊的說明。
    ※ 點圖卡會捲到首頁下方對應區塊：案例分享、講師顧問聯盟、講師經紀申請區、合作單位。 */

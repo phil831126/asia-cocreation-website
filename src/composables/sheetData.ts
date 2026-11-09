@@ -2,10 +2,11 @@ import { computed, shallowRef, type ShallowRef } from 'vue'
 import { sheetSources } from '@/data/sheets'
 import { lecturers as localLecturers, type Lecturer } from '@/data/lecturers'
 import { cases as localCases, categoryLabel, type CaseCategory, type CaseItem } from '@/data/cases'
-import { localHotCourses, type HotCourse } from '@/data/hotCourse'
+import { localNews, NEWS_LIMIT, type NewsItem, type NewsSort } from '@/data/news'
+import { localArticles, type Article } from '@/data/trends'
 
 /**
- * 從 Google 試算表（發布為 CSV）讀取講師、案例與熱門課程。
+ * 從 Google 試算表（發布為 CSV）讀取講師、案例、最新消息、趨勢專欄與設定。
  * - 第 1 列是欄位代號（英文），程式靠它對應資料，欄位順序可以任意調換
  * - 第一格以「#」開頭的列會略過（範本第 2 列的中文說明就是這樣標的）
  * - 讀不到時改用內建資料，網站不會變空白
@@ -173,24 +174,88 @@ const linkUrl = (raw = '') => {
   return url.startsWith('/') || /^https:\/\//.test(url) ? url : ''
 }
 
-function toHotCourses(rows: Row[]): HotCourse[] {
-  const out = rows
+/**
+ * 日期：接受 2026/11/10、2026-11-10、2026.11.10、2026年11月10日（日可省略）。
+ * 回傳顯示用文字（可辨識時統一成 2026.11.10）與排序用時間戳（無法辨識時為 NaN）。
+ */
+export function parseDate(raw = '') {
+  const text = raw.trim()
+  const m = text.match(/^(\d{4})\s*[/.\-年]\s*(\d{1,2})\s*(?:月\s*(?:(\d{1,2})\s*日?)?|[/.\-]\s*(\d{1,2}))?$/)
+  if (!m) return { label: text, time: NaN }
+  const day = m[3] ?? m[4]
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), day ? Number(day) : 1]
+  if (mo < 1 || mo > 12 || d < 1 || d > 31) return { label: text, time: NaN }
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return { label: day ? `${y}.${pad(mo)}.${pad(d)}` : `${y}.${pad(mo)}`, time: Date.UTC(y, mo - 1, d) }
+}
+
+/** 日期新的在前；沒有日期的排最後 */
+const byNewest = (a: number, b: number) => (Number.isNaN(a) ? 1 : 0) - (Number.isNaN(b) ? 1 : 0) || (b || 0) - (a || 0)
+
+function toNews(rows: Row[]) {
+  return rows
     .map((r, index) => {
       if (!bool(r.show, true) || !r.title) return null
-      const item: HotCourse = {
+      const { label, time } = parseDate(r.date)
+      const item: NewsItem = {
         tag: r.tag,
         title: r.title,
         summary: r.summary,
         cover: imageUrl(r.cover),
         coverAlt: r.coverAlt || r.title,
-        info: list(r.info),
+        date: label,
+        time,
         link: linkUrl(r.link),
         linkLabel: r.linkLabel || '查看詳情',
       }
       return { order: orderOf(r.order, index), index, item }
     })
     .filter((x): x is NonNullable<typeof x> => !!x)
-  return byOrder(out)
+}
+
+/** 依設定挑出最多 NEWS_LIMIT 則 */
+function pickNews(list: { order: number; index: number; item: NewsItem }[], sort: NewsSort) {
+  const sorted = [...list].sort((a, b) =>
+    sort === 'date'
+      ? byNewest(a.item.time, b.item.time) || a.order - b.order || a.index - b.index
+      : a.order - b.order || a.index - b.index,
+  )
+  return sorted.slice(0, NEWS_LIMIT).map((x) => x.item)
+}
+
+/** 網址代號：只留英數字與 -，其餘換成 - */
+const slug = (v: string) => v.trim().replace(/[^\w-]/g, '-')
+
+function toArticles(rows: Row[]): Article[] {
+  const out = rows
+    .map((r, index) => {
+      if (!bool(r.show, true) || !r.title) return null
+      const { label, time } = parseDate(r.date)
+      const item: Article = {
+        id: slug(r.id || '') || `article-${index + 1}`,
+        category: r.category,
+        title: r.title,
+        excerpt: r.excerpt,
+        cover: imageUrl(r.cover),
+        coverAlt: r.coverAlt || r.title,
+        date: label,
+        time,
+        author: r.author,
+        content: lines(r.content),
+        link: /^https:\/\//.test(r.link ?? '') ? r.link : '',
+      }
+      // 有填排序數字的照數字；沒填的依日期（新的在前）排在後面
+      return { order: orderOf(r.order, index), index, item }
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x)
+  return out
+    .sort((a, b) => a.order - b.order || byNewest(a.item.time, b.item.time) || a.index - b.index)
+    .map((x) => x.item)
+}
+
+/** 設定分頁：key → value */
+function toSettings(rows: Row[]) {
+  return rows.filter((r) => r.key).map((r) => ({ key: r.key, value: r.value ?? '' }))
 }
 
 /* ---------- 讀取與快取 ---------- */
@@ -231,7 +296,14 @@ async function fetchCsv(url: string) {
   }
 }
 
-function createSource<T>(url: string, local: T[], convert: (rows: Row[]) => T[], label: string) {
+function createSource<T>(
+  url: string,
+  local: T[],
+  convert: (rows: Row[]) => T[],
+  label: string,
+  /** true＝試算表沒有任何可顯示的資料時，就顯示空的（不改用內建資料） */
+  allowEmpty = false,
+) {
   const items: ShallowRef<T[]> = shallowRef(url ? [] : local)
   const status = shallowRef<Status>(url ? 'loading' : 'local')
   let started = false
@@ -242,7 +314,7 @@ function createSource<T>(url: string, local: T[], convert: (rows: Row[]) => T[],
     fetchCsv(url)
       .then((text) => {
         const list = convert(toRows(text))
-        if (!list.length) throw new Error('試算表沒有可顯示的資料')
+        if (!list.length && !allowEmpty) throw new Error('試算表沒有可顯示的資料')
         items.value = list
         status.value = 'sheet'
       })
@@ -258,7 +330,11 @@ function createSource<T>(url: string, local: T[], convert: (rows: Row[]) => T[],
 
 const lecturerSource = createSource(sheetSources.lecturers, localLecturers, toLecturers, '講師')
 const caseSource = createSource(sheetSources.cases, localCases, toCases, '案例')
-const hotCourseSource = createSource(sheetSources.hotCourses, localHotCourses, toHotCourses, '熱門課程')
+type NewsRow = ReturnType<typeof toNews>[number]
+const localNewsRows: NewsRow[] = localNews.map((item, index) => ({ order: index, index, item }))
+const newsSource = createSource(sheetSources.news, localNewsRows, toNews, '最新消息')
+const articleSource = createSource(sheetSources.trends, localArticles, toArticles, '趨勢專欄', true)
+const settingSource = createSource(sheetSources.settings, [], toSettings, '設定', true)
 
 /** 講師資料（試算表優先，失敗用內建資料） */
 export function useLecturers() {
@@ -287,12 +363,28 @@ export function useCases() {
   }
 }
 
-/** 熱門課程（試算表優先，失敗用內建資料）：courses＝全部（課程總覽輪播），course＝排序最前面的一筆（首頁） */
-export function useHotCourse() {
-  hotCourseSource.load()
+/** 試算表「設定」分頁的值（讀不到時回傳 fallback） */
+function useSetting(key: string, fallback: string) {
+  settingSource.load()
+  return computed(() => settingSource.items.value.find((s) => s.key === key)?.value.trim() || fallback)
+}
+
+/** 最新消息（試算表優先，失敗用內建資料）：依「設定」分頁的 newsSort 取最多 5 則 */
+export function useNews() {
+  newsSource.load()
+  const sortSetting = useSetting('newsSort', '排序數字')
+  const sort = computed<NewsSort>(() => (/日期|date/i.test(sortSetting.value) ? 'date' : 'order'))
   return {
-    courses: computed(() => hotCourseSource.items.value),
-    course: computed(() => hotCourseSource.items.value[0] ?? null),
-    loading: computed(() => hotCourseSource.status.value === 'loading'),
+    news: computed(() => pickNews(newsSource.items.value, sort.value)),
+    loading: computed(() => newsSource.status.value === 'loading' || settingSource.status.value === 'loading'),
+  }
+}
+
+/** 趨勢專欄文章（試算表沒有文章時為空陣列） */
+export function useArticles() {
+  articleSource.load()
+  return {
+    articles: computed(() => articleSource.items.value),
+    loading: computed(() => articleSource.status.value === 'loading'),
   }
 }
