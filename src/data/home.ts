@@ -11,13 +11,6 @@ export const hero = {
   subtitle: '亞洲共創透過專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。',
 }
 
-export const servicesSection = {
-  eyebrow: 'Our Services',
-  title: '專業整合，打造多元培訓服務',
-  highlight: '多元培訓服務',
-  desc: '從教育訓練、講師媒合到品牌顧問，依據不同單位的需求，提供整合的培訓與合作服務。',
-}
-
 export const lecturersSection = {
   eyebrow: 'Lecturers & Consultants',
   title: '講師顧問聯盟',

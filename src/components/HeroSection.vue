@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { Sparkles } from '@lucide/vue'
-import HeroDashboard from './HeroDashboard.vue'
+import HeroServices from './HeroServices.vue'
 import HeroCases from './HeroCases.vue'
 import { hero } from '@/data/home'
 import { navDockEl } from '@/composables/navDock'
@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
     </div>
     <Sparkles class="hero__spark" :size="26" :stroke-width="1.8" aria-hidden="true" />
 
-    <!-- 版面：左上標題與說明、左下成果數據、右側放大的案例輪播 -->
+    <!-- 版面：左上標題與說明、左下四大服務項目、右側放大的案例輪播 -->
     <div class="container hero__grid">
       <div class="hero__copy">
         <h1 id="hero-title" class="hero__title">
@@ -39,8 +39,8 @@ onBeforeUnmount(() => {
         <p class="hero__sub hero__in" style="--d: 0.45s">{{ hero.subtitle }}</p>
       </div>
 
-      <div class="hero__stats hero__in" style="--d: 0.55s">
-        <HeroDashboard />
+      <div class="hero__services hero__in" style="--d: 0.55s">
+        <HeroServices />
       </div>
 
       <div class="hero__cases hero__in" style="--d: 0.35s">
@@ -115,7 +115,8 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 左欄：標題（上）＋成果數據（下）；右欄：案例輪播 */
+/* 左欄：標題（上）＋服務項目（下）；右欄：案例輪播
+   上方留白讓出左上角的 Logo（桌機版導覽列停在底部時，Logo 留在左上角） */
 .hero__grid {
   flex: 1;
   display: grid;
@@ -123,11 +124,11 @@ onBeforeUnmount(() => {
   grid-template-rows: auto auto;
   grid-template-areas:
     'copy cases'
-    'stats cases';
+    'services cases';
   align-content: center;
   column-gap: clamp(40px, 5vw, 80px);
-  row-gap: clamp(28px, 6vh, 64px);
-  padding-block: clamp(32px, 6vh, 64px) clamp(28px, 4vh, 48px);
+  row-gap: clamp(24px, 5vh, 52px);
+  padding-block: calc(76px + clamp(12px, 3vh, 32px)) clamp(24px, 3.5vh, 44px);
 }
 
 .hero__copy {
@@ -170,8 +171,8 @@ onBeforeUnmount(() => {
   color: var(--c-text-2);
 }
 
-.hero__stats {
-  grid-area: stats;
+.hero__services {
+  grid-area: services;
   align-self: start;
 }
 
@@ -219,7 +220,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 平板與手機：上下堆疊（文字 → 數據 → 案例），導覽列固定在頂端 */
+/* 平板與手機：上下堆疊（文字 → 服務 → 案例），導覽列固定在頂端 */
 @media (max-width: 1080px) {
   .hero {
     min-height: auto;
@@ -230,7 +231,7 @@ onBeforeUnmount(() => {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       'copy'
-      'stats'
+      'services'
       'cases';
     row-gap: 36px;
     padding-block: 0;

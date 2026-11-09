@@ -1,7 +1,12 @@
 <script setup lang="ts">
-/* SECTION 03｜合作服務：桌機三欄卡片，手機改為單欄（id="services" 供首頁「了解更多」連結使用） */
+/*
+ * SECTION 05｜合作服務：四張服務卡片，內容與首頁 Hero 的服務圖卡共用 src/data/services.ts
+ * 桌機四欄、平板兩欄、手機單欄（id="services" 供首頁服務圖卡連結使用）
+ */
 import SectionHeading from '@/components/SectionHeading.vue'
+import ServiceIcon from '@/components/ServiceIcon.vue'
 import { aboutServices as copy } from '@/data/about'
+import { services } from '@/data/services'
 </script>
 
 <template>
@@ -10,16 +15,19 @@ import { aboutServices as copy } from '@/data/about'
       <SectionHeading id="services-title" :eyebrow="copy.eyebrow" :title="copy.title" />
 
       <ul class="svc">
-        <li v-for="(s, i) in copy.items" :key="s.key" v-reveal="i * 120" class="svc__item">
+        <li v-for="(s, i) in services" :key="s.id" v-reveal="i * 120" class="svc__item">
           <article class="svc__card">
             <div class="svc__top">
               <span class="svc__icon">
-                <component :is="s.icon" :size="28" :stroke-width="1.6" aria-hidden="true" />
+                <ServiceIcon :name="s.icon" :size="28" />
               </span>
               <span class="num svc__no" aria-hidden="true">{{ s.no }}</span>
             </div>
             <h3 class="svc__title">{{ s.title }}</h3>
-            <p class="svc__desc">{{ s.desc }}</p>
+            <p class="svc__desc">{{ s.summary }}</p>
+            <ul class="svc__points" aria-label="服務內容">
+              <li v-for="p in s.points" :key="p">{{ p }}</li>
+            </ul>
           </article>
         </li>
       </ul>
@@ -30,8 +38,8 @@ import { aboutServices as copy } from '@/data/about'
 <style scoped>
 .svc {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
   margin-top: calc(var(--block-gap) + 8px);
 }
 
@@ -44,7 +52,7 @@ import { aboutServices as copy } from '@/data/about'
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: clamp(28px, 3vw, 36px);
+  padding: clamp(26px, 2.4vw, 32px) clamp(22px, 2vw, 28px);
   border-radius: var(--radius-lg);
   background: #fff;
   border: 1px solid var(--c-line);
@@ -121,41 +129,42 @@ import { aboutServices as copy } from '@/data/about'
   line-height: 1.95;
 }
 
-/* 平板：卡片內容較長，改為單欄、圖示放左側 */
-@media (max-width: 1023px) {
+/* 分類標籤：放在卡片底部，各卡片對齊 */
+.svc__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.svc__points li {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--c-line-strong);
+  color: var(--c-text-2);
+  font-size: 0.85rem;
+}
+
+/* 平板：2 × 2 */
+@media (max-width: 1199px) {
   .svc {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-    max-width: 820px;
-  }
-
-  .svc__card {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 22px;
-  }
-
-  .svc__top {
-    grid-row: 1 / span 2;
-  }
-
-  .svc__no {
-    display: none;
-  }
-
-  .svc__title {
-    margin-top: 2px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 767px) {
+/* 手機：單欄 */
+@media (max-width: 640px) {
+  .svc {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
   .svc__card {
-    display: flex;
     padding: 24px 22px;
   }
 
   .svc__no {
-    display: block;
     font-size: 2.1rem;
   }
 

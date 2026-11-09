@@ -1,6 +1,7 @@
 /* =========================================================
    關於亞創頁面：文案、圖示與圖片路徑
-   ※ 五個區塊的文字都集中在這個檔案，直接修改字串即可。
+   ※ 各區塊的文字都集中在這個檔案，直接修改字串即可
+     （合作服務的四張卡片除外，見 src/data/services.ts）。
    ※ 換上照片：把檔案放到 public/about/，再把 aboutImages 裡
      對應項目的 src 改成 '/about/檔名.webp'。
      src 為空字串時，頁面會顯示「照片待補」的中性佔位區塊。
@@ -8,13 +9,10 @@
 
 import type { Component } from 'vue'
 import {
-  Building2,
   ChartNoAxesColumnIncreasing,
   Handshake,
   HeartHandshake,
-  Landmark,
   MessagesSquare,
-  MonitorPlay,
   PenLine,
   Share2,
   WandSparkles,
@@ -142,44 +140,74 @@ export const aboutTeaching = {
   futureTag: '未來探索',
 }
 
-/* ---------- SECTION 03｜合作服務 ---------- */
-export interface AboutService {
-  key: string
-  no: string
-  title: string
-  desc: string
-  icon: Component
+/* ---------- SECTION 03｜課程的起點：從自媒體課堂開始的學習旅程 ----------
+   ※ 起點照片：把檔案放到 public/about/，再把 photo.src 改成 '/about/檔名.webp'。
+     src 為空字串時顯示圖示佔位，圖說會等照片換上後才出現。 */
+export const aboutOrigin = {
+  tag: '課程的起點',
+  title: '從自媒體課堂開始的學習旅程',
+  paragraphs: [
+    '2020 年，在亞洲共創的「專業網紅培訓課程」裡，學員把手機架上腳架，分組練習面對鏡頭。有人拿著麥克風練習主持，有人在旁用手機拍攝。課堂從怎麼寫一段文案、怎麼用影片說故事開始，讓學員有機會把自己的想法和特色拍出來、說給別人聽。',
+    '這也是亞洲共創早期課程的起點。當學員開始能寫、能拍，接下來就會遇到新的問題：內容要分享給誰？社群要怎麼經營？當這些能力用在品牌工作上，又要怎麼知道做出的內容有沒有效？',
+  ],
+  cta: '看課程如何演進',
+  photo: {
+    /** 照片路徑；留空時顯示佔位示意 */
+    src: '',
+    alt: '2020 年專業網紅培訓課程中，學員分組用手機腳架與麥克風進行拍攝練習',
+    caption: '2020 年專業網紅培訓課程的小組實戰演練',
+    width: 1200,
+    height: 900,
+  },
 }
 
+/* ---------- SECTION 04｜亞洲共創的課程發展歷程 ---------- */
+export interface EvolutionStage {
+  years: string
+  title: string
+  body: string
+}
+
+export const aboutEvolution = {
+  /** 區塊錨點 id（起點區的按鈕會捲到這裡） */
+  id: 'evolution',
+  title: '亞洲共創的課程發展歷程',
+  stages: [
+    {
+      years: '2020～2021',
+      title: '從自我表達，學會內容創作',
+      body: '早期的自媒體與網紅培訓，從個人品牌、文案、社群與影音表達出發。課堂上，學員練習找出自己的特色，再透過文字、影片或鏡頭前的表達，把想分享的內容說清楚。',
+    },
+    {
+      years: '2022',
+      title: '從內容製作，走進品牌經營',
+      body: '當內容創作成為品牌工作的一部分，課程也跟著往前走。以「社群小編全能實戰培訓班」為例，文案和圖文製作開始和品牌的行銷目標一起規劃。學員除了練習做內容，也要思考要和誰溝通、在哪個平台發布，以及每一則貼文要達成什麼目的。',
+    },
+    {
+      years: '2022～2024',
+      title: '從行銷執行，學會用數據說話',
+      body: '隨著行銷工作涵蓋更多平台與工具，課程逐步加入行銷科技（MarTech），把範圍延伸到數位廣告、數據分析與行銷流程。課堂上的問題也跟著改變：內容發布後，有沒有讓想接觸的人看到？看過的人有沒有進一步點擊或採取行動？',
+    },
+    {
+      years: '2025～至今',
+      title: '從行銷實務，走向 AI 協作',
+      body: '在品牌行銷、內容製作、廣告投放與數據分析的基礎上，課程開始加入生成式 AI。學員可以用 AI 幫忙找題材、整理文案初稿，或依腳本生成短影音片段，再依品牌風格與實際需求修改。從一個點子到一份可以發布的內容，課堂會帶學員練習在不同步驟使用 AI。',
+    },
+  ] satisfies EvolutionStage[],
+  /** 時間軸下方的連結：前往學習地圖的七大主題 */
+  next: '看看上課會學什麼',
+  nextTo: { path: '/learning-map', hash: '#topics' },
+}
+
+/* ---------- SECTION 05｜合作服務 ----------
+   ※ 四張服務卡片與首頁 Hero 的服務圖卡共用 src/data/services.ts，
+     修改服務名稱、簡介或標籤請改那個檔案。 */
 export const aboutServices = {
   eyebrow: 'Services',
   title: '從不同的需求出發，一起設計適合的學習',
-  items: [
-    {
-      key: 'gov-school',
-      no: '01',
-      title: '政府與學校人才培訓',
-      desc: '與政府機關及大專院校合作，依據培訓計畫與學員背景，規劃青年職涯、產學合作、專業技能與實務應用課程，協助學員累積進入職場需要的知識與能力。',
-      icon: Landmark,
-    },
-    {
-      key: 'enterprise',
-      no: '02',
-      title: '企業內訓與顧問',
-      desc: '從企業的實際工作需求出發，結合品牌行銷、數位工具及專業講師資源，規劃具實作性的內部培訓，並依需求提供品牌與行銷顧問服務。',
-      icon: Building2,
-    },
-    {
-      key: 'ai-marketing',
-      no: '03',
-      title: 'AI 與行銷實作課程',
-      desc: '從品牌企劃、社群經營、影音內容、數位廣告與數據分析，到生成式 AI 的應用，透過課堂練習與實際案例，協助學員把學到的方法帶回工作與生活。',
-      icon: MonitorPlay,
-    },
-  ] satisfies AboutService[],
 }
 
-/* ---------- SECTION 04｜培訓案例 ---------- */
+/* ---------- SECTION 06｜培訓案例 ---------- */
 export interface AboutCase {
   key: string
   year: string
@@ -218,7 +246,7 @@ export const aboutCases = {
   ] satisfies AboutCase[],
 }
 
-/* ---------- SECTION 05｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
+/* ---------- SECTION 07｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
 export const aboutContact = {
   eyebrow: "Let's Co-create",
   title: '讓下一段學習，從我們的交流開始',

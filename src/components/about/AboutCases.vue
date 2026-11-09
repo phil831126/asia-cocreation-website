@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/* SECTION 04｜培訓案例：大卡片，文字在左、照片在右；照片尚未提供時顯示中性佔位 */
+/* SECTION 06｜培訓案例：大卡片，文字在左、照片在右；照片尚未提供時顯示中性佔位 */
 import SectionHeading from '@/components/SectionHeading.vue'
 import AboutPhoto from './AboutPhoto.vue'
 import { aboutCases as copy } from '@/data/about'

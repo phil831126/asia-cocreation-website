@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { ArrowRight } from '@lucide/vue'
 import HeroSection from '@/components/HeroSection.vue'
-import ServiceCards from '@/components/ServiceCards.vue'
 import LecturerAlliance from '@/components/LecturerAlliance.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import CaseShowcase from '@/components/CaseShowcase.vue'
@@ -21,13 +20,11 @@ const snap = useSectionSnap(root)
   <div ref="root" class="page home">
     <!-- 最底層的背景點綴（網點、虛線、幾何圖形） -->
     <HomeBackdrop />
-    <!-- 01 主視覺（含成果 Dashboard） -->
+    <!-- 01 主視覺（含四大服務項目與案例輪播） -->
     <HeroSection data-snap="首頁" />
-    <!-- 02 三大服務 -->
-    <ServiceCards data-snap="服務項目" />
-    <!-- 03 講師顧問聯盟 -->
+    <!-- 02 講師顧問聯盟 -->
     <LecturerAlliance data-snap="講師顧問" />
-    <!-- 04 案例分享（Swiper） -->
+    <!-- 03 案例分享（Swiper） -->
     <section id="cases" class="section" data-snap="案例分享">
       <div class="container">
         <CaseShowcase layout="swiper">
@@ -45,9 +42,9 @@ const snap = useSectionSnap(root)
         </CaseShowcase>
       </div>
     </section>
-    <!-- 05 合作單位展示 -->
+    <!-- 04 合作單位展示 -->
     <PartnerWall data-snap="合作單位" />
-    <!-- 06 合作邀請 -->
+    <!-- 05 合作邀請 -->
     <CtaBanner data-snap="洽詢合作" />
 
     <Teleport to="body">

@@ -81,7 +81,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   about: {
     title: '關於亞創｜亞洲共創學院',
     description:
-      '亞洲共創學院提供數位行銷、職場專業技能與 AI 協作課程，串聯講師與產業資源，回應組織的人才培育需求。認識亞創的教學理念、合作服務與培訓案例。',
+      '亞洲共創學院提供數位行銷、職場專業技能與 AI 協作課程，串聯講師與產業資源，回應組織的人才培育需求。認識亞創的教學理念、課程發展歷程、合作服務與培訓案例。',
   },
   lecturers: {
     title: '講師聯盟｜亞洲共創學院',
@@ -93,7 +93,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   },
   learningMap: {
     title: '學習地圖｜亞洲共創學院',
-    description: '從 2020 年的專業網紅培訓課程出發，看亞洲共創的課程如何從個人創作走向品牌社群、數據成效與 AI 應用，以及上課會學到的七個行銷主題。',
+    description: '亞洲共創學院的學習地圖：累計開課、合作單位、業師與學員數據，以及從觀念到實作的七大行銷學習主題。',
   },
   cases: {
     title: '案例分享｜亞洲共創學院',

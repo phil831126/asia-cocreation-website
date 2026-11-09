@@ -89,7 +89,13 @@ onBeforeUnmount(() => {
   >
     <div class="nav__wrap">
       <div class="nav__bar">
-        <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
+        <!-- 首頁停靠時，Logo 反向位移留在畫面左上角；導覽列上移到頂端後與 Logo 合併 -->
+        <RouterLink
+          to="/"
+          class="nav__brand"
+          aria-label="亞洲共創學院 回到首頁"
+          :style="docked ? { transform: `translateY(${-dockOffset}px)` } : undefined"
+        >
           <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="282" height="240" />
         </RouterLink>
 
@@ -200,6 +206,12 @@ onBeforeUnmount(() => {
 .nav__brand {
   display: inline-flex;
   border-radius: 12px;
+}
+
+/* 首頁停靠時 Logo 獨立留在左上角：加一層淡白底，內容捲到下方時仍清楚 */
+.nav.is-docked .nav__brand {
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.82);
 }
 
 /* 圖文一體的 Logo（字樣在圖示下方），高度接近導覽列本體 */
