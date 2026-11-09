@@ -5,9 +5,9 @@ import { Search, X, UserRound, ArrowRight, SearchX } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
-import LecturerApply from '@/components/LecturerApply.vue'
 import { lecturerAudiences, lecturerFields, lecturerFormats, type Lecturer } from '@/data/lecturers'
 import { useLecturers } from '@/composables/sheetData'
+import { lecturerApplySection } from '@/data/home'
 
 const route = useRoute()
 const router = useRouter()
@@ -133,6 +133,9 @@ function onDialogClick(e: MouseEvent) {
   if (e.target === dialogEl.value) closeLecturer()
 }
 
+/** 申請加入講師聯盟：前往聯絡我們，需求預選「講師經紀」並帶入申請留言 */
+const joinLink = lecturerApplySection.primary.to
+
 const inviteLink = computed(() =>
   current.value ? { path: '/contact', query: { topic: 'lecturer', lecturer: current.value.name } } : '/contact',
 )
@@ -149,6 +152,11 @@ const inviteLink = computed(() =>
       compact
     >
       <span v-if="hasSample" class="pending-tag">講師資料待補（目前為示意內容）</span>
+      <!-- 邀請講師加入：首頁「加入講師聯盟，讓專業走進更多課堂」的濃縮版 -->
+      <p class="join">
+        有實務經驗、願意分享專業？歡迎加入講師聯盟，我們協助課程媒合、規劃與曝光。
+        <RouterLink :to="joinLink" class="link-arrow join__link">申請加入 <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
+      </p>
     </PageHeader>
 
     <!-- 頁首下方不留大片空白，讓篩選區在進入頁面時就完整出現 -->
@@ -234,9 +242,6 @@ const inviteLink = computed(() =>
       </div>
     </section>
 
-    <!-- 邀請講師加入（與首頁「加入講師聯盟，讓專業走進更多課堂」相同內容） -->
-    <LecturerApply class="section--alt" :browse-link="false" />
-
     <CtaBanner />
 
     <!-- 講師詳細介紹 -->
@@ -305,6 +310,26 @@ const inviteLink = computed(() =>
 </template>
 
 <style scoped>
+/* 頁首：邀請講師加入 */
+.join {
+  color: var(--c-text-2);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+  .join {
+    font-size: 0.9rem;
+  }
+}
+
+.join__link {
+  display: inline-flex;
+  margin-left: 6px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
 /* 篩選區緊接在頁首下方 */
 .lec-main {
   padding-top: 20px;

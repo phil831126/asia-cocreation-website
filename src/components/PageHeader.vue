@@ -187,6 +187,14 @@ defineProps<{
   font-size: min(1.1rem, calc(100cqi / var(--chars)));
 }
 
+/* 手機：一行放不下時改為正常換行，避免字級縮得太小 */
+@media (max-width: 600px) {
+  .ph__desc--line {
+    white-space: normal;
+    font-size: 1rem;
+  }
+}
+
 @keyframes ph-in {
   from {
     opacity: 0;
