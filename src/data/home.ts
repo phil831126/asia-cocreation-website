@@ -4,6 +4,11 @@
      請於取得正式文案後直接修改本檔。
    ========================================================= */
 
+import type { Component } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
+import { GraduationCap, Handshake, Mic, UsersRound } from '@lucide/vue'
+import { services } from './services'
+
 export const hero = {
   titleLines: ['亞洲共創學院'],
   /** 標題中以品牌黃底線強調的文字 */
@@ -42,3 +47,53 @@ export const ctaSection = {
   steps: ['需求了解', '課程規劃', '專案執行', '成果回饋'],
   button: { label: '聯絡我們', to: '/contact' },
 }
+
+/* ---------- Hero 左下「快速導引」四張圖卡（依序 01～04） ----------
+   ※ 教育培訓、講師經紀的簡介與標籤沿用 services.ts（與關於亞創的服務卡片一致）；
+     講師顧問聯盟、合作單位沿用首頁對應區塊的說明。 */
+export interface QuickGuideItem {
+  key: string
+  title: string
+  summary: string
+  points: string[]
+  icon: Component
+  /** 點擊後前往的頁面或首頁區塊 */
+  to: RouteLocationRaw
+}
+
+const service = (id: string) => services.find((s) => s.id === id)!
+
+export const quickGuide: QuickGuideItem[] = [
+  {
+    key: 'training',
+    title: service('training').title,
+    summary: service('training').summary,
+    points: service('training').points,
+    icon: GraduationCap,
+    to: '/about#services',
+  },
+  {
+    key: 'lecturers',
+    title: '講師顧問聯盟',
+    summary: lecturersSection.desc,
+    points: ['職涯探索', '品牌行銷', '自媒體經營'],
+    icon: UsersRound,
+    to: '/lecturers',
+  },
+  {
+    key: 'agency',
+    title: service('lecturer').title,
+    summary: service('lecturer').summary,
+    points: service('lecturer').points,
+    icon: Mic,
+    to: '/about#services',
+  },
+  {
+    key: 'partners',
+    title: '合作單位',
+    summary: partnerWallSection.desc,
+    points: ['政府機關', '大專院校', '企業品牌'],
+    icon: Handshake,
+    to: { path: '/', hash: '#partners' },
+  },
+]

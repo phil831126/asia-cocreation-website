@@ -1,6 +1,6 @@
 /* =========================================================
    Google 試算表資料來源（偽後端）
-   - 講師、案例、熱門課程分頁在 Google 試算表「檔案 → 共用 → 發布到網路」，
+   - 講師、案例分頁（與另一份「熱門課程」試算表）在 Google 試算表「檔案 → 共用 → 發布到網路」，
      格式選「逗號分隔值 (.csv)」，把產生的網址貼在下面。
    - 留空字串＝不讀試算表，直接使用 src/data/lecturers.ts、cases.ts、hotCourse.ts 的內建資料。
    - 讀取失敗（網路問題、取消發布）時，網站也會自動改用內建資料。
@@ -17,11 +17,13 @@ export const sheetSources = {
   /** 「案例」分頁的 CSV 網址 */
   cases: `${PUBLISHED}?gid=1046939079&single=true&output=csv`,
   /**
-   * 「熱門課程」分頁的 CSV 網址（首頁 Hero 右側圖卡）。
-   * 分頁建立並發布後，把 gid 填進來，例如 `${PUBLISHED}?gid=123456789&single=true&output=csv`。
+   * 熱門課程的 CSV 網址：首頁 Hero 右側圖卡與課程總覽頁的輪播共用。
+   * 資料在另一份試算表「亞創網站｜熱門課程」（同一個「亞創網站內容」資料夾），
+   * 已發布到網路（格式 .csv），網址如下。
    * 第 1 列欄位代號：show, order, tag, title, summary, cover, coverAlt, info, link, linkLabel
    */
-  hotCourses: '',
+  hotCourses:
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpp8koIFa3fXFt80FPTNWJSG1jP7UQCdhO8Cp17ypDZGF6UVcFUorc3lMIAvssOdPnnWgM1S2XG1-K/pub?gid=2068586822&single=true&output=csv',
 }
 
 /**

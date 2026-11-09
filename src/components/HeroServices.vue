@@ -1,22 +1,21 @@
 <script setup lang="ts">
 /*
- * 首頁 Hero 左下：四大服務項目（精簡版圖卡，2 × 2）
- * 內容與「關於亞創」的服務卡片共用 src/data/services.ts。
+ * 首頁 Hero 左下：「快速導引」四張圖卡（2 × 2）：教育培訓、講師顧問聯盟、講師經紀、合作單位
+ * 內容在 src/data/home.ts 的 quickGuide。
  * 桌機畫面高度不足時隱藏簡介，只留標題與分類標籤，讓 Hero 維持在第一個畫面內。
  */
 import { ArrowUpRight } from '@lucide/vue'
-import ServiceIcon from './ServiceIcon.vue'
-import { services } from '@/data/services'
+import { quickGuide } from '@/data/home'
 </script>
 
 <template>
-  <ul class="hs" aria-label="服務項目">
-    <li v-for="(s, i) in services" :key="s.id" class="hs__item">
-      <RouterLink to="/about#services" class="hs__card" :class="`hs__card--${i + 1}`">
+  <ul class="hs" aria-label="快速導引">
+    <li v-for="(s, i) in quickGuide" :key="s.key" class="hs__item">
+      <RouterLink :to="s.to" class="hs__card" :class="`hs__card--${i + 1}`">
         <div class="hs__head">
-          <span class="hs__icon"><ServiceIcon :name="s.icon" :size="20" /></span>
+          <span class="hs__icon"><component :is="s.icon" :size="20" :stroke-width="1.6" aria-hidden="true" /></span>
           <h2 class="hs__title">{{ s.title }}</h2>
-          <span class="num hs__no" aria-hidden="true">{{ s.no }}</span>
+          <span class="num hs__no" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</span>
           <ArrowUpRight class="hs__arrow" :size="18" aria-hidden="true" />
         </div>
         <p class="hs__summary">{{ s.summary }}</p>

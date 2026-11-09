@@ -287,10 +287,11 @@ export function useCases() {
   }
 }
 
-/** 首頁熱門課程：排序最前面的一筆（試算表優先，失敗用內建資料） */
+/** 熱門課程（試算表優先，失敗用內建資料）：courses＝全部（課程總覽輪播），course＝排序最前面的一筆（首頁） */
 export function useHotCourse() {
   hotCourseSource.load()
   return {
+    courses: computed(() => hotCourseSource.items.value),
     course: computed(() => hotCourseSource.items.value[0] ?? null),
     loading: computed(() => hotCourseSource.status.value === 'loading'),
   }

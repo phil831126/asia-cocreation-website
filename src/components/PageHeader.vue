@@ -16,34 +16,40 @@ defineProps<{
 <template>
   <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
-    <svg class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
+    <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的熱門課程輪播）時改顯示該內容 -->
+    <svg v-if="!$slots.aside" class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
       <circle cx="130" cy="130" r="92" fill="rgba(255,255,255,0.5)" stroke="#d6d6d3" stroke-width="12" />
       <circle cx="130" cy="130" r="40" fill="#F8BE20" fill-opacity="0.35" />
       <circle cx="130" cy="130" r="14" fill="#F8BE20" />
       <path d="M198 198 L262 262" stroke="#9a9a98" stroke-width="20" stroke-linecap="round" />
     </svg>
-    <div class="container ph__inner">
-      <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
-        <ol>
-          <li><RouterLink to="/">首頁</RouterLink></li>
-          <li v-for="c in crumbs" :key="c.label">
-            <ChevronRight :size="14" aria-hidden="true" />
-            <RouterLink v-if="c.to" :to="c.to">{{ c.label }}</RouterLink>
-            <span v-else aria-current="page">{{ c.label }}</span>
-          </li>
-        </ol>
-      </nav>
-      <span class="eyebrow ph__eyebrow">{{ eyebrow }}</span>
-      <h1 class="ph__title">{{ title }}</h1>
-      <p
-        v-if="desc"
-        class="ph__desc"
-        :class="{ 'ph__desc--line': singleLineDesc }"
-        :style="singleLineDesc ? { '--chars': desc.length + 0.6 } : undefined"
-      >
-        {{ desc }}
-      </p>
-      <slot />
+    <div class="container ph__layout" :class="{ 'ph__layout--aside': $slots.aside }">
+      <div class="ph__inner">
+        <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
+          <ol>
+            <li><RouterLink to="/">首頁</RouterLink></li>
+            <li v-for="c in crumbs" :key="c.label">
+              <ChevronRight :size="14" aria-hidden="true" />
+              <RouterLink v-if="c.to" :to="c.to">{{ c.label }}</RouterLink>
+              <span v-else aria-current="page">{{ c.label }}</span>
+            </li>
+          </ol>
+        </nav>
+        <span class="eyebrow ph__eyebrow">{{ eyebrow }}</span>
+        <h1 class="ph__title">{{ title }}</h1>
+        <p
+          v-if="desc"
+          class="ph__desc"
+          :class="{ 'ph__desc--line': singleLineDesc }"
+          :style="singleLineDesc ? { '--chars': desc.length + 0.6 } : undefined"
+        >
+          {{ desc }}
+        </p>
+        <slot />
+      </div>
+      <div v-if="$slots.aside" class="ph__aside">
+        <slot name="aside" />
+      </div>
     </div>
   </section>
 </template>
@@ -87,7 +93,21 @@ defineProps<{
   }
 }
 
+/* 有右側內容時：左文右卡片 */
+.ph__layout--aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.ph__aside {
+  min-width: 0;
+  animation: ph-in 0.8s var(--ease-out) both 0.3s;
+}
+
 .ph__inner {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -101,7 +121,21 @@ defineProps<{
   padding: calc(var(--nav-h) + 28px) 0 24px;
 }
 
-.ph--compact .ph__inner {
+.ph--compact /* 有右側內容時：左文右卡片 */
+.ph__layout--aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.ph__aside {
+  min-width: 0;
+  animation: ph-in 0.8s var(--ease-out) both 0.3s;
+}
+
+.ph__inner {
+  min-width: 0;
   gap: 14px;
 }
 
@@ -157,6 +191,16 @@ defineProps<{
   from {
     opacity: 0;
     transform: translateY(18px);
+  }
+}
+
+@media (max-width: 960px) {
+  .ph__layout--aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ph__aside {
+    max-width: 520px;
   }
 }
 

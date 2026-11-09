@@ -6,6 +6,13 @@ import { prefersReducedMotion } from '@/composables/motion'
 
 const year = new Date().getFullYear()
 
+/** 服務時間的午休說明（全形括號起）換到下一行，其餘欄位維持一行 */
+function footLines(key: string, value: string) {
+  if (key !== 'hours') return [value]
+  const i = value.indexOf('（')
+  return i > 0 ? [value.slice(0, i).trim(), value.slice(i)] : [value]
+}
+
 function backToTop() {
   window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
 }
@@ -46,7 +53,9 @@ function backToTop() {
               <dt>{{ f.label }}</dt>
               <dd>
                 <a v-if="f.href" :href="f.href" class="foot__tel">{{ contact[f.key] }}</a>
-                <template v-else>{{ contact[f.key] }}</template>
+                <template v-else>
+                  <span v-for="(line, i) in footLines(f.key, contact[f.key])" :key="i" class="foot__line">{{ line }}</span>
+                </template>
               </dd>
             </div>
           </dl>
@@ -243,5 +252,10 @@ function backToTop() {
     right: var(--gutter);
     top: 24px;
   }
+}
+
+/* 一個欄位分成多行（例如服務時間的午休說明） */
+.foot__line {
+  display: block;
 }
 </style>
