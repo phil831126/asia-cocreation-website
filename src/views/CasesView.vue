@@ -17,7 +17,7 @@ const { hasSample } = useCases()
       :crumbs="[{ label: '課程總覽' }]"
     >
       <span v-if="hasSample" class="pending-tag">示意內容／待補案例</span>
-      <!-- 右側：最新消息輪播（與首頁主視覺共用試算表「最新消息」分頁） -->
+      <!-- 右側：熱門課程輪播（與首頁主視覺共用試算表「熱門課程」分頁） -->
       <template #aside>
         <NewsCarousel />
       </template>

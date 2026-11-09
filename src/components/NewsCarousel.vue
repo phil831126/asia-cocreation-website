@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /*
- * 最新消息輪播：首頁主視覺右側與課程總覽頁頁首右側共用
- * 內容來自試算表「最新消息」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
+ * 熱門課程輪播：首頁主視覺右側與課程總覽頁頁首右側共用
+ * 內容來自試算表「熱門課程」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
  * 只有一則時不顯示頁碼與箭頭。showAll＝在下方加上「課程總覽」連結（首頁使用）。
  */
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
@@ -39,9 +39,9 @@ function init() {
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
     pagination: { el: pagination.value, clickable: true, bulletClass: 'hcc__dot', bulletActiveClass: 'is-active' },
     a11y: {
-      prevSlideMessage: '上一則消息',
-      nextSlideMessage: '下一則消息',
-      paginationBulletMessage: '前往第 {{index}} 則消息',
+      prevSlideMessage: '上一個熱門課程',
+      nextSlideMessage: '下一個熱門課程',
+      paginationBulletMessage: '前往第 {{index}} 個熱門課程',
     },
   })
 }
@@ -61,7 +61,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 </script>
 
 <template>
-  <section class="hcc" aria-label="最新消息">
+  <section class="hcc" aria-label="熱門課程">
     <div v-if="loading" class="hcc__single">
       <NewsItem :item="null" />
     </div>
@@ -85,10 +85,10 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
       <div ref="pagination" class="hcc__pagination"></div>
       <div class="hcc__nav">
         <template v-if="news.length > 1">
-          <button ref="prevBtn" type="button" class="hcc__arrow" aria-label="上一則消息">
+          <button ref="prevBtn" type="button" class="hcc__arrow" aria-label="上一個熱門課程">
             <ArrowLeft :size="16" aria-hidden="true" />
           </button>
-          <button ref="nextBtn" type="button" class="hcc__arrow" aria-label="下一則消息">
+          <button ref="nextBtn" type="button" class="hcc__arrow" aria-label="下一個熱門課程">
             <ArrowRight :size="16" aria-hidden="true" />
           </button>
         </template>

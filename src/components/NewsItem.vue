@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /*
- * 最新消息圖卡（單張）：上方 16:10 圖片、下方「最新消息」標示／類別／日期／標題／摘要／連結。
+ * 熱門課程圖卡（單張）：上方 16:10 圖片、下方「熱門課程」標示／類別／日期／標題／摘要／連結。
  * 首頁主視覺與課程總覽頁的輪播（NewsCarousel）共用。
  * item 為 null 時顯示載入中的佔位卡。
  */
 import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowRight, ArrowUpRight, ImageIcon, Megaphone } from '@lucide/vue'
+import { ArrowRight, ArrowUpRight, Flame, ImageIcon } from '@lucide/vue'
 import type { NewsItem } from '@/data/news'
 
 const props = withDefaults(defineProps<{ item: NewsItem | null; titleTag?: 'h2' | 'h3' }>(), { titleTag: 'h2' })
@@ -41,9 +41,9 @@ watch(
     </div>
 
     <div class="hot__body">
-      <!-- 「最新消息」標示放在文字區，不遮住海報 -->
+      <!-- 「熱門課程」標示放在文字區，不遮住海報 -->
       <p class="hot__meta">
-        <span class="hot__badge"><Megaphone :size="14" :stroke-width="2.2" aria-hidden="true" />最新消息</span>
+        <span class="hot__badge"><Flame :size="14" :stroke-width="2.2" aria-hidden="true" />熱門課程</span>
         <span v-if="item.tag" class="hot__tag">{{ item.tag }}</span>
         <time v-if="item.date" class="num hot__date">{{ item.date }}</time>
       </p>
@@ -121,7 +121,7 @@ a.hot__card:hover .hot__img {
   gap: 8px;
 }
 
-/* 「最新消息」標示：品牌黃底 */
+/* 「熱門課程」標示：品牌黃底 */
 .hot__badge {
   display: inline-flex;
   align-items: center;

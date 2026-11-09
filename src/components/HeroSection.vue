@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
     </div>
     <Sparkles class="hero__spark" :size="26" :stroke-width="1.8" aria-hidden="true" />
 
-    <!-- 版面：左上標題與說明、左下服務項目、右側最新消息輪播 -->
+    <!-- 版面：左上標題與說明、左下服務項目、右側熱門課程輪播 -->
     <div class="container hero__grid">
       <div class="hero__copy">
         <h1 id="hero-title" class="hero__title">
@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 左欄：標題（上）＋服務項目（下）；右欄：最新消息輪播
+/* 左欄：標題（上）＋服務項目（下）；右欄：熱門課程輪播
    上方留白讓出左上角的 Logo（桌機版導覽列停在底部時，Logo 留在左上角） */
 .hero__grid {
   flex: 1;
@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
   margin-bottom: 14px;
 }
 
-/* 右欄：最新消息輪播，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
+/* 右欄：熱門課程輪播，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
 .hero__course {
   grid-area: course;
   align-self: center;
@@ -228,7 +228,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 平板與手機：上下堆疊（文字 → 最新消息輪播 → 服務項目），導覽列固定在頂端 */
+/* 平板與手機：上下堆疊（文字 → 熱門課程輪播 → 服務項目），導覽列固定在頂端 */
 @media (max-width: 1080px) {
   .hero {
     min-height: auto;

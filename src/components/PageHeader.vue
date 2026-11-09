@@ -16,7 +16,7 @@ defineProps<{
 <template>
   <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
-    <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的最新消息輪播）時改顯示該內容 -->
+    <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的熱門課程輪播）時改顯示該內容 -->
     <svg v-if="!$slots.aside" class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
       <circle cx="130" cy="130" r="92" fill="rgba(255,255,255,0.5)" stroke="#d6d6d3" stroke-width="12" />
       <circle cx="130" cy="130" r="40" fill="#F8BE20" fill-opacity="0.35" />

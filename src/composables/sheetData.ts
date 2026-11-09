@@ -6,7 +6,7 @@ import { localNews, NEWS_LIMIT, type NewsItem, type NewsSort } from '@/data/news
 import { localArticles, type Article } from '@/data/trends'
 
 /**
- * 從 Google 試算表（發布為 CSV）讀取講師、案例、最新消息、趨勢專欄與設定。
+ * 從 Google 試算表（發布為 CSV）讀取講師、案例、熱門課程、趨勢專欄與設定。
  * - 第 1 列是欄位代號（英文），程式靠它對應資料，欄位順序可以任意調換
  * - 第一格以「#」開頭的列會略過（範本第 2 列的中文說明就是這樣標的）
  * - 讀不到時改用內建資料，網站不會變空白
@@ -332,7 +332,7 @@ const lecturerSource = createSource(sheetSources.lecturers, localLecturers, toLe
 const caseSource = createSource(sheetSources.cases, localCases, toCases, '案例')
 type NewsRow = ReturnType<typeof toNews>[number]
 const localNewsRows: NewsRow[] = localNews.map((item, index) => ({ order: index, index, item }))
-const newsSource = createSource(sheetSources.news, localNewsRows, toNews, '最新消息')
+const newsSource = createSource(sheetSources.news, localNewsRows, toNews, '熱門課程')
 const articleSource = createSource(sheetSources.trends, localArticles, toArticles, '趨勢專欄', true)
 const settingSource = createSource(sheetSources.settings, [], toSettings, '設定', true)
 
@@ -369,7 +369,7 @@ function useSetting(key: string, fallback: string) {
   return computed(() => settingSource.items.value.find((s) => s.key === key)?.value.trim() || fallback)
 }
 
-/** 最新消息（試算表優先，失敗用內建資料）：依「設定」分頁的 newsSort 取最多 5 則 */
+/** 熱門課程（試算表優先，失敗用內建資料）：依「設定」分頁的 newsSort 取最多 5 則 */
 export function useNews() {
   newsSource.load()
   const sortSetting = useSetting('newsSort', '排序數字')
