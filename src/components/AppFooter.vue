@@ -41,15 +41,7 @@ function backToTop() {
         <div class="foot__col">
           <h2 class="foot__heading">聯絡資訊</h2>
           <dl class="foot__contact">
-            <div>
-              <dt>公司名稱</dt>
-              <dd>{{ brand.company }}</dd>
-            </div>
-            <div>
-              <dt>品牌名稱</dt>
-              <dd>{{ brand.name }}</dd>
-            </div>
-            <!-- 只顯示已確認的項目（電子郵件、服務時間待確認，暫不顯示） -->
+            <!-- 依序顯示：聯絡電話、公司地址、電子郵件（順序在 site.ts 的 footerOrder） -->
             <div v-for="f in footerContactFields" :key="f.key">
               <dt>{{ f.label }}</dt>
               <dd>

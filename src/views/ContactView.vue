@@ -125,7 +125,6 @@ async function onSubmit() {
               </div>
             </li>
           </ul>
-          <p class="info__note">電子郵件與服務時間待企業確認後更新；地址為公司登記地址。</p>
         </aside>
 
         <div class="form-card">
@@ -265,14 +264,6 @@ async function onSubmit() {
 
 .info__value {
   font-weight: 500;
-}
-
-.info__note {
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid var(--c-line);
-  font-size: 0.88rem;
-  color: var(--c-text-2);
 }
 
 .form-card {
