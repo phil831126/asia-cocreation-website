@@ -5,7 +5,6 @@
  * 捲動到這一區時，路徑線段與節點依序亮起。
  */
 import { ref } from 'vue'
-import { Quote } from '@lucide/vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import { useInView } from '@/composables/motion'
 import { aboutTeaching as copy } from '@/data/about'
@@ -17,17 +16,7 @@ const on = useInView(list, 0.2)
 <template>
   <section class="section teach" aria-labelledby="teach-title">
     <div class="container">
-      <SectionHeading id="teach-title" :eyebrow="copy.eyebrow" :title="copy.title" />
-
-      <div class="teach__intro">
-        <p v-for="(p, i) in copy.intro" :key="i" v-reveal="i * 80" class="teach__text">{{ p }}</p>
-      </div>
-
-      <!-- 核心理念：放在四階段流程上方 -->
-      <blockquote v-reveal class="teach__motto">
-        <Quote class="teach__quote" :size="30" :stroke-width="1.6" aria-hidden="true" />
-        <p>{{ copy.motto }}</p>
-      </blockquote>
+      <SectionHeading id="teach-title" :eyebrow="copy.eyebrow" :title="copy.title" single-line />
 
       <h3 v-reveal class="teach__subtitle">{{ copy.stagesTitle }}</h3>
 
@@ -61,46 +50,8 @@ const on = useInView(list, 0.2)
 </template>
 
 <style scoped>
-/* ---------- 理念說明 ---------- */
-.teach__intro {
-  max-width: 820px;
-  margin-top: var(--block-gap);
-}
-
-.teach__text {
-  color: var(--c-text-2);
-  line-height: 2;
-}
-
-.teach__text + .teach__text {
-  margin-top: 14px;
-}
-
-/* 核心理念：黃色引號＋大字，左側黃線 */
-.teach__motto {
-  position: relative;
-  margin: clamp(36px, 5vw, 56px) 0 0;
-  padding: clamp(26px, 3vw, 36px) clamp(24px, 4vw, 48px);
-  border-left: 4px solid var(--c-yellow);
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  background: linear-gradient(100deg, var(--c-yellow-tint), rgba(255, 246, 220, 0.2));
-}
-
-.teach__quote {
-  color: var(--c-yellow-deep);
-}
-
-.teach__motto p {
-  margin-top: 10px;
-  font-size: clamp(1.3rem, 2.3vw, 1.75rem);
-  font-weight: 700;
-  line-height: 1.6;
-  letter-spacing: 0.04em;
-  text-wrap: balance;
-}
-
 .teach__subtitle {
-  margin-top: clamp(40px, 5vw, 60px);
+  margin-top: var(--block-gap);
   font-size: clamp(1.2rem, 1.8vw, 1.4rem);
   letter-spacing: 0.06em;
 }

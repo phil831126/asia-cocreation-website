@@ -36,10 +36,11 @@ onBeforeUnmount(() => {
             {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="hero__mark">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
           </span>
         </h1>
-        <p class="hero__sub hero__in" style="--d: 0.45s">{{ hero.subtitle }}</p>
+        <p class="hero__sub hero__in" :style="{ '--d': '0.45s', '--chars': hero.subtitle.length + 0.6 }">{{ hero.subtitle }}</p>
       </div>
 
       <div class="hero__services hero__in" style="--d: 0.55s">
+        <p class="eyebrow hero__guide">{{ hero.servicesLabel }}</p>
         <HeroServices />
       </div>
 
@@ -150,8 +151,10 @@ onBeforeUnmount(() => {
   letter-spacing: 0.03em;
 }
 
+/* 標題與說明都固定一行 */
 .hero__line {
   display: block;
+  white-space: nowrap;
 }
 
 /* 黃色螢光底線（黃字放在白底上對比不足） */
@@ -162,10 +165,10 @@ onBeforeUnmount(() => {
   padding-inline: 0.06em;
 }
 
-/* 說明文字固定一行：字級依左欄寬度縮放（全文 35 字），最大 17px */
+/* 說明文字固定一行：字級依左欄寬度縮放（--chars 為字數），最大 17px */
 .hero__sub {
   margin-top: 2.6vh;
-  font-size: min(17px, 2.3vh + 2px, calc(100cqi / 35.6));
+  font-size: min(17px, 2.3vh + 2px, calc(100cqi / var(--chars)));
   line-height: 1.85;
   white-space: nowrap;
   color: var(--c-text-2);
@@ -174,6 +177,11 @@ onBeforeUnmount(() => {
 .hero__services {
   grid-area: services;
   align-self: start;
+}
+
+/* 「快速導引」小標籤：純標示 */
+.hero__guide {
+  margin-bottom: 14px;
 }
 
 /* 右欄：放大的案例輪播，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
@@ -242,7 +250,7 @@ onBeforeUnmount(() => {
   }
 
   .hero__sub {
-    font-size: min(17px, calc(100cqi / 35.6));
+    font-size: min(17px, calc(100cqi / var(--chars)));
   }
 
   .hero__cases {

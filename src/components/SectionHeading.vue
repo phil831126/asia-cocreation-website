@@ -12,6 +12,8 @@ const props = withDefaults(
     align?: 'left' | 'center'
     as?: 'h1' | 'h2'
     id?: string
+    /** 標題固定一行：依寬度自動縮小字級，不換行 */
+    singleLine?: boolean
   }>(),
   { align: 'left', as: 'h2' },
 )
@@ -21,7 +23,11 @@ const phrases = computed(() => splitPhrases(props.title, props.highlight))
 </script>
 
 <template>
-  <div class="sh" :class="`sh--${align}`">
+  <div
+    class="sh"
+    :class="[`sh--${align}`, { 'sh--line': singleLine }]"
+    :style="singleLine ? { '--chars': title.length * 1.02 + 0.4 } : undefined"
+  >
     <span v-if="eyebrow" v-reveal class="eyebrow">{{ eyebrow }}</span>
     <component :is="as" :id="id" v-reveal="80" class="sh__title">
 <span v-for="(p, i) in phrases" :key="i" class="sh__phrase">{{ p.before }}<span v-if="p.mark" class="highlight">{{ p.mark }}</span>{{ p.after }}</span>
@@ -57,6 +63,17 @@ const phrases = computed(() => splitPhrases(props.title, props.highlight))
   display: inline-block;
 }
 
+/* 單行標題：不換行，空間不足時依寬度縮小字級（--chars 為字數） */
+.sh--line {
+  max-width: none;
+  container-type: inline-size;
+}
+
+.sh.sh--line .sh__title {
+  white-space: nowrap;
+  font-size: min(clamp(1.75rem, 3vw, 2.6rem), calc(100cqi / var(--chars)));
+}
+
 .sh__desc {
   max-width: 620px;
   font-size: 1rem;
@@ -76,6 +93,10 @@ const phrases = computed(() => splitPhrases(props.title, props.highlight))
 
   .sh__desc {
     font-size: 0.94rem;
+  }
+
+  .sh.sh--line .sh__title {
+    font-size: min(2.1rem, calc(100cqi / var(--chars)));
   }
 }
 </style>

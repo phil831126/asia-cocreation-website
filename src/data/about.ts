@@ -84,13 +84,6 @@ export interface TeachingStage {
 export const aboutTeaching = {
   eyebrow: 'Teaching Approach',
   title: '學習，不只是學會一項工具，而是找到更多可能',
-  intro: [
-    '亞洲共創的教育理念，來自創辦人多年跨領域工作的體會。',
-    '每個人都有不同的起點，也有不同的學習方式。比起單向傳授知識，亞創更重視如何讓學員在課程中實際參與、動手練習，並透過交流找到適合自己的方法。',
-    '從早期的品牌行銷與自媒體培訓，到數位行銷、數據分析與生成式 AI 應用，課程隨著產業環境持續發展，但重視實作與人的成長，始終是亞創希望延續的方向。',
-  ],
-  /** 四階段流程上方的核心理念 */
-  motto: '以人為起點，以實作為方法，讓學習成為持續成長的力量。',
   stagesTitle: '教學方向的四個階段',
   stages: [
     {
@@ -207,7 +200,7 @@ export const aboutServices = {
   title: '從不同的需求出發，一起設計適合的學習',
 }
 
-/* ---------- SECTION 06｜培訓案例 ---------- */
+/* ---------- 培訓案例（顯示在學習地圖頁「七大主題」下方，元件為 components/about/AboutCases.vue） ---------- */
 export interface AboutCase {
   key: string
   year: string
@@ -246,7 +239,7 @@ export const aboutCases = {
   ] satisfies AboutCase[],
 }
 
-/* ---------- SECTION 07｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
+/* ---------- SECTION 06｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
 export const aboutContact = {
   eyebrow: "Let's Co-create",
   title: '讓下一段學習，從我們的交流開始',

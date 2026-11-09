@@ -531,6 +531,9 @@ const inviteLink = computed(() =>
   width: 104px;
   aspect-ratio: 1;
   padding: 4px;
+  /* 照片比例不一（例如直式照片）時，外框仍維持正圓 */
+  min-height: 0;
+  overflow: hidden;
   border-radius: 50%;
   background: conic-gradient(from 200deg, var(--c-yellow), #ffe08a, var(--c-yellow-deep), var(--c-yellow));
 }

@@ -5,10 +5,12 @@
    ========================================================= */
 
 export const hero = {
-  titleLines: ['聚焦專業，', '連結學習與產業'],
+  titleLines: ['亞洲共創學院'],
   /** 標題中以品牌黃底線強調的文字 */
-  titleHighlight: '連結學習與產業',
-  subtitle: '亞洲共創透過專業課程規劃與教育培訓服務，連結政府、企業與人才發展需求。',
+  titleHighlight: '亞洲共創學院',
+  subtitle: '我們相信，每一位迷惘的人都能透過系統性學習找到人生的方向。',
+  /** 服務圖卡上方的小標籤（純標示，不是連結） */
+  servicesLabel: '快速導引',
 }
 
 export const lecturersSection = {

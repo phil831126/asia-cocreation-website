@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /*
- * 學習地圖：大標下方為成果數據，接著是學習行銷的七大主題。
+ * 學習地圖：大標下方為成果數據，接著是學習行銷的七大主題、培訓案例。
  * （原本的「從自媒體課堂開始的學習旅程」與「課程發展歷程」已移到關於亞創頁）
  */
 import PageHeader from '@/components/PageHeader.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import StatsDashboard from '@/components/StatsDashboard.vue'
+import AboutCases from '@/components/about/AboutCases.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
 import { anchors, topics } from '@/data/courseMap'
 </script>
@@ -43,6 +44,9 @@ import { anchors, topics } from '@/data/courseMap'
         </ul>
       </div>
     </section>
+
+    <!-- 培訓案例（文案在 about.ts 的 aboutCases） -->
+    <AboutCases class="section--alt" />
 
     <CtaBanner />
   </div>

@@ -93,6 +93,9 @@ const markBroken = (id: string) => (broken.value = new Set(broken.value).add(id)
   width: clamp(108px, 18vh, 156px);
   aspect-ratio: 1;
   padding: 5px;
+  /* 照片比例不一（例如直式照片）時，外框仍維持正圓 */
+  min-height: 0;
+  overflow: hidden;
   border-radius: 50%;
   background: conic-gradient(from 200deg, var(--c-yellow), #ffe08a, var(--c-yellow-deep), var(--c-yellow));
   transition: transform 0.5s var(--ease-out);
