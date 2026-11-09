@@ -58,11 +58,11 @@ export const contactFields: { key: ContactKey; label: string; href?: string; foo
   { key: 'phone', label: '聯絡電話', href: phoneHref, footer: true },
   { key: 'email', label: '電子郵件', href: 'mailto:asia.alliance2020@gmail.com', footer: true },
   { key: 'address', label: '公司地址', footer: true },
-  { key: 'hours', label: '服務時間', footer: false },
+  { key: 'hours', label: '服務時間', footer: true },
 ]
 
-/** 頁尾聯絡資訊的顯示順序（與聯絡我們頁相同）：聯絡電話 → 電子郵件 → 公司地址 */
-const footerOrder: ContactKey[] = ['phone', 'email', 'address']
+/** 頁尾聯絡資訊的顯示順序（與聯絡我們頁相同）：聯絡電話 → 電子郵件 → 公司地址 → 服務時間 */
+const footerOrder: ContactKey[] = ['phone', 'email', 'address', 'hours']
 
 /** 頁尾顯示的聯絡項目：只列出已填寫、且允許顯示在頁尾的資料 */
 export const footerContactFields = footerOrder
