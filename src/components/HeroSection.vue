@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { Sparkles } from '@lucide/vue'
 import HeroServices from './HeroServices.vue'
-import HeroCases from './HeroCases.vue'
+import HotCourseCard from './HotCourseCard.vue'
 import { hero } from '@/data/home'
 import { navDockEl } from '@/composables/navDock'
 
@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
     </div>
     <Sparkles class="hero__spark" :size="26" :stroke-width="1.8" aria-hidden="true" />
 
-    <!-- 版面：左上標題與說明、左下四大服務項目、右側放大的案例輪播 -->
+    <!-- 版面：左上標題與說明、左下四大服務項目、右側熱門課程圖卡 -->
     <div class="container hero__grid">
       <div class="hero__copy">
         <h1 id="hero-title" class="hero__title">
@@ -44,8 +44,8 @@ onBeforeUnmount(() => {
         <HeroServices />
       </div>
 
-      <div class="hero__cases hero__in" style="--d: 0.35s">
-        <HeroCases />
+      <div class="hero__course hero__in" style="--d: 0.35s">
+        <HotCourseCard />
       </div>
     </div>
 
@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* 左欄：標題（上）＋服務項目（下）；右欄：案例輪播
+/* 左欄：標題（上）＋服務項目（下）；右欄：熱門課程圖卡
    上方留白讓出左上角的 Logo（桌機版導覽列停在底部時，Logo 留在左上角） */
 .hero__grid {
   flex: 1;
@@ -124,8 +124,8 @@ onBeforeUnmount(() => {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: auto auto;
   grid-template-areas:
-    'copy cases'
-    'services cases';
+    'copy course'
+    'services course';
   align-content: center;
   column-gap: clamp(40px, 5vw, 80px);
   row-gap: clamp(24px, 5vh, 52px);
@@ -184,9 +184,9 @@ onBeforeUnmount(() => {
   margin-bottom: 14px;
 }
 
-/* 右欄：放大的案例輪播，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
-.hero__cases {
-  grid-area: cases;
+/* 右欄：熱門課程圖卡，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
+.hero__course {
+  grid-area: course;
   align-self: center;
   justify-self: end;
   width: 100%;
@@ -223,12 +223,12 @@ onBeforeUnmount(() => {
 
 /* 側邊留白不足時，讓出右下角「共創諮詢台」按鈕的位置 */
 @media (min-width: 1081px) and (max-width: 1500px) {
-  .hero__cases {
+  .hero__course {
     margin-right: 48px;
   }
 }
 
-/* 平板與手機：上下堆疊（文字 → 服務 → 案例），導覽列固定在頂端 */
+/* 平板與手機：上下堆疊（文字 → 服務 → 熱門課程），導覽列固定在頂端 */
 @media (max-width: 1080px) {
   .hero {
     min-height: auto;
@@ -240,7 +240,7 @@ onBeforeUnmount(() => {
     grid-template-areas:
       'copy'
       'services'
-      'cases';
+      'course';
     row-gap: 36px;
     padding-block: 0;
   }
@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
     font-size: min(17px, calc(100cqi / var(--chars)));
   }
 
-  .hero__cases {
+  .hero__course {
     justify-self: stretch;
     max-width: none;
   }

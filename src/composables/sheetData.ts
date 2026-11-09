@@ -2,9 +2,10 @@ import { computed, shallowRef, type ShallowRef } from 'vue'
 import { sheetSources } from '@/data/sheets'
 import { lecturers as localLecturers, type Lecturer } from '@/data/lecturers'
 import { cases as localCases, categoryLabel, type CaseCategory, type CaseItem } from '@/data/cases'
+import { localHotCourses, type HotCourse } from '@/data/hotCourse'
 
 /**
- * 從 Google 試算表（發布為 CSV）讀取講師與案例。
+ * 從 Google 試算表（發布為 CSV）讀取講師、案例與熱門課程。
  * - 第 1 列是欄位代號（英文），程式靠它對應資料，欄位順序可以任意調換
  * - 第一格以「#」開頭的列會略過（範本第 2 列的中文說明就是這樣標的）
  * - 讀不到時改用內建資料，網站不會變空白
@@ -166,6 +167,32 @@ function toCases(rows: Row[]): CaseItem[] {
   return byOrder(out)
 }
 
+/** 連結：站內路徑（/ 開頭）或 https 網址，其餘忽略 */
+const linkUrl = (raw = '') => {
+  const url = raw.trim()
+  return url.startsWith('/') || /^https:\/\//.test(url) ? url : ''
+}
+
+function toHotCourses(rows: Row[]): HotCourse[] {
+  const out = rows
+    .map((r, index) => {
+      if (!bool(r.show, true) || !r.title) return null
+      const item: HotCourse = {
+        tag: r.tag,
+        title: r.title,
+        summary: r.summary,
+        cover: imageUrl(r.cover),
+        coverAlt: r.coverAlt || r.title,
+        info: list(r.info),
+        link: linkUrl(r.link),
+        linkLabel: r.linkLabel || '查看詳情',
+      }
+      return { order: orderOf(r.order, index), index, item }
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x)
+  return byOrder(out)
+}
+
 /* ---------- 讀取與快取 ---------- */
 
 function readCache(key: string) {
@@ -231,6 +258,7 @@ function createSource<T>(url: string, local: T[], convert: (rows: Row[]) => T[],
 
 const lecturerSource = createSource(sheetSources.lecturers, localLecturers, toLecturers, '講師')
 const caseSource = createSource(sheetSources.cases, localCases, toCases, '案例')
+const hotCourseSource = createSource(sheetSources.hotCourses, localHotCourses, toHotCourses, '熱門課程')
 
 /** 講師資料（試算表優先，失敗用內建資料） */
 export function useLecturers() {
@@ -256,5 +284,14 @@ export function useCases() {
     cases,
     loading: computed(() => caseSource.status.value === 'loading'),
     hasSample: computed(() => cases.value.some((c) => c.placeholder)),
+  }
+}
+
+/** 首頁熱門課程：排序最前面的一筆（試算表優先，失敗用內建資料） */
+export function useHotCourse() {
+  hotCourseSource.load()
+  return {
+    course: computed(() => hotCourseSource.items.value[0] ?? null),
+    loading: computed(() => hotCourseSource.status.value === 'loading'),
   }
 }

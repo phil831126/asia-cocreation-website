@@ -10,10 +10,10 @@ const { hasSample } = useCases()
 <template>
   <div class="page">
     <PageHeader
-      eyebrow="Case Studies"
-      title="案例分享"
+      eyebrow="Course Overview"
+      title="課程總覽"
       desc="政府計畫、產學合作與企業內訓相關合作案例。"
-      :crumbs="[{ label: '案例分享' }]"
+      :crumbs="[{ label: '課程總覽' }]"
     >
       <span v-if="hasSample" class="pending-tag">示意內容／待補案例</span>
     </PageHeader>

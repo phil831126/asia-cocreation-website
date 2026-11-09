@@ -30,7 +30,7 @@ const blocks = computed(() => [
       <PageHeader
         :eyebrow="categoryLabel[item.category]"
         :title="item.title"
-        :crumbs="[{ label: '案例分享', to: '/cases' }, { label: item.title }]"
+        :crumbs="[{ label: '課程總覽', to: '/cases' }, { label: item.title }]"
       >
         <span v-if="item.placeholder" class="pending-tag">示意內容／待補案例</span>
       </PageHeader>
@@ -71,11 +71,11 @@ const blocks = computed(() => [
     </template>
 
     <template v-else-if="loading">
-      <PageHeader eyebrow="Case Studies" title="案例載入中…" :crumbs="[{ label: '案例分享', to: '/cases' }]" />
+      <PageHeader eyebrow="Course Overview" title="案例載入中…" :crumbs="[{ label: '課程總覽', to: '/cases' }]" />
     </template>
 
     <template v-else>
-      <PageHeader eyebrow="Not Found" title="找不到這則案例" desc="案例可能已移除或網址有誤。" :crumbs="[{ label: '案例分享', to: '/cases' }]">
+      <PageHeader eyebrow="Not Found" title="找不到這則案例" desc="案例可能已移除或網址有誤。" :crumbs="[{ label: '課程總覽', to: '/cases' }]">
         <BaseButton to="/cases">返回案例列表</BaseButton>
       </PageHeader>
     </template>

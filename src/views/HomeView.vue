@@ -24,8 +24,8 @@ const snap = useSectionSnap(root)
     <HeroSection data-snap="首頁" />
     <!-- 02 講師顧問聯盟 -->
     <LecturerAlliance data-snap="講師顧問" />
-    <!-- 03 案例分享（Swiper） -->
-    <section id="cases" class="section" data-snap="案例分享">
+    <!-- 03 課程總覽（案例 Swiper） -->
+    <section id="cases" class="section" data-snap="課程總覽">
       <div class="container">
         <CaseShowcase layout="swiper">
           <template #head>
