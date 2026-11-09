@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/* SECTION 04｜培訓案例：大卡片左右交錯，照片尚未提供時顯示中性佔位 */
+/* SECTION 04｜培訓案例：大卡片，文字在左、照片在右；照片尚未提供時顯示中性佔位 */
 import SectionHeading from '@/components/SectionHeading.vue'
 import AboutPhoto from './AboutPhoto.vue'
 import { aboutCases as copy } from '@/data/about'
@@ -12,11 +12,10 @@ import { aboutCases as copy } from '@/data/about'
 
       <div class="cases__list">
         <article
-          v-for="(c, i) in copy.items"
+          v-for="c in copy.items"
           :key="c.key"
           v-reveal
           class="case"
-          :class="{ 'case--flip': i % 2 === 1 }"
           :aria-labelledby="`case-${c.key}`"
         >
           <div class="case__media">
@@ -54,7 +53,7 @@ import { aboutCases as copy } from '@/data/about'
 
 .case {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
   align-items: center;
   gap: clamp(24px, 4vw, 56px);
   padding: clamp(16px, 1.6vw, 20px);
@@ -68,7 +67,8 @@ import { aboutCases as copy } from '@/data/about'
   box-shadow: var(--shadow-md);
 }
 
-.case--flip .case__media {
+/* 桌機：照片一律在右 */
+.case__media {
   order: 2;
 }
 
@@ -137,7 +137,7 @@ import { aboutCases as copy } from '@/data/about'
     gap: 20px;
   }
 
-  .case--flip .case__media {
+  .case__media {
     order: 0;
   }
 

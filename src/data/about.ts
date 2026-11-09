@@ -191,20 +191,12 @@ export interface AboutCase {
   image: AboutImage
 }
 
+/** 依年份由新到舊排列 */
 export const aboutCases = {
   eyebrow: 'Training Cases',
   title: '讓學習走進真實的工作情境',
   morePending: '延伸介紹待補',
   items: [
-    {
-      key: 'hcu-2024',
-      year: '2024',
-      school: '玄奘大學',
-      course: '國際數位行銷暨社群經營人才培訓班',
-      desc: '結合學界與業界講師，課程涵蓋品牌行銷企劃、創意文案、新媒體內容創作及個人形象建立，讓學員從實際練習中累積數位行銷能力。',
-      more: [],
-      image: aboutImages.caseHsuanChuang,
-    },
     {
       key: 'mcu-2025',
       year: '2025',
@@ -213,6 +205,15 @@ export const aboutCases = {
       desc: '將生成式 AI、Google Ads 與數據分析帶入行銷培訓，結合數位行銷實作與證照相關學習，協助學員理解工具如何應用於工作任務。',
       more: [],
       image: aboutImages.caseMingChuan,
+    },
+    {
+      key: 'hcu-2024',
+      year: '2024',
+      school: '玄奘大學',
+      course: '國際數位行銷暨社群經營人才培訓班',
+      desc: '結合學界與業界講師，課程涵蓋品牌行銷企劃、創意文案、新媒體內容創作及個人形象建立，讓學員從實際練習中累積數位行銷能力。',
+      more: [],
+      image: aboutImages.caseHsuanChuang,
     },
   ] satisfies AboutCase[],
 }
