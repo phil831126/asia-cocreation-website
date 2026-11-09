@@ -33,7 +33,7 @@ export const services: Service[] = [
     icon: 'graduation',
     title: '教育培訓',
     summary: '依需求規劃企業內訓與政府計畫教育培訓，結合 OMO 學習平臺，兼顧知識理解與實作。',
-    points: ['企業內訓', '政府計畫', 'OMO 學習平臺'],
+    points: ['企業內訓', '政府計畫', '產學合作'],
   },
   {
     id: 'lecturer',
