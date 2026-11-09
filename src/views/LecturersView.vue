@@ -144,11 +144,14 @@ const inviteLink = computed(() =>
       title="講師聯盟"
       desc="集結逾百位合作業師，依專業領域、適合對象與授課形式，找到最適合貴單位的講師。"
       :crumbs="[{ label: '講師聯盟' }]"
+      single-line-desc
+      compact
     >
       <span v-if="hasSample" class="pending-tag">講師資料待補（目前為示意內容）</span>
     </PageHeader>
 
-    <section class="section">
+    <!-- 頁首下方不留大片空白，讓篩選區在進入頁面時就完整出現 -->
+    <section class="section lec-main">
       <div class="container">
         <!-- 搜尋與篩選 -->
         <div class="finder" role="search">
@@ -298,6 +301,11 @@ const inviteLink = computed(() =>
 </template>
 
 <style scoped>
+/* 篩選區緊接在頁首下方 */
+.lec-main {
+  padding-top: 20px;
+}
+
 /* ---------- 搜尋與篩選 ---------- */
 .finder {
   display: flex;

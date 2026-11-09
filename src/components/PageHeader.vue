@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { ChevronRight } from '@lucide/vue'
 
-defineProps<{ eyebrow: string; title: string; desc?: string; crumbs?: { label: string; to?: string }[] }>()
+defineProps<{
+  eyebrow: string
+  title: string
+  desc?: string
+  crumbs?: { label: string; to?: string }[]
+  /** 說明文字固定一行：依寬度自動縮小字級，不換行 */
+  singleLineDesc?: boolean
+  /** 縮小上下留白，讓下方內容（例如篩選區）在第一個畫面就能完整看到 */
+  compact?: boolean
+}>()
 </script>
 
 <template>
-  <section class="ph">
+  <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
     <svg class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
       <circle cx="130" cy="130" r="92" fill="rgba(255,255,255,0.5)" stroke="#d6d6d3" stroke-width="12" />
@@ -26,7 +35,14 @@ defineProps<{ eyebrow: string; title: string; desc?: string; crumbs?: { label: s
       </nav>
       <span class="eyebrow ph__eyebrow">{{ eyebrow }}</span>
       <h1 class="ph__title">{{ title }}</h1>
-      <p v-if="desc" class="ph__desc">{{ desc }}</p>
+      <p
+        v-if="desc"
+        class="ph__desc"
+        :class="{ 'ph__desc--line': singleLineDesc }"
+        :style="singleLineDesc ? { '--chars': desc.length + 0.6 } : undefined"
+      >
+        {{ desc }}
+      </p>
       <slot />
     </div>
   </section>
@@ -76,6 +92,17 @@ defineProps<{ eyebrow: string; title: string; desc?: string; crumbs?: { label: s
   flex-direction: column;
   align-items: flex-start;
   gap: 18px;
+  /* 讓單行說明文字依內容寬度縮放字級（cqi） */
+  container-type: inline-size;
+}
+
+/* 精簡版：上下留白較少 */
+.ph--compact {
+  padding: calc(var(--nav-h) + 28px) 0 24px;
+}
+
+.ph--compact .ph__inner {
+  gap: 14px;
 }
 
 .ph__crumbs ol {
@@ -117,6 +144,13 @@ defineProps<{ eyebrow: string; title: string; desc?: string; crumbs?: { label: s
   font-size: 1.1rem;
   color: var(--c-text-2);
   animation: ph-in 0.8s var(--ease-out) both 0.25s;
+}
+
+/* 單行說明：不換行，字級最大 1.1rem，空間不足時依寬度縮小（--chars 為字數） */
+.ph__desc--line {
+  max-width: none;
+  white-space: nowrap;
+  font-size: min(1.1rem, calc(100cqi / var(--chars)));
 }
 
 @keyframes ph-in {

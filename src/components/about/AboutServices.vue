@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/* SECTION 04｜合作服務：桌機三欄卡片，手機改為單欄（id="services" 供首頁「了解更多」連結使用） */
+/* SECTION 03｜合作服務：桌機三欄卡片，手機改為單欄（id="services" 供首頁「了解更多」連結使用） */
 import SectionHeading from '@/components/SectionHeading.vue'
 import { aboutServices as copy } from '@/data/about'
 </script>

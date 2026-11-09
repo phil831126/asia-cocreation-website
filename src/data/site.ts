@@ -76,7 +76,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   about: {
     title: '關於亞創｜亞洲共創學院',
     description:
-      '亞洲共創秉持「共創、共享、共好」的精神，讓不同的專長成為一起前進的力量。認識創辦人張丞亞從新聞媒體、設計與品牌管理走進教育的故事，以及亞創的教學理念、合作服務與培訓案例。',
+      '亞洲共創學院提供數位行銷、職場專業技能與 AI 協作課程，串聯講師與產業資源，回應組織的人才培育需求。認識亞創的教學理念、合作服務與培訓案例。',
   },
   lecturers: {
     title: '講師聯盟｜亞洲共創學院',

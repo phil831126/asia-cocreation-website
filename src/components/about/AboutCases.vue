@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/* SECTION 05｜培訓案例：大卡片左右交錯，照片尚未提供時顯示中性佔位 */
+/* SECTION 04｜培訓案例：大卡片左右交錯，照片尚未提供時顯示中性佔位 */
 import SectionHeading from '@/components/SectionHeading.vue'
 import AboutPhoto from './AboutPhoto.vue'
 import { aboutCases as copy } from '@/data/about'

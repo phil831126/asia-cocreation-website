@@ -1,11 +1,9 @@
 /* =========================================================
    關於亞創頁面：文案、圖示與圖片路徑
-   ※ 六個區塊的文字都集中在這個檔案，直接修改字串即可。
+   ※ 五個區塊的文字都集中在這個檔案，直接修改字串即可。
    ※ 換上照片：把檔案放到 public/about/，再把 aboutImages 裡
      對應項目的 src 改成 '/about/檔名.webp'。
      src 為空字串時，頁面會顯示「照片待補」的中性佔位區塊。
-   ※ 創辦人經歷依據：銘傳一週（2021 年 3 月 2 日）
-     https://www.week.mcu.edu.tw/39297/
    ========================================================= */
 
 import type { Component } from 'vue'
@@ -34,20 +32,6 @@ export interface AboutImage {
 }
 
 export const aboutImages = {
-  founder: {
-    src: '',
-    alt: '亞洲共創學院創辦人張丞亞',
-    pendingLabel: '創辦人照片待補',
-    width: 900,
-    height: 1100,
-  },
-  history: {
-    src: '',
-    alt: '亞洲共創學院早期活動紀錄',
-    pendingLabel: '歷史活動照片待補',
-    width: 1200,
-    height: 900,
-  },
   caseHsuanChuang: {
     src: '',
     alt: '2024 玄奘大學國際數位行銷暨社群經營人才培訓班上課情形',
@@ -71,9 +55,9 @@ export const aboutOpening = {
   /** 標題中以黃色螢光底線強調的字 */
   highlight: '不同的專長',
   paragraphs: [
-    '亞洲共創的起點，來自一個簡單的信念：每個人都有不同的經驗與專長，而當彼此願意分享、交流與合作，就能創造更多可能。',
-    '創辦人張丞亞從傳播媒體、設計與品牌管理一路走進教育領域，在不同的工作環境中，看見跨領域合作的力量，也逐漸思考，如何讓知識不只停留在個人身上，而能透過分享，成為更多人成長的養分。',
-    '秉持著「共創、共享、共好」的精神，亞洲共創學院逐步發展教育培訓、品牌行銷與跨領域合作，期望讓每一次相遇，都成為彼此學習與成長的機會。',
+    '亞洲共創學院提供數位行銷、職場專業技能與 AI 協作課程，串聯講師與產業資源，協助個人學習成長，並回應組織的人才培育需求。',
+    '透過政府機關的培訓合作與企業內訓服務，整合不同領域的講師資源，依合作單位需求規劃客製化課程，兼顧知識理解與實務應用。截至 2026 年，學院累計開課逾 1,000 場、合作業師超過 100 位，並培育超過 5,000 位學員。',
+    '教育，是連結人才與產業的起點。亞洲共創致力於讓知識在分享中延伸價值，讓專長在合作中化為行動，共同推動產業與社會向前。',
   ],
   /** 右側概念圖：人與人透過分享、交流與合作連結成「共創」（文字取自上方內文） */
   visual: {
@@ -86,67 +70,7 @@ export const aboutOpening = {
   },
 }
 
-/* ---------- SECTION 02｜創辦人的故事 ---------- */
-export interface StoryChapter {
-  /** 時間軸上的標籤 */
-  label: string
-  title: string
-  paragraphs: string[]
-  /** 對應 aboutImages 的照片（選填） */
-  image?: AboutImage
-  /** 沒有照片時，在另一側以大字裝飾（選填，例如年份） */
-  decor?: string
-}
-
-export const aboutStory = {
-  eyebrow: 'Our Story',
-  title: '從新聞現場到教育現場，一路走來的跨界探索',
-  chapters: [
-    {
-      label: '新聞媒體',
-      title: '傳播實務的起點',
-      paragraphs: [
-        '創辦人張丞亞的職涯，從新聞媒體開始。',
-        '曾在東森、中天及非凡新聞擔任編輯與記者的他，經歷過新聞工作的高壓與快速節奏，也在職涯轉折中重新思考自己想走的方向。',
-      ],
-      image: aboutImages.founder,
-    },
-    {
-      label: '設計與創業',
-      title: '跨領域探索',
-      paragraphs: [
-        '離開媒體後，他持續進修傳播管理與設計相關領域，並將傳播與設計的經驗帶進創業，成立喜丞創意股份有限公司。',
-      ],
-    },
-    {
-      label: '品牌管理',
-      title: '累積產業經驗',
-      paragraphs: [
-        '之後，他受邀前往上海擔任品牌管理公司的總經理，在不同市場與產業之間，累積了更多品牌經營及團隊管理的經驗。',
-        '在上海、蘇州工作期間，他接觸到寓教於樂的親子產業，也開始對全人教育產生興趣。',
-      ],
-    },
-    {
-      label: '2019 年返台',
-      title: '重新思考教育的可能',
-      paragraphs: [
-        '2019 年返台後，他重新整理過去累積的經驗，也更加確定自己希望投入的方向：讓不同領域的知識與資源被串聯，讓學習不只是單向接收，更能在交流與實作中發生。',
-      ],
-      decor: '2019',
-    },
-    {
-      label: '亞洲共創',
-      title: '共創、共享、共好',
-      paragraphs: [
-        '亞洲共創學院因此誕生。',
-        '對他而言，「共創」不只是品牌名稱，更是一種讓不同世代、不同專長的人彼此連結的方式。',
-      ],
-      image: aboutImages.history,
-    },
-  ] satisfies StoryChapter[],
-}
-
-/* ---------- SECTION 03｜教學理念 ---------- */
+/* ---------- SECTION 02｜教學理念 ---------- */
 export interface TeachingStage {
   key: string
   no: string
@@ -218,7 +142,7 @@ export const aboutTeaching = {
   futureTag: '未來探索',
 }
 
-/* ---------- SECTION 04｜合作服務 ---------- */
+/* ---------- SECTION 03｜合作服務 ---------- */
 export interface AboutService {
   key: string
   no: string
@@ -255,7 +179,7 @@ export const aboutServices = {
   ] satisfies AboutService[],
 }
 
-/* ---------- SECTION 05｜培訓案例 ---------- */
+/* ---------- SECTION 04｜培訓案例 ---------- */
 export interface AboutCase {
   key: string
   year: string
@@ -293,7 +217,7 @@ export const aboutCases = {
   ] satisfies AboutCase[],
 }
 
-/* ---------- SECTION 06｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
+/* ---------- SECTION 05｜合作洽詢（頁尾前的 CTA 區塊） ---------- */
 export const aboutContact = {
   eyebrow: "Let's Co-create",
   title: '讓下一段學習，從我們的交流開始',
