@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { ArrowRight } from '@lucide/vue'
 import HeroSection from '@/components/HeroSection.vue'
 import LecturerAlliance from '@/components/LecturerAlliance.vue'
+import LecturerApply from '@/components/LecturerApply.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
 import CaseShowcase from '@/components/CaseShowcase.vue'
 import PartnerWall from '@/components/PartnerWall.vue'
@@ -20,11 +21,9 @@ const snap = useSectionSnap(root)
   <div ref="root" class="page home">
     <!-- 最底層的背景點綴（網點、虛線、幾何圖形） -->
     <HomeBackdrop />
-    <!-- 01 主視覺（含四大服務項目與案例輪播） -->
+    <!-- 01 主視覺（快速導引圖卡＋熱門課程） -->
     <HeroSection data-snap="首頁" />
-    <!-- 02 講師顧問聯盟 -->
-    <LecturerAlliance data-snap="講師顧問" />
-    <!-- 03 課程總覽（案例 Swiper） -->
+    <!-- 02 課程總覽（案例 Swiper）：快速導引「教育培訓」 -->
     <section id="cases" class="section" data-snap="課程總覽">
       <div class="container">
         <CaseShowcase layout="swiper">
@@ -42,9 +41,13 @@ const snap = useSectionSnap(root)
         </CaseShowcase>
       </div>
     </section>
-    <!-- 04 合作單位展示 -->
+    <!-- 03 講師顧問聯盟：快速導引「講師顧問聯盟」 -->
+    <LecturerAlliance data-snap="講師顧問" />
+    <!-- 04 講師經紀申請區：快速導引「講師經紀」 -->
+    <LecturerApply data-snap="講師經紀" />
+    <!-- 05 合作單位展示：快速導引「合作單位」 -->
     <PartnerWall data-snap="合作單位" />
-    <!-- 05 合作邀請 -->
+    <!-- 06 合作邀請 -->
     <CtaBanner data-snap="洽詢合作" />
 
     <Teleport to="body">

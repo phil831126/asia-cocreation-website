@@ -26,12 +26,18 @@ const needOptions = [
 const topic = String(route.query.topic ?? '')
 /** 從講師聯盟點「邀請這位講師」過來時，留言預先帶入講師名稱 */
 const lecturer = String(route.query.lecturer ?? '').slice(0, 40)
+/** 從首頁「講師經紀申請區」點「申請加入講師聯盟」過來時，留言預先帶入申請提示 */
+const applying = route.query.apply === '1'
 const form = reactive({
   name: '',
   org: '',
   email: '',
   need: needOptions.some((o) => o.value === topic) ? topic : '',
-  message: lecturer ? `想邀請講師「${lecturer}」，活動主題／日期／人數：` : '',
+  message: lecturer
+    ? `想邀請講師「${lecturer}」，活動主題／日期／人數：`
+    : applying
+      ? '我想申請加入講師聯盟。專長領域／授課主題／過往授課經歷：'
+      : '',
 })
 const errors = reactive<Record<string, string>>({})
 

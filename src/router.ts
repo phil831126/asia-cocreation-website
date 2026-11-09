@@ -32,7 +32,14 @@ export const router = createRouter({
     if (to.path === from.path && to.hash === from.hash) return false
     if (to.hash) {
       const behavior = prefersReducedMotion() ? 'auto' : 'smooth'
-      const target = { el: to.hash, top: 96, behavior } as const
+      // 首頁桌機版的整頁區塊（data-snap）已自行預留導覽列空間，直接對齊區塊頂端，與側邊圓點跳轉的位置一致
+      const el = document.querySelector(to.hash)
+      const snapped =
+        to.path === from.path &&
+        !!el?.hasAttribute('data-snap') &&
+        document.documentElement.classList.contains('snap-mode') &&
+        window.matchMedia('(min-width: 1024px)').matches
+      const target = { el: to.hash, top: snapped ? 0 : 96, behavior } as const
       // 跨頁時等待新頁面渲染後再捲動
       if (to.path !== from.path) return new Promise((resolve) => setTimeout(() => resolve(target), 80))
       return target
