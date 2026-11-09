@@ -41,7 +41,7 @@ function backToTop() {
         <div class="foot__col">
           <h2 class="foot__heading">聯絡資訊</h2>
           <dl class="foot__contact">
-            <!-- 依序顯示：聯絡電話、公司地址、電子郵件（順序在 site.ts 的 footerOrder） -->
+            <!-- 依序顯示：聯絡電話、電子郵件、公司地址（順序在 site.ts 的 footerOrder） -->
             <div v-for="f in footerContactFields" :key="f.key">
               <dt>{{ f.label }}</dt>
               <dd>

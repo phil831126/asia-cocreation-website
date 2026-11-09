@@ -61,8 +61,8 @@ export const contactFields: { key: ContactKey; label: string; href?: string; foo
   { key: 'hours', label: '服務時間', footer: false },
 ]
 
-/** 頁尾聯絡資訊的顯示順序：聯絡電話 → 公司地址 → 電子郵件 */
-const footerOrder: ContactKey[] = ['phone', 'address', 'email']
+/** 頁尾聯絡資訊的顯示順序（與聯絡我們頁相同）：聯絡電話 → 電子郵件 → 公司地址 */
+const footerOrder: ContactKey[] = ['phone', 'email', 'address']
 
 /** 頁尾顯示的聯絡項目：只列出已填寫、且允許顯示在頁尾的資料 */
 export const footerContactFields = footerOrder
