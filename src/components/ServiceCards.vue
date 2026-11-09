@@ -40,8 +40,8 @@ import { servicesSection as copy } from '@/data/home'
 <style scoped>
 .svc__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
   margin-top: var(--block-gap);
 }
 
@@ -54,7 +54,7 @@ import { servicesSection as copy } from '@/data/home'
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 28px 26px 24px;
+  padding: 26px 22px 22px;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   overflow: hidden;
@@ -78,6 +78,10 @@ import { servicesSection as copy } from '@/data/home'
 .card--3 {
   background: linear-gradient(160deg, var(--c-yellow-tint), #fff 85%);
   border-color: rgba(248, 190, 32, 0.35);
+}
+
+.card--4 {
+  background: var(--c-bg-alt);
 }
 
 .card::before {
@@ -188,7 +192,14 @@ import { servicesSection as copy } from '@/data/home'
   margin-left: auto;
 }
 
-@media (max-width: 960px) {
+/* 平板：2 × 2 */
+@media (max-width: 1199px) {
+  .svc__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
   .svc__grid {
     grid-template-columns: 1fr;
     gap: 16px;

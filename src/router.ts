@@ -5,6 +5,7 @@ import HomeView from './views/HomeView.vue'
 import AboutView from './views/AboutView.vue'
 import LecturersView from './views/LecturersView.vue'
 import LearningMapView from './views/LearningMapView.vue'
+import TrendsView from './views/TrendsView.vue'
 import CasesView from './views/CasesView.vue'
 import CaseDetailView from './views/CaseDetailView.vue'
 import ContactView from './views/ContactView.vue'
@@ -16,6 +17,7 @@ export const router = createRouter({
     { path: '/', name: 'home', component: HomeView, meta: { key: 'home' } },
     { path: '/about', name: 'about', component: AboutView, meta: { key: 'about' } },
     { path: '/lecturers', name: 'lecturers', component: LecturersView, meta: { key: 'lecturers' } },
+    { path: '/trends', name: 'trends', component: TrendsView, meta: { key: 'trends' } },
     { path: '/learning-map', name: 'learning-map', component: LearningMapView, meta: { key: 'learningMap' } },
     { path: '/cases', name: 'cases', component: CasesView, meta: { key: 'cases' } },
     { path: '/cases/:id', name: 'case-detail', component: CaseDetailView, meta: { key: 'caseDetail' } },

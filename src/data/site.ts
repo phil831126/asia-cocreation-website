@@ -29,6 +29,7 @@ export const navItems: NavItem[] = [
   { label: '首頁', to: '/' },
   { label: '關於亞創', to: '/about' },
   { label: '講師聯盟', to: '/lecturers' },
+  { label: '趨勢專欄', to: '/trends' },
   { label: '學習地圖', to: '/learning-map' },
   { label: '案例分享', to: '/cases' },
 ]
@@ -81,6 +82,10 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
   lecturers: {
     title: '講師聯盟｜亞洲共創學院',
     description: '搜尋亞洲共創學院合作講師，依專業領域、適合對象與授課形式找到合適的講師。',
+  },
+  trends: {
+    title: '趨勢專欄｜亞洲共創學院',
+    description: '亞洲共創學院趨勢專欄，內容建置中。',
   },
   learningMap: {
     title: '學習地圖｜亞洲共創學院',
