@@ -146,7 +146,7 @@ const inviteLink = computed(() =>
     <PageHeader
       eyebrow="Lecturers"
       title="講師聯盟"
-      desc="集結逾百位合作業師，依專業領域、適合對象與授課形式，找到最適合貴單位的講師。"
+      desc="集結逾百位合作業師，涵蓋職涯探索、品牌行銷與自媒體經營等領域，可依專業、對象與授課形式找到合適講師。"
       :crumbs="[{ label: '講師聯盟' }]"
       single-line-desc
       compact

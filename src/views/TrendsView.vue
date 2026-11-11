@@ -43,7 +43,7 @@ const list = computed(() => (current.value ? articles.value.filter((a) => a.cate
       <PageHeader
         eyebrow="Trends"
         title="趨勢專欄"
-        desc="整理 AI 應用、品牌行銷與職涯發展的產業觀察與實務分享。"
+        desc="整理 AI 應用、品牌行銷與職涯發展的產業觀察與實務分享，協助你掌握趨勢，也找到可以立即運用的方法。"
         :crumbs="[{ label: '趨勢專欄' }]"
       />
 
@@ -86,6 +86,7 @@ const list = computed(() => (current.value ? articles.value.filter((a) => a.cate
       <div class="container trends__inner">
         <span class="eyebrow trends__in" style="--d: 0.05s">Trends</span>
         <h1 id="trends-title" class="trends__title trends__in" style="--d: 0.12s">趨勢專欄</h1>
+        <p class="trends__desc trends__in" style="--d: 0.18s">整理 AI 應用、品牌行銷與職涯發展的產業觀察與實務分享，協助你掌握趨勢，也找到可以立即運用的方法。</p>
         <p v-if="!loading" class="trends__status trends__in" style="--d: 0.22s"><span class="highlight">建置中</span></p>
       </div>
     </section>
@@ -163,6 +164,14 @@ const list = computed(() => (current.value ? articles.value.filter((a) => a.cate
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--c-text-2);
+}
+
+.trends__desc {
+  max-width: 640px;
+  margin-top: 14px;
+  color: var(--c-text-2);
+  line-height: 1.8;
+  text-wrap: balance;
 }
 
 .trends__status {

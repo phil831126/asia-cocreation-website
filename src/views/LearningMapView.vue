@@ -1,11 +1,10 @@
 <script setup lang="ts">
 /*
- * 學習地圖：大標下方為成果數據，接著是學習行銷的七大主題、培訓案例。
- * （原本的「從自媒體課堂開始的學習旅程」與「課程發展歷程」已移到關於亞創頁）
+ * 學習地圖：大標與副標下方是學習行銷的七大主題、培訓案例。
+ * （成果數據 Dashboard 已移到課程總覽頁；「從自媒體課堂開始的學習旅程」與「課程發展歷程」在關於亞創頁）
  */
 import PageHeader from '@/components/PageHeader.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
-import StatsDashboard from '@/components/StatsDashboard.vue'
 import AboutCases from '@/components/about/AboutCases.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
 import { anchors, topics } from '@/data/courseMap'
@@ -13,12 +12,12 @@ import { anchors, topics } from '@/data/courseMap'
 
 <template>
   <div class="page">
-    <PageHeader eyebrow="Learning Map" title="學習地圖" :crumbs="[{ label: '學習地圖' }]">
-      <!-- 成果數據：大標下方 -->
-      <div class="lm-stats">
-        <StatsDashboard />
-      </div>
-    </PageHeader>
+    <PageHeader
+      eyebrow="Learning Map"
+      title="學習地圖"
+      desc="從觀念到實作，整理亞洲共創累計的開課成果與學習行銷的七大主題，幫助你找到適合自己的學習起點。"
+      :crumbs="[{ label: '學習地圖' }]"
+    />
 
     <!-- 學習行銷的七大主題 -->
     <section :id="anchors.topics" class="section">
@@ -53,13 +52,6 @@ import { anchors, topics } from '@/data/courseMap'
 </template>
 
 <style scoped>
-/* ---------- 大標下方的成果數據 ---------- */
-.lm-stats {
-  width: 100%;
-  max-width: 680px;
-  margin-top: 14px;
-}
-
 /* ---------- 七大學習主題 ---------- */
 .topics {
   display: grid;
