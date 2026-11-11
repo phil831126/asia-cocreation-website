@@ -27,6 +27,11 @@ export const sheetSources = {
    * 欄位：id, show, order, date, category, title, excerpt, cover, coverAlt, content, author, link
    */
   trends: `${PUBLISHED}?gid=1557806033&single=true&output=csv`,
+  /**
+   * 「培訓案例」分頁：學習地圖頁「讓學習走進真實的工作情境」的案例卡片
+   * 欄位：show, order, year, school, course, desc, more, image, imageAlt（說明見 src/data/about.ts 的 aboutCases）
+   */
+  training: `${PUBLISHED}?gid=1272355579&single=true&output=csv`,
   /** 「設定」分頁：欄位 key, value（目前有 newsSort：熱門課程超過 5 則時依「排序數字」或「日期最新」取捨） */
   settings: `${PUBLISHED}?gid=310568720&single=true&output=csv`,
 }

@@ -4,9 +4,10 @@ import { lecturers as localLecturers, type Lecturer } from '@/data/lecturers'
 import { cases as localCases, categoryLabel, type CaseCategory, type CaseItem } from '@/data/cases'
 import { localNews, NEWS_LIMIT, type NewsItem, type NewsSort } from '@/data/news'
 import { localArticles, type Article } from '@/data/trends'
+import { aboutCases, type AboutCase } from '@/data/about'
 
 /**
- * 從 Google 試算表（發布為 CSV）讀取講師、案例、熱門課程、趨勢專欄與設定。
+ * 從 Google 試算表（發布為 CSV）讀取講師、案例、熱門課程、趨勢專欄、培訓案例與設定。
  * - 第 1 列是欄位代號（英文），程式靠它對應資料，欄位順序可以任意調換
  * - 第一格以「#」開頭的列會略過（範本第 2 列的中文說明就是這樣標的）
  * - 讀不到時改用內建資料，網站不會變空白
@@ -253,6 +254,40 @@ function toArticles(rows: Row[]): Article[] {
     .map((x) => x.item)
 }
 
+/** 培訓案例（學習地圖）：依「排序」，沒填排序的依年份新的在前 */
+function toTrainingCases(rows: Row[]): AboutCase[] {
+  const out = rows
+    .map((r, index) => {
+      if (!bool(r.show, true) || !r.course) return null
+      const item: AboutCase = {
+        key: slug(r.id || '') || `training-${index + 1}`,
+        year: r.year,
+        school: r.school,
+        course: r.course,
+        desc: r.desc,
+        more: lines(r.more),
+        image: {
+          src: imageUrl(r.image),
+          alt: r.imageAlt || [r.year, r.school, r.course].filter(Boolean).join(' '),
+          pendingLabel: '活動照片待補',
+          width: 1200,
+          height: 800,
+        },
+      }
+      const n = Number(r.order)
+      return { order: r.order !== '' && Number.isFinite(n) ? n : Infinity, index, item }
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x)
+  return out
+    .sort(
+      (a, b) =>
+        (a.order === b.order ? 0 : a.order < b.order ? -1 : 1) ||
+        (Number(b.item.year) || 0) - (Number(a.item.year) || 0) ||
+        a.index - b.index,
+    )
+    .map((x) => x.item)
+}
+
 /** 設定分頁：key → value */
 function toSettings(rows: Row[]) {
   return rows.filter((r) => r.key).map((r) => ({ key: r.key, value: r.value ?? '' }))
@@ -334,6 +369,7 @@ type NewsRow = ReturnType<typeof toNews>[number]
 const localNewsRows: NewsRow[] = localNews.map((item, index) => ({ order: index, index, item }))
 const newsSource = createSource(sheetSources.news, localNewsRows, toNews, '熱門課程')
 const articleSource = createSource(sheetSources.trends, localArticles, toArticles, '趨勢專欄', true)
+const trainingSource = createSource(sheetSources.training, aboutCases.items, toTrainingCases, '培訓案例')
 const settingSource = createSource(sheetSources.settings, [], toSettings, '設定', true)
 
 /** 講師資料（試算表優先，失敗用內建資料） */
@@ -360,6 +396,15 @@ export function useCases() {
     cases,
     loading: computed(() => caseSource.status.value === 'loading'),
     hasSample: computed(() => cases.value.some((c) => c.placeholder)),
+  }
+}
+
+/** 培訓案例（學習地圖頁；試算表優先，沒有資料或讀取失敗時用 about.ts 的內建資料） */
+export function useTrainingCases() {
+  trainingSource.load()
+  return {
+    items: computed(() => trainingSource.items.value),
+    loading: computed(() => trainingSource.status.value === 'loading'),
   }
 }
 

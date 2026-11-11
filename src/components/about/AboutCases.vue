@@ -3,6 +3,10 @@
 import SectionHeading from '@/components/SectionHeading.vue'
 import AboutPhoto from './AboutPhoto.vue'
 import { aboutCases as copy } from '@/data/about'
+import { useTrainingCases } from '@/composables/sheetData'
+
+// 案例內容來自試算表「培訓案例」分頁，沒有資料時用 about.ts 的內建兩筆
+const { items } = useTrainingCases()
 </script>
 
 <template>
@@ -12,7 +16,7 @@ import { aboutCases as copy } from '@/data/about'
 
       <div class="cases__list">
         <article
-          v-for="c in copy.items"
+          v-for="c in items"
           :key="c.key"
           v-reveal
           class="case"
