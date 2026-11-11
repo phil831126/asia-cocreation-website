@@ -27,8 +27,11 @@ export interface CaseItem {
   category: CaseCategory
   title: string
   excerpt: string
+  /** 封面：列表卡片與首頁使用，也是詳情頁輪播的第一張 */
   image: string
   imageAlt: string
+  /** 詳情頁輪播的其他照片（選填；試算表「案例」分頁的 gallery 欄位，一格多張） */
+  gallery?: string[]
   /** 案例詳情頁三個區塊；未填時顯示「待補」 */
   background?: string
   execution?: string

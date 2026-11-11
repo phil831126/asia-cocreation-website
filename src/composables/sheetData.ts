@@ -156,6 +156,7 @@ function toCases(rows: Row[]): CaseItem[] {
         excerpt: r.excerpt,
         image: imageUrl(r.cover),
         imageAlt: r.coverAlt || r.title,
+        gallery: list(r.gallery).map(imageUrl).filter(Boolean),
         background: r.background,
         execution: r.execution,
         result: r.result,

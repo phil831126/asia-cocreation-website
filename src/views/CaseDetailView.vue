@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowLeft } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
-import CaseVisual from '@/components/CaseVisual.vue'
+import CaseGallery from '@/components/CaseGallery.vue'
 import CaseCard from '@/components/CaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { categoryLabel } from '@/data/cases'
@@ -38,7 +38,8 @@ const blocks = computed(() => [
       <section class="section detail">
         <div class="container detail__grid">
           <div v-reveal class="detail__media">
-            <CaseVisual :item="item" />
+            <!-- 封面＋gallery 欄位的其他照片：多張時輪播 -->
+            <CaseGallery :key="item.id" :item="item" />
           </div>
           <div class="detail__body">
             <p v-reveal class="detail__excerpt">{{ item.excerpt }}</p>
