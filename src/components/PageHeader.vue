@@ -20,7 +20,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 </script>
 
 <template>
-  <section class="ph" :class="{ 'ph--compact': compact, 'ph--action': $slots.action }">
+  <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
     <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的熱門課程輪播）時改顯示該內容 -->
     <svg v-if="!$slots.aside" class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
@@ -29,8 +29,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
       <circle cx="130" cy="130" r="14" fill="#F8BE20" />
       <path d="M198 198 L262 262" stroke="#9a9a98" stroke-width="20" stroke-linecap="round" />
     </svg>
-    <!-- 右側放大鏡下方的操作按鈕（平板與手機改放在文字下方） -->
-    <div v-if="$slots.action" class="ph__action ph__action--deco"><slot name="action" /></div>
     <div class="container ph__layout" :class="{ 'ph__layout--aside': $slots.aside }">
       <div class="ph__inner">
         <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
@@ -54,7 +52,8 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
           <span v-for="(line, i) in descLines" :key="i" class="ph__line">{{ line }}</span>
         </p>
         <slot />
-        <div v-if="$slots.action" class="ph__action ph__action--inline"><slot name="action" /></div>
+        <!-- 副標下方的操作按鈕（例如講師聯盟的「申請加入」） -->
+        <div v-if="$slots.action" class="ph__action"><slot name="action" /></div>
       </div>
       <div v-if="$slots.aside" class="ph__aside">
         <slot name="aside" />
@@ -120,32 +119,22 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 18px;
+  gap: 14px;
   /* 讓單行說明文字依內容寬度縮放字級（cqi） */
   container-type: inline-size;
 }
 
-/* 精簡版：上下留白較少 */
+/* 精簡版：上下留白與間距較少（講師聯盟頁，讓篩選區在第一個畫面就完整出現） */
 .ph--compact {
-  padding: calc(var(--nav-h) + 28px) 0 24px;
+  padding: calc(var(--nav-h) + 22px) 0 16px;
 }
 
-.ph--compact /* 有右側內容時：左文右卡片 */
-.ph__layout--aside {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
-  align-items: center;
-  gap: clamp(32px, 5vw, 72px);
+.ph--compact .ph__inner {
+  gap: 10px;
 }
 
-.ph__aside {
-  min-width: 0;
-  animation: ph-in 0.8s var(--ease-out) both 0.3s;
-}
-
-.ph__inner {
-  min-width: 0;
-  gap: 14px;
+.ph--compact .ph__title {
+  font-size: clamp(2.3rem, 5.4vw, 3.8rem);
 }
 
 .ph__crumbs ol {
@@ -194,29 +183,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   display: block;
 }
 
-/* 有右側操作按鈕時：放大鏡縮小一點，下方留出按鈕的位置 */
-.ph--action {
-  --ring-w: clamp(150px, 17vw, 210px);
-}
-
-.ph--action .ph__ring {
-  width: var(--ring-w);
-}
-
-.ph__action--deco {
-  position: absolute;
-  right: max(var(--gutter), calc((100% - var(--container)) / 2));
-  top: calc(50% + var(--ring-w) * 0.51 - 14px);
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  width: var(--ring-w);
-}
-
-.ph__action--inline {
-  display: none;
-}
-
 .ph__desc--line {
   max-width: none;
   white-space: nowrap;
@@ -227,29 +193,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 @media (max-width: 600px) {
   .ph__line {
   display: block;
-}
-
-/* 有右側操作按鈕時：放大鏡縮小一點，下方留出按鈕的位置 */
-.ph--action {
-  --ring-w: clamp(150px, 17vw, 210px);
-}
-
-.ph--action .ph__ring {
-  width: var(--ring-w);
-}
-
-.ph__action--deco {
-  position: absolute;
-  right: max(var(--gutter), calc((100% - var(--container)) / 2));
-  top: calc(50% + var(--ring-w) * 0.51 - 14px);
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  width: var(--ring-w);
-}
-
-.ph__action--inline {
-  display: none;
 }
 
 .ph__desc--line {
@@ -276,14 +219,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 }
 
 @media (max-width: 768px) {
-  .ph__action--deco {
-    display: none;
-  }
-
-  .ph__action--inline {
-    display: block;
-  }
-
   .ph__ring {
     top: auto;
     bottom: -40px;

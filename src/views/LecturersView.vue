@@ -155,7 +155,7 @@ const inviteLink = computed(() =>
       compact
     >
       <span v-if="hasSample" class="pending-tag">講師資料待補（目前為示意內容）</span>
-      <!-- 申請加入講師聯盟：毛玻璃按鈕，桌機在右側放大鏡下方，手機在副標下方 -->
+      <!-- 申請加入講師聯盟：毛玻璃按鈕，放在副標下方 -->
       <template #action>
         <RouterLink :to="joinLink" class="join-btn">
           申請加入
