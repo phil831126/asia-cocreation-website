@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ArrowRight } from '@lucide/vue'
 import CaseVisual from './CaseVisual.vue'
 import { categoryLabel, type CaseItem } from '@/data/cases'
 
-defineProps<{ item: CaseItem }>()
+const props = defineProps<{ item: CaseItem }>()
+
+/** 試算表裡尚未改寫的示意摘要（「示意內容：…」）不顯示在卡片上 */
+const excerpt = computed(() => (/^示意內容/.test(props.item.excerpt) ? '' : props.item.excerpt))
 </script>
 
 <template>
@@ -14,12 +18,11 @@ defineProps<{ item: CaseItem }>()
     <div class="cc__body">
       <div class="cc__meta">
         <span class="cc__cat">{{ categoryLabel[item.category] }}</span>
-        <span v-if="item.placeholder" class="pending-tag">示意內容／待補案例</span>
       </div>
       <h3 class="cc__title">
         <RouterLink :to="`/cases/${item.id}`">{{ item.title }}</RouterLink>
       </h3>
-      <p class="cc__excerpt">{{ item.excerpt }}</p>
+      <p class="cc__excerpt">{{ excerpt }}</p>
       <RouterLink :to="`/cases/${item.id}`" class="link-arrow cc__more" tabindex="-1" aria-hidden="true">
         查看詳情 <ArrowRight :size="16" />
       </RouterLink>

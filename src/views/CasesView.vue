@@ -4,9 +4,6 @@ import CaseShowcase from '@/components/CaseShowcase.vue'
 import NewsCarousel from '@/components/NewsCarousel.vue'
 import StatsDashboard from '@/components/StatsDashboard.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
-import { useCases } from '@/composables/sheetData'
-
-const { hasSample } = useCases()
 </script>
 
 <template>
@@ -21,7 +18,6 @@ const { hasSample } = useCases()
       <div class="cases-stats">
         <StatsDashboard />
       </div>
-      <span v-if="hasSample" class="pending-tag">示意內容／待補案例</span>
       <!-- 右側：熱門課程輪播（與首頁主視覺共用試算表「熱門課程」分頁） -->
       <template #aside>
         <NewsCarousel />
