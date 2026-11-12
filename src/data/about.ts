@@ -216,7 +216,6 @@ export interface AboutCase {
 export const aboutCases = {
   eyebrow: 'Training Cases',
   title: '讓學習走進真實的工作情境',
-  morePending: '延伸介紹待補',
   items: [
     {
       key: 'mcu-2025',

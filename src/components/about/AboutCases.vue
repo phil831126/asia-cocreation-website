@@ -33,12 +33,9 @@ const { items } = useTrainingCases()
             <h3 :id="`case-${c.key}`" class="case__course">{{ c.course }}</h3>
             <p class="case__label">課程內容</p>
             <p class="case__desc">{{ c.desc }}</p>
-            <!-- 延伸介紹：在 about.ts 的 more 陣列加入段落後顯示 -->
-            <div class="case__more">
-              <template v-if="c.more.length">
-                <p v-for="(p, j) in c.more" :key="j" class="case__desc">{{ p }}</p>
-              </template>
-              <span v-else class="pending-tag">{{ copy.morePending }}</span>
+            <!-- 延伸介紹：試算表「培訓案例」分頁的 more 欄有填才顯示，沒填就不佔位 -->
+            <div v-if="c.more.length" class="case__more">
+              <p v-for="(p, j) in c.more" :key="j" class="case__desc">{{ p }}</p>
             </div>
           </div>
         </article>
