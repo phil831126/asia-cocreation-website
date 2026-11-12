@@ -17,7 +17,7 @@ const inView = useInView(root, 0.2, { repeat: true })
         <dt class="stat__label">{{ k.label }}</dt>
         <dd class="stat__value">
           <RollingNumber class="num stat__num" :value="k.value" :suffix="k.suffix" :active="inView" />
-          <span class="sr-only">逾 {{ k.value.toLocaleString('zh-TW') }} {{ k.unit }}</span>
+          <span class="sr-only">{{ k.value.toLocaleString('zh-TW') }}{{ k.suffix }} {{ k.unit }}</span>
         </dd>
       </div>
     </dl>
