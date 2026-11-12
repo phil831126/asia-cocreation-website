@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ChevronRight } from '@lucide/vue'
 
-defineProps<{
+const props = defineProps<{
   eyebrow: string
   title: string
+  /** 副標；字串裡的換行字元會分成多行顯示 */
   desc?: string
   crumbs?: { label: string; to?: string }[]
   /** 說明文字固定一行：依寬度自動縮小字級，不換行 */
@@ -11,10 +13,14 @@ defineProps<{
   /** 縮小上下留白，讓下方內容（例如篩選區）在第一個畫面就能完整看到 */
   compact?: boolean
 }>()
+
+const descLines = computed(() => (props.desc ?? '').split('\n'))
+/** 單行模式以最長的一行計算字級縮放 */
+const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length)) + 0.6)
 </script>
 
 <template>
-  <section class="ph" :class="{ 'ph--compact': compact }">
+  <section class="ph" :class="{ 'ph--compact': compact, 'ph--action': $slots.action }">
     <div class="ph__dots" aria-hidden="true"></div>
     <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的熱門課程輪播）時改顯示該內容 -->
     <svg v-if="!$slots.aside" class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
@@ -23,6 +29,8 @@ defineProps<{
       <circle cx="130" cy="130" r="14" fill="#F8BE20" />
       <path d="M198 198 L262 262" stroke="#9a9a98" stroke-width="20" stroke-linecap="round" />
     </svg>
+    <!-- 右側放大鏡下方的操作按鈕（平板與手機改放在文字下方） -->
+    <div v-if="$slots.action" class="ph__action ph__action--deco"><slot name="action" /></div>
     <div class="container ph__layout" :class="{ 'ph__layout--aside': $slots.aside }">
       <div class="ph__inner">
         <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
@@ -41,11 +49,12 @@ defineProps<{
           v-if="desc"
           class="ph__desc"
           :class="{ 'ph__desc--line': singleLineDesc }"
-          :style="singleLineDesc ? { '--chars': desc.length + 0.6 } : undefined"
+          :style="singleLineDesc ? { '--chars': descChars } : undefined"
         >
-          {{ desc }}
+          <span v-for="(line, i) in descLines" :key="i" class="ph__line">{{ line }}</span>
         </p>
         <slot />
+        <div v-if="$slots.action" class="ph__action ph__action--inline"><slot name="action" /></div>
       </div>
       <div v-if="$slots.aside" class="ph__aside">
         <slot name="aside" />
@@ -181,6 +190,33 @@ defineProps<{
 }
 
 /* 單行說明：不換行，字級最大 1.1rem，空間不足時依寬度縮小（--chars 為字數） */
+.ph__line {
+  display: block;
+}
+
+/* 有右側操作按鈕時：放大鏡縮小一點，下方留出按鈕的位置 */
+.ph--action {
+  --ring-w: clamp(150px, 17vw, 210px);
+}
+
+.ph--action .ph__ring {
+  width: var(--ring-w);
+}
+
+.ph__action--deco {
+  position: absolute;
+  right: max(var(--gutter), calc((100% - var(--container)) / 2));
+  top: calc(50% + var(--ring-w) * 0.51 - 14px);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: var(--ring-w);
+}
+
+.ph__action--inline {
+  display: none;
+}
+
 .ph__desc--line {
   max-width: none;
   white-space: nowrap;
@@ -189,7 +225,34 @@ defineProps<{
 
 /* 手機：一行放不下時改為正常換行，避免字級縮得太小 */
 @media (max-width: 600px) {
-  .ph__desc--line {
+  .ph__line {
+  display: block;
+}
+
+/* 有右側操作按鈕時：放大鏡縮小一點，下方留出按鈕的位置 */
+.ph--action {
+  --ring-w: clamp(150px, 17vw, 210px);
+}
+
+.ph--action .ph__ring {
+  width: var(--ring-w);
+}
+
+.ph__action--deco {
+  position: absolute;
+  right: max(var(--gutter), calc((100% - var(--container)) / 2));
+  top: calc(50% + var(--ring-w) * 0.51 - 14px);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: var(--ring-w);
+}
+
+.ph__action--inline {
+  display: none;
+}
+
+.ph__desc--line {
     white-space: normal;
     font-size: 1rem;
   }
@@ -213,6 +276,14 @@ defineProps<{
 }
 
 @media (max-width: 768px) {
+  .ph__action--deco {
+    display: none;
+  }
+
+  .ph__action--inline {
+    display: block;
+  }
+
   .ph__ring {
     top: auto;
     bottom: -40px;

@@ -136,6 +136,9 @@ function onDialogClick(e: MouseEvent) {
 /** 申請加入講師聯盟：前往聯絡我們，需求預選「講師經紀」並帶入申請留言 */
 const joinLink = lecturerApplySection.primary.to
 
+/** 副標分兩行：第二行從「可依專業…」開始 */
+const headerDesc = '集結逾百位合作業師，涵蓋職涯探索、品牌行銷與自媒體經營等領域，\n可依專業、對象與授課形式找到合適講師。'
+
 const inviteLink = computed(() =>
   current.value ? { path: '/contact', query: { topic: 'lecturer', lecturer: current.value.name } } : '/contact',
 )
@@ -146,17 +149,19 @@ const inviteLink = computed(() =>
     <PageHeader
       eyebrow="Lecturers"
       title="講師聯盟"
-      desc="集結逾百位合作業師，涵蓋職涯探索、品牌行銷與自媒體經營等領域，可依專業、對象與授課形式找到合適講師。"
+      :desc="headerDesc"
       :crumbs="[{ label: '講師聯盟' }]"
       single-line-desc
       compact
     >
       <span v-if="hasSample" class="pending-tag">講師資料待補（目前為示意內容）</span>
-      <!-- 邀請講師加入：首頁「加入講師聯盟，讓專業走進更多課堂」的濃縮版 -->
-      <p class="join">
-        有實務經驗、願意分享專業？歡迎加入講師聯盟，我們協助課程媒合、規劃與曝光。
-        <RouterLink :to="joinLink" class="link-arrow join__link">申請加入 <ArrowRight :size="16" aria-hidden="true" /></RouterLink>
-      </p>
+      <!-- 申請加入講師聯盟：毛玻璃按鈕，桌機在右側放大鏡下方，手機在副標下方 -->
+      <template #action>
+        <RouterLink :to="joinLink" class="join-btn">
+          申請加入
+          <span class="join-btn__icon"><ArrowRight :size="15" aria-hidden="true" /></span>
+        </RouterLink>
+      </template>
     </PageHeader>
 
     <!-- 頁首下方不留大片空白，讓篩選區在進入頁面時就完整出現 -->
@@ -311,23 +316,53 @@ const inviteLink = computed(() =>
 
 <style scoped>
 /* 頁首：邀請講師加入 */
-.join {
-  color: var(--c-text-2);
-  font-size: 0.95rem;
-  line-height: 1.8;
-}
-
-@media (max-width: 600px) {
-  .join {
-    font-size: 0.9rem;
-  }
-}
-
-.join__link {
+/* 申請加入：毛玻璃按鈕（半透明品牌黃＋模糊背景＋白色高光邊） */
+.join-btn {
   display: inline-flex;
-  margin-left: 6px;
-  font-size: 0.95rem;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(248, 190, 32, 0.42));
+  box-shadow:
+    0 16px 32px -14px rgba(224, 165, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(224, 165, 0, 0.25);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  color: var(--c-text);
+  font-weight: 700;
+  letter-spacing: 0.08em;
   white-space: nowrap;
+  transition:
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out),
+    background-color 0.3s;
+}
+
+.join-btn:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(248, 190, 32, 0.68));
+  box-shadow:
+    0 20px 36px -14px rgba(224, 165, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(224, 165, 0, 0.3);
+}
+
+.join-btn__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--c-text);
+  color: #fff;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.join-btn:hover .join-btn__icon {
+  transform: translateX(3px);
 }
 
 /* 篩選區緊接在頁首下方 */
