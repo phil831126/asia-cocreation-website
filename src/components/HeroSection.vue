@@ -1,249 +1,289 @@
 <script setup lang="ts">
-import { Sparkles } from '@lucide/vue'
-import HeroServices from './HeroServices.vue'
-import NewsCarousel from './NewsCarousel.vue'
-import { hero } from '@/data/home'
+/*
+ * 首頁主視覺：導覽列下方的滿版「熱門課程」輪播，只放圖片（不放任何文字）。
+ * 圖片來自試算表「熱門課程」分頁的 cover 欄位（與實務總覽頁共用同一份資料）；
+ * 點圖片會前往該則的連結（沒填連結就不能點）。
+ * 目前這張置中，左右露出前後張；沒有「循環」，到最後一張回到第一張。
+ */
+import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
+import { RouterLink } from 'vue-router'
+import Swiper from 'swiper'
+import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import { ArrowLeft, ArrowRight, ImageIcon } from '@lucide/vue'
+import { brand } from '@/data/site'
+import { useNews } from '@/composables/sheetData'
+import { prefersReducedMotion } from '@/composables/motion'
 
-function splitLine(line: string) {
-  const i = line.indexOf(hero.titleHighlight)
-  if (i < 0) return { before: line, mark: '', after: '' }
-  return { before: line.slice(0, i), mark: hero.titleHighlight, after: line.slice(i + hero.titleHighlight.length) }
+const { news, loading } = useNews()
+
+const root = ref<HTMLElement | null>(null)
+const pagination = ref<HTMLElement | null>(null)
+const prevBtn = ref<HTMLButtonElement | null>(null)
+const nextBtn = ref<HTMLButtonElement | null>(null)
+let swiper: Swiper | null = null
+
+/** 讀不到的圖片改顯示佔位底圖（以網址記錄） */
+const broken = reactive(new Set<string>())
+
+const multiple = computed(() => news.value.length > 1)
+
+const isExternal = (link: string) => /^https:\/\//.test(link)
+const slideTag = (link: string) => (!link ? 'div' : isExternal(link) ? 'a' : RouterLink)
+const slideAttrs = (link: string) => {
+  if (!link) return {}
+  return isExternal(link) ? { href: link, target: '_blank', rel: 'noopener' } : { to: link }
 }
+
+function init() {
+  swiper?.destroy(true, true)
+  swiper = null
+  if (!root.value || !multiple.value) return
+  const reduced = prefersReducedMotion()
+  swiper = new Swiper(root.value, {
+    modules: [Navigation, Pagination, A11y, Autoplay],
+    slidesPerView: 'auto',
+    centeredSlides: true,
+    spaceBetween: 20,
+    speed: reduced ? 0 : 700,
+    grabCursor: true,
+    rewind: true,
+    autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
+    navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
+    pagination: { el: pagination.value, clickable: true, bulletClass: 'hb__dot', bulletActiveClass: 'is-active' },
+    a11y: {
+      prevSlideMessage: '上一張',
+      nextSlideMessage: '下一張',
+      paginationBulletMessage: '前往第 {{index}} 張',
+    },
+  })
+}
+
+// 試算表載入完成後再建立輪播
+watch(
+  () => [loading.value, news.value.length] as const,
+  async ([isLoading]) => {
+    if (isLoading) return
+    await nextTick()
+    init()
+  },
+  { immediate: true },
+)
+
+onBeforeUnmount(() => swiper?.destroy(true, true))
 </script>
 
 <template>
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__bg" aria-hidden="true">
-      <div class="hero__glow"></div>
-      <div class="hero__dots"></div>
+  <section class="hero" aria-label="熱門課程">
+    <h1 class="sr-only">{{ brand.name }}</h1>
+
+    <div class="hb">
+      <!-- 載入中：保留一張的位置 -->
+      <div v-if="loading" class="hb__single">
+        <div class="hb__item"><div class="hb__img hb__ph"></div></div>
+      </div>
+
+      <!-- 只有一則：不輪播 -->
+      <div v-else-if="news.length === 1" class="hb__single">
+        <component :is="slideTag(news[0].link)" v-bind="slideAttrs(news[0].link)" class="hb__item">
+          <img
+            v-if="news[0].cover && !broken.has(news[0].cover)"
+            class="hb__img"
+            :src="news[0].cover"
+            :alt="news[0].coverAlt || news[0].title"
+            @error="broken.add(news[0].cover)"
+          />
+          <div v-else class="hb__img hb__ph"><ImageIcon :size="36" :stroke-width="1.4" aria-hidden="true" /></div>
+        </component>
+      </div>
+
+      <template v-else>
+        <div ref="root" class="swiper hb__swiper">
+          <ul class="swiper-wrapper">
+            <li v-for="(c, i) in news" :key="`${i}-${c.cover}`" class="swiper-slide hb__slide">
+              <component :is="slideTag(c.link)" v-bind="slideAttrs(c.link)" class="hb__item">
+                <img
+                  v-if="c.cover && !broken.has(c.cover)"
+                  class="hb__img"
+                  :src="c.cover"
+                  :alt="c.coverAlt || c.title"
+                  @error="broken.add(c.cover)"
+                />
+                <div v-else class="hb__img hb__ph"><ImageIcon :size="36" :stroke-width="1.4" aria-hidden="true" /></div>
+              </component>
+            </li>
+          </ul>
+        </div>
+
+        <button ref="prevBtn" type="button" class="hb__arrow hb__arrow--prev" aria-label="上一張">
+          <ArrowLeft :size="22" aria-hidden="true" />
+        </button>
+        <button ref="nextBtn" type="button" class="hb__arrow hb__arrow--next" aria-label="下一張">
+          <ArrowRight :size="22" aria-hidden="true" />
+        </button>
+        <div ref="pagination" class="hb__pagination"></div>
+      </template>
     </div>
-    <Sparkles class="hero__spark" :size="26" :stroke-width="1.8" aria-hidden="true" />
-
-    <!-- 版面：左上標題與說明、左下服務項目、右側熱門課程輪播 -->
-    <div class="container hero__grid">
-      <div class="hero__copy">
-        <h1 id="hero-title" class="hero__title">
-          <span v-for="(line, i) in hero.titleLines" :key="line" class="hero__line hero__in" :style="{ '--d': `${0.15 + i * 0.12}s` }">
-            {{ splitLine(line).before }}<span v-if="splitLine(line).mark" class="hero__mark">{{ splitLine(line).mark }}</span>{{ splitLine(line).after }}
-          </span>
-        </h1>
-        <p class="hero__sub hero__in" :style="{ '--d': '0.45s', '--chars': hero.subtitle.length + 0.6 }">{{ hero.subtitle }}</p>
-      </div>
-
-      <div class="hero__services hero__in" style="--d: 0.55s">
-        <p class="eyebrow hero__guide">{{ hero.servicesLabel }}</p>
-        <HeroServices />
-      </div>
-
-      <div class="hero__course hero__in" style="--d: 0.35s">
-        <NewsCarousel show-all title-tag="h2" />
-      </div>
-    </div>
-
   </section>
 </template>
 
 <style scoped>
 .hero {
+  --hb-gap: 18px;
+  --hb-dots: 40px;
   position: relative;
-  isolation: isolate;
   display: flex;
-  flex-direction: column;
-  min-height: max(100svh, 640px);
-  /* 透明底，讓首頁最底層的點綴透出來（頁面本身為白底） */
+  align-items: center;
+  min-height: max(100svh, 520px);
+  /* 上方讓出固定在頂端的導覽列 */
+  padding: calc(var(--nav-h) + var(--hb-gap)) 0 0;
   background: transparent;
-  color: var(--c-text);
   overflow: hidden;
 }
 
-.hero__bg {
+.hb {
+  position: relative;
+  width: 100%;
+  /* 圖片高度＝畫面高度扣掉導覽列、上方留白與頁碼區 */
+  --hb-h: calc(max(100svh, 520px) - var(--nav-h) - var(--hb-gap) - var(--hb-dots));
+}
+
+.hb__swiper {
+  overflow: hidden;
+}
+
+/* 每張 16:10；寬度依高度推算，窄螢幕不超過畫面寬度（左右留一點露出鄰張） */
+.hb__slide,
+.hb__single {
+  width: min(calc(var(--hb-h) * 1.6), calc(100% - 2 * var(--gutter) - 56px));
+  transition: opacity 0.5s;
+}
+
+.hb__single {
+  margin-inline: auto;
+}
+
+/* 沒有被選中的相鄰張：淡化 */
+.hb__slide:not(.swiper-slide-active) {
+  opacity: 0.45;
+}
+
+.hb__item {
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--c-bg-alt);
+  box-shadow: 0 22px 44px -26px rgba(60, 50, 20, 0.55);
+}
+
+.hb__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hb__ph {
+  display: grid;
+  place-items: center;
+  color: var(--c-gray);
+  background:
+    radial-gradient(rgba(224, 165, 0, 0.3) 1.2px, transparent 1.4px) 0 0 / 18px 18px,
+    linear-gradient(150deg, #fff 10%, var(--c-yellow-tint));
+}
+
+a.hb__item .hb__img {
+  transition: transform 0.7s var(--ease-out);
+}
+
+a.hb__item:hover .hb__img {
+  transform: scale(1.03);
+}
+
+/* ---------- 左右箭頭：貼在畫面兩側 ---------- */
+.hb__arrow {
   position: absolute;
-  inset: 0;
-  z-index: -1;
+  top: calc(var(--hb-h) / 2);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--c-text);
+  box-shadow: 0 8px 22px -10px rgba(34, 34, 34, 0.55);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    background-color 0.3s,
+    opacity 0.3s;
+}
+
+.hb__arrow--prev {
+  left: clamp(10px, 2vw, 28px);
+}
+
+.hb__arrow--next {
+  right: clamp(10px, 2vw, 28px);
+}
+
+.hb__arrow:hover {
+  background: var(--c-yellow);
+}
+
+.hb__arrow.is-disabled {
+  opacity: 0.35;
   pointer-events: none;
 }
 
-/* 輪播後方的淡黃光暈與點陣 */
-.hero__glow {
-  position: absolute;
-  right: 4%;
-  top: 4%;
-  width: 50%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(248, 190, 32, 0.16), transparent 66%);
-}
-
-.hero__dots {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 55%;
-  height: 80%;
-  background-image: radial-gradient(rgba(224, 165, 0, 0.35) 1.2px, transparent 1.4px);
-  background-size: 18px 18px;
-  -webkit-mask-image: radial-gradient(ellipse at 70% 35%, #000, transparent 65%);
-  mask-image: radial-gradient(ellipse at 70% 35%, #000, transparent 65%);
-  opacity: 0.5;
-}
-
-.hero__spark {
-  position: absolute;
-  left: 47%;
-  top: 7vh;
-  color: var(--c-yellow);
-  animation: spark 4s ease-in-out infinite;
-}
-
-@keyframes spark {
-  50% {
-    transform: rotate(12deg) scale(1.1);
-    opacity: 0.7;
-  }
-}
-
-/* 左欄：標題（上）＋服務項目（下）；右欄：熱門課程輪播
-   上方留白讓出固定在頂端的導覽列 */
-.hero__grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  grid-template-areas:
-    'copy course'
-    'services course';
-  align-content: center;
-  column-gap: clamp(40px, 5vw, 80px);
-  row-gap: clamp(24px, 5vh, 52px);
-  padding-block: calc(var(--nav-h) + clamp(8px, 2vh, 24px)) clamp(24px, 3.5vh, 44px);
-}
-
-.hero__copy {
-  grid-area: copy;
-  align-self: end;
+/* ---------- 頁碼點：圖片正下方置中 ---------- */
+.hb__pagination {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  /* 讓說明文字依左欄寬度縮放字級（cqi） */
-  container-type: inline-size;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: var(--hb-dots);
 }
 
-.hero__title {
-  display: flex;
-  flex-direction: column;
-  font-size: clamp(40px, 8.4vh, 68px);
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: 0.03em;
+.hb__pagination :deep(.hb__dot) {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--c-gray-300);
+  cursor: pointer;
+  transition:
+    width 0.4s var(--ease-out),
+    background-color 0.3s;
 }
 
-/* 標題與說明都固定一行 */
-.hero__line {
-  display: block;
-  white-space: nowrap;
+.hb__pagination :deep(.hb__dot.is-active) {
+  width: 26px;
+  background: var(--c-yellow);
 }
 
-/* 黃色螢光底線（黃字放在白底上對比不足） */
-.hero__mark {
-  background: linear-gradient(transparent 58%, rgba(248, 190, 32, 0.7) 58%, rgba(248, 190, 32, 0.7) 90%, transparent 90%);
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  padding-inline: 0.06em;
-}
-
-/* 說明文字固定一行：字級依左欄寬度縮放（--chars 為字數），最大 17px */
-.hero__sub {
-  margin-top: 2.6vh;
-  font-size: min(17px, 2.3vh + 2px, calc(100cqi / var(--chars)));
-  line-height: 1.85;
-  white-space: nowrap;
-  color: var(--c-text-2);
-}
-
-.hero__services {
-  grid-area: services;
-  align-self: start;
-}
-
-/* 「服務項目」小標籤：純標示 */
-.hero__guide {
-  margin-bottom: 14px;
-}
-
-/* 右欄：熱門課程輪播，寬度依畫面高度限制，讓整張卡片留在第一個畫面內 */
-.hero__course {
-  grid-area: course;
-  align-self: center;
-  justify-self: end;
-  width: 100%;
-  max-width: min(640px, calc((100svh - 400px) * 1.6 + 12px));
-  min-width: 0;
-}
-
-/* 載入時逐步淡入 */
-.hero__in {
-  animation: hero-in 1s var(--ease-out) both;
-  animation-delay: var(--d, 0s);
-}
-
-@keyframes hero-in {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-    filter: blur(6px);
-  }
-}
-
-/* 側邊留白不足時，讓出右下角「共創諮詢台」按鈕的位置 */
-@media (min-width: 1081px) and (max-width: 1500px) {
-  .hero__course {
-    margin-right: 48px;
-  }
-}
-
-/* 平板與手機：上下堆疊（文字 → 熱門課程輪播 → 服務項目），導覽列固定在頂端 */
+/* 平板與手機：不再要求整張圖在第一個畫面內，圖片依寬度顯示 */
 @media (max-width: 1080px) {
   .hero {
     min-height: auto;
-    padding: calc(var(--nav-h) + 24px) 0 56px;
+    padding-bottom: 24px;
   }
 
-  .hero__grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      'copy'
-      'course'
-      'services';
-    row-gap: 36px;
-    padding-block: 0;
+  .hb {
+    --hb-h: calc(100vw * 0.55);
   }
 
-  .hero__title {
-    font-size: clamp(2.2rem, 7vw, 3.4rem);
+  .hb__arrow {
+    width: 40px;
+    height: 40px;
   }
+}
 
-  .hero__sub {
-    font-size: min(17px, calc(100cqi / var(--chars)));
-  }
-
-  .hero__course {
-    justify-self: stretch;
-    max-width: none;
-  }
-
-  .hero__spark {
+@media (max-width: 600px) {
+  .hb__arrow {
     display: none;
-  }
-
-  .hero__glow {
-    right: 0;
-    top: 360px;
-    width: 90vw;
-    max-width: 640px;
-  }
-
-  .hero__dots {
-    height: 640px;
   }
 }
 </style>

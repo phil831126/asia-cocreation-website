@@ -57,6 +57,7 @@ onBeforeUnmount(() => {
       <div class="nav__bar">
         <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
           <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="282" height="240" />
+          <span class="nav__name">{{ brand.name }}</span>
         </RouterLink>
 
         <nav class="nav__pill" aria-label="主要導覽">
@@ -128,24 +129,38 @@ onBeforeUnmount(() => {
   box-shadow: 0 8px 24px -16px rgba(34, 34, 34, 0.3);
 }
 
+/* 滿版：Logo 靠左、聯絡我們靠右，選單置中 */
 .nav__wrap {
-  width: calc(100% - var(--gutter) * 2);
-  max-width: var(--container);
-  margin-inline: auto;
+  width: 100%;
+  padding-inline: clamp(14px, 2.4vw, 36px);
 }
 
 .nav__bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   height: 76px;
-  padding: 0 10px 0 18px;
+}
+
+.nav__cta {
+  justify-self: end;
 }
 
 .nav__brand {
   display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: start;
   border-radius: 12px;
+}
+
+/* Logo 旁的粗體校名 */
+.nav__name {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 /* 圖文一體的 Logo（字樣在圖示下方），高度接近導覽列本體 */
@@ -165,8 +180,6 @@ onBeforeUnmount(() => {
   display: flex;
   gap: 2px;
   padding: 5px;
-  border-radius: 999px;
-  background: var(--c-gray-100);
 }
 
 .nav__link {
@@ -184,7 +197,7 @@ onBeforeUnmount(() => {
 
 .nav__link:hover {
   color: var(--c-text);
-  background: #fff;
+  background: var(--c-gray-100);
 }
 
 .nav__link.is-active {
@@ -289,7 +302,15 @@ onBeforeUnmount(() => {
   }
 
   .nav__bar {
-    padding: 0 8px 0 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav__name {
+    font-size: 1.1rem;
+    letter-spacing: 0.03em;
   }
 }
 

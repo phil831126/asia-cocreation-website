@@ -5,26 +5,12 @@
    ========================================================= */
 
 import type { Component } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
 import {
   ClipboardPen,
-  GraduationCap,
   Handshake,
   Megaphone,
-  Mic,
   PencilRuler,
-  UsersRound,
 } from '@lucide/vue'
-import { services } from './services'
-
-export const hero = {
-  titleLines: ['亞洲共創學院'],
-  /** 標題中以品牌黃底線強調的文字 */
-  titleHighlight: '亞洲共創學院',
-  subtitle: '我們相信，每一位迷惘的人都能透過系統性學習找到人生的方向。',
-  /** 服務圖卡上方的小標籤（純標示，不是連結） */
-  servicesLabel: '服務項目',
-}
 
 export const lecturersSection = {
   eyebrow: 'Lecturers & Consultants',
@@ -95,54 +81,3 @@ export const ctaSection = {
   steps: ['需求了解', '課程規劃', '專案執行', '成果回饋'],
   button: { label: '聯絡我們', to: '/contact' },
 }
-
-/* ---------- Hero 左下「服務項目」四張圖卡（依序 01～04） ----------
-   ※ 教育培訓、講師經紀的簡介與標籤沿用 services.ts（與關於亞創的服務卡片一致）；
-     講師顧問聯盟、合作單位沿用首頁對應區塊的說明。
-   ※ 點圖卡會捲到首頁下方對應區塊：案例分享、講師顧問聯盟、講師經紀申請區、合作單位。 */
-export interface QuickGuideItem {
-  key: string
-  title: string
-  summary: string
-  points: string[]
-  icon: Component
-  /** 點擊後捲到的首頁區塊 */
-  to: RouteLocationRaw
-}
-
-const service = (id: string) => services.find((s) => s.id === id)!
-
-export const quickGuide: QuickGuideItem[] = [
-  {
-    key: 'training',
-    title: service('training').title,
-    summary: service('training').summary,
-    points: service('training').points,
-    icon: GraduationCap,
-    to: { path: '/', hash: '#cases' },
-  },
-  {
-    key: 'lecturers',
-    title: '講師顧問聯盟',
-    summary: lecturersSection.desc,
-    points: ['職涯探索', '品牌行銷', '自媒體經營'],
-    icon: UsersRound,
-    to: { path: '/', hash: '#lecturers' },
-  },
-  {
-    key: 'agency',
-    title: service('lecturer').title,
-    summary: service('lecturer').summary,
-    points: service('lecturer').points,
-    icon: Mic,
-    to: { path: '/', hash: '#lecturer-apply' },
-  },
-  {
-    key: 'partners',
-    title: '合作單位',
-    summary: partnerWallSection.desc,
-    points: ['政府機關', '大專院校', '企業品牌'],
-    icon: Handshake,
-    to: { path: '/', hash: '#partners' },
-  },
-]
