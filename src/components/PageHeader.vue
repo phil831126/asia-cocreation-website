@@ -22,13 +22,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 <template>
   <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
-    <!-- 右側放大鏡裝飾：有 aside 內容（例如課程總覽的熱門課程輪播）時改顯示該內容 -->
-    <svg v-if="!$slots.aside" class="ph__ring" viewBox="0 0 300 300" aria-hidden="true">
-      <circle cx="130" cy="130" r="92" fill="rgba(255,255,255,0.5)" stroke="#d6d6d3" stroke-width="12" />
-      <circle cx="130" cy="130" r="40" fill="#F8BE20" fill-opacity="0.35" />
-      <circle cx="130" cy="130" r="14" fill="#F8BE20" />
-      <path d="M198 198 L262 262" stroke="#9a9a98" stroke-width="20" stroke-linecap="round" />
-    </svg>
     <div class="container ph__layout" :class="{ 'ph__layout--aside': $slots.aside }">
       <div class="ph__inner">
         <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
@@ -67,7 +60,8 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   position: relative;
   isolation: isolate;
   padding: calc(var(--nav-h) + var(--section-y)) 0 var(--section-y);
-  background: linear-gradient(180deg, #fff, var(--c-bg-alt));
+  /* 灰底：比原本更深一些，但仍淺於 Logo 的灰色（#8a8a88 左右） */
+  background: linear-gradient(180deg, #e9e9e6, #d6d6d3);
   overflow: hidden;
 }
 
@@ -83,22 +77,6 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   -webkit-mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
   mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
   opacity: 0.55;
-}
-
-.ph__ring {
-  position: absolute;
-  right: max(var(--gutter), calc((100% - var(--container)) / 2));
-  top: 50%;
-  z-index: -1;
-  width: clamp(180px, 24vw, 300px);
-  transform: translateY(-40%) rotate(-8deg);
-  animation: ph-float 10s ease-in-out infinite;
-}
-
-@keyframes ph-float {
-  50% {
-    transform: translateY(-46%) rotate(-4deg);
-  }
 }
 
 /* 有右側內容時：左文右卡片 */
@@ -218,14 +196,4 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   }
 }
 
-@media (max-width: 768px) {
-  .ph__ring {
-    top: auto;
-    bottom: -40px;
-    right: -40px;
-    opacity: 0.5;
-    animation: none;
-    transform: rotate(-8deg);
-  }
-}
 </style>

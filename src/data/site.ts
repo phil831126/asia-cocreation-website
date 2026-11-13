@@ -31,7 +31,7 @@ export const navItems: NavItem[] = [
   { label: '講師聯盟', to: '/lecturers' },
   { label: '趨勢專欄', to: '/trends' },
   { label: '學習地圖', to: '/learning-map' },
-  { label: '課程總覽', to: '/cases' },
+  { label: '實務總覽', to: '/cases' },
 ]
 
 /** 頁尾網站地圖：保留「聯絡我們」 */
@@ -100,7 +100,7 @@ export const pageMeta: Record<string, { title: string; description: string }> = 
     description: '亞洲共創學院的學習地圖：累計開課、合作單位、業師與學員數據，從觀念到實作的七大行銷學習主題，以及培訓案例。',
   },
   cases: {
-    title: '課程總覽｜亞洲共創學院',
+    title: '實務總覽｜亞洲共創學院',
     description: '瀏覽亞洲共創學院在政府計畫、產學合作與企業內訓的合作案例。',
   },
   caseDetail: {

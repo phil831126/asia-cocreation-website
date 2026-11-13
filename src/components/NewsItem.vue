@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /*
  * 熱門課程圖卡（單張）：上方 16:10 圖片、下方「熱門課程」標示／類別／日期／標題／摘要／連結。
- * 首頁主視覺與課程總覽頁的輪播（NewsCarousel）共用。
+ * 首頁主視覺與實務總覽頁的輪播（NewsCarousel）共用。
  * item 為 null 時顯示載入中的佔位卡。
  */
 import { computed, ref, watch } from 'vue'

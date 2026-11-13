@@ -25,10 +25,12 @@ const inView = useInView(root, 0.2, { repeat: true })
 </template>
 
 <style scoped>
+/* 四格靠左、間距收窄（欄寬依內容，不再平均撐滿） */
 .dash__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 28px);
+  grid-template-columns: repeat(4, auto);
+  justify-content: start;
+  gap: clamp(14px, 2.2vw, 32px);
   margin: 0;
 }
 
@@ -73,7 +75,7 @@ const inView = useInView(root, 0.2, { repeat: true })
 
 .stat__num {
   /* 依畫面寬高縮放，四格並排時數字不會互相重疊 */
-  font-size: clamp(24px, min(4.8vh, 2.5vw), 40px);
+  font-size: clamp(28px, min(5.6vh, 3.2vw), 48px);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.01em;
@@ -82,23 +84,24 @@ const inView = useInView(root, 0.2, { repeat: true })
 .stat__label {
   margin-top: 8px;
   color: var(--c-text-3);
-  font-size: clamp(12px, 1.7vh, 13px);
+  font-size: clamp(14px, 2.2vh, 17px);
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.16em;
   white-space: nowrap;
 }
 
 /* 平板：四格並排，數字依寬度放大 */
 @media (min-width: 640px) and (max-width: 1080px) {
   .stat__num {
-    font-size: clamp(28px, 4.6vw, 40px);
+    font-size: clamp(30px, 5vw, 44px);
   }
 }
 
 /* 手機：改為 2 × 2 */
 @media (max-width: 639px) {
   .dash__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, auto);
+    column-gap: 36px;
     row-gap: 26px;
   }
 
@@ -107,7 +110,7 @@ const inView = useInView(root, 0.2, { repeat: true })
   }
 
   .stat__label {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 }
 </style>

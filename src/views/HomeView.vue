@@ -23,8 +23,8 @@ const snap = useSectionSnap(root)
     <HomeBackdrop />
     <!-- 01 主視覺（服務項目圖卡＋熱門課程輪播） -->
     <HeroSection data-snap="首頁" />
-    <!-- 02 課程總覽（案例 Swiper）：服務項目「教育培訓」 -->
-    <section id="cases" class="section" data-snap="課程總覽">
+    <!-- 02 實務總覽（案例 Swiper）：服務項目「教育培訓」 -->
+    <section id="cases" class="section" data-snap="實務總覽">
       <div class="container">
         <CaseShowcase layout="swiper">
           <template #head>

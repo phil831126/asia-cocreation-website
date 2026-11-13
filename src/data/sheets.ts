@@ -18,7 +18,7 @@ export const sheetSources = {
   /** 「案例」分頁的 CSV 網址 */
   cases: `${PUBLISHED}?gid=1046939079&single=true&output=csv`,
   /**
-   * 「熱門課程」分頁：首頁主視覺與課程總覽頁的輪播（最多 5 則）
+   * 「熱門課程」分頁：首頁主視覺與實務總覽頁的輪播（最多 5 則）
    * 欄位：show, order, date, tag, title, summary, cover, coverAlt, link, linkLabel
    */
   news: `${PUBLISHED}?gid=1709610413&single=true&output=csv`,

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /*
- * 熱門課程輪播：首頁主視覺右側與課程總覽頁頁首右側共用
+ * 熱門課程輪播：首頁主視覺右側與實務總覽頁頁首右側共用
  * 內容來自試算表「熱門課程」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
- * 只有一則時不顯示頁碼與箭頭。showAll＝在下方加上「課程總覽」連結（首頁使用）。
+ * 只有一則時不顯示頁碼與箭頭。showAll＝在下方加上「實務總覽」連結（首頁使用）。
  */
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper'
@@ -80,7 +80,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
       </div>
     </template>
 
-    <!-- 下方控制列：頁碼、左右箭頭（兩則以上），以及首頁的「課程總覽」連結 -->
+    <!-- 下方控制列：頁碼、左右箭頭（兩則以上），以及首頁的「實務總覽」連結 -->
     <div v-if="!loading && (news.length > 1 || showAll)" class="hcc__foot">
       <div ref="pagination" class="hcc__pagination"></div>
       <div class="hcc__nav">
@@ -92,7 +92,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
             <ArrowRight :size="16" aria-hidden="true" />
           </button>
         </template>
-        <RouterLink v-if="showAll" to="/cases" class="hcc__all">課程總覽</RouterLink>
+        <RouterLink v-if="showAll" to="/cases" class="hcc__all">實務總覽</RouterLink>
       </div>
     </div>
   </section>
@@ -172,7 +172,7 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   background: var(--c-yellow);
 }
 
-/* 首頁：前往課程總覽 */
+/* 首頁：前往實務總覽 */
 .hcc__all {
   margin-left: 8px;
   padding: 2px 0;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /*
  * 學習地圖：大標與副標下方是學習行銷的七大主題、培訓案例。
- * （成果數據 Dashboard 已移到課程總覽頁；「從自媒體課堂開始的學習旅程」與「課程發展歷程」在關於亞創頁）
+ * （成果數據 Dashboard 已移到實務總覽頁；「從自媒體課堂開始的學習旅程」與「課程發展歷程」在關於亞創頁）
  */
 import PageHeader from '@/components/PageHeader.vue'
 import SectionHeading from '@/components/SectionHeading.vue'
