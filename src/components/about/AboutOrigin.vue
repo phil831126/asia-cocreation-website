@@ -1,11 +1,34 @@
 <script setup lang="ts">
 /*
  * SECTION 03｜課程的起點：從自媒體課堂開始的學習旅程（原學習地圖頁）
- * 桌機左文右圖，平板與手機改為上下排；照片尚未提供時以圖示示意。
+ * 桌機左文右圖，平板與手機改為上下排。
+ * 右側照片由試算表「關於亞創輪播」分頁控制（一列一張，見 sheetData.ts 的 useOriginPhotos）：
+ * 兩張以上輪播、一張顯示單張、沒有照片時以圖示示意。
  */
+import { computed, ref, watch } from 'vue'
 import { Mic, Smartphone, Video } from '@lucide/vue'
 import BaseButton from '@/components/BaseButton.vue'
+import PhotoCarousel from '@/components/PhotoCarousel.vue'
 import { aboutEvolution, aboutOrigin as origin } from '@/data/about'
+import { useOriginPhotos } from '@/composables/sheetData'
+
+const { photos, loading } = useOriginPhotos()
+
+/** 試算表有填就用試算表的照片，否則沿用 about.ts 的 photo.src */
+const items = computed(() =>
+  photos.value.length ? photos.value : origin.photo.src ? [{ src: origin.photo.src, caption: origin.photo.caption }] : [],
+)
+const photoList = computed(() => items.value.map((p) => p.src))
+const captionList = computed(() => items.value.map((p) => p.caption))
+/** 只有一張照片時，圖說放在照片下方（多張輪播時圖說在各張照片上） */
+const figureCaption = computed(() => (photoList.value.length === 1 ? captionList.value[0] : ''))
+
+/** 單張照片讀不到時改顯示圖示 */
+const broken = ref(false)
+watch(
+  () => photoList.value[0],
+  () => (broken.value = false),
+)
 </script>
 
 <template>
@@ -19,28 +42,33 @@ import { aboutEvolution, aboutOrigin as origin } from '@/data/about'
       </div>
 
       <figure v-reveal="120" class="origin__figure">
-        <img
-          v-if="origin.photo.src"
-          class="origin__photo"
-          :src="origin.photo.src"
-          :alt="origin.photo.alt"
-          :width="origin.photo.width"
-          :height="origin.photo.height"
-          loading="lazy"
-        />
-        <!-- 照片尚未提供：以手機腳架、麥克風與攝影圖示示意，尺寸與照片相同 -->
-        <div v-else class="origin__placeholder">
-          <div class="ph-art" aria-hidden="true">
-            <span class="ph-art__item ph-art__item--mic"><Mic :size="30" :stroke-width="1.5" /></span>
-            <span class="ph-art__tripod">
-              <span class="ph-art__phone"><Smartphone :size="46" :stroke-width="1.4" /></span>
-              <span class="ph-art__legs"></span>
-            </span>
-            <span class="ph-art__item ph-art__item--cam"><Video :size="30" :stroke-width="1.5" /></span>
-          </div>
-          <span class="pending-tag origin__pending">課堂照片待補</span>
-        </div>
-        <figcaption v-if="origin.photo.src" class="origin__caption">{{ origin.photo.caption }}</figcaption>
+        <PhotoCarousel :photos="photoList" :captions="captionList" :alt="origin.photo.alt" aspect="4 / 3" :autoplay="5000" radius="var(--radius-xl)">
+          <template #fallback>
+            <img
+              v-if="photoList[0] && !broken"
+              class="origin__photo"
+              :src="photoList[0]"
+              :alt="origin.photo.alt"
+              :width="origin.photo.width"
+              :height="origin.photo.height"
+              loading="lazy"
+              @error="broken = true"
+            />
+            <!-- 沒有照片：以手機腳架、麥克風與攝影圖示示意，尺寸與照片相同 -->
+            <div v-else class="origin__placeholder">
+              <div class="ph-art" aria-hidden="true">
+                <span class="ph-art__item ph-art__item--mic"><Mic :size="30" :stroke-width="1.5" /></span>
+                <span class="ph-art__tripod">
+                  <span class="ph-art__phone"><Smartphone :size="46" :stroke-width="1.4" /></span>
+                  <span class="ph-art__legs"></span>
+                </span>
+                <span class="ph-art__item ph-art__item--cam"><Video :size="30" :stroke-width="1.5" /></span>
+              </div>
+              <span v-if="!loading" class="pending-tag origin__pending">課堂照片待補</span>
+            </div>
+          </template>
+        </PhotoCarousel>
+        <figcaption v-if="figureCaption" class="origin__caption">{{ figureCaption }}</figcaption>
       </figure>
     </div>
   </section>

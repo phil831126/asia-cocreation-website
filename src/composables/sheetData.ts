@@ -289,6 +289,24 @@ function toTrainingCases(rows: Row[]): AboutCase[] {
     .map((x) => x.item)
 }
 
+/** 關於亞創「課程的起點」輪播的照片（一列一張）：src＝圖片網址，caption＝圖說（選填） */
+export interface OriginPhoto {
+  src: string
+  caption: string
+}
+
+function toOriginPhotos(rows: Row[]) {
+  const out = rows
+    .map((r, index) => {
+      if (!bool(r.show, true)) return null
+      const src = imageUrl(r.photo)
+      if (!src) return null
+      return { order: orderOf(r.order, index), index, item: { src, caption: r.caption ?? '' } satisfies OriginPhoto }
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x)
+  return out
+}
+
 /** 設定分頁：key → value */
 function toSettings(rows: Row[]) {
   return rows.filter((r) => r.key).map((r) => ({ key: r.key, value: r.value ?? '' }))
@@ -371,6 +389,7 @@ const localNewsRows: NewsRow[] = localNews.map((item, index) => ({ order: index,
 const newsSource = createSource(sheetSources.news, localNewsRows, toNews, '熱門課程')
 const articleSource = createSource(sheetSources.trends, localArticles, toArticles, '趨勢專欄', true)
 const trainingSource = createSource(sheetSources.training, aboutCases.items, toTrainingCases, '培訓案例')
+const originSource = createSource(sheetSources.originPhotos, [], toOriginPhotos, '關於亞創輪播', true)
 const settingSource = createSource(sheetSources.settings, [], toSettings, '設定', true)
 
 /** 講師資料（試算表優先，失敗用內建資料） */
@@ -413,6 +432,20 @@ export function useTrainingCases() {
 function useSetting(key: string, fallback: string) {
   settingSource.load()
   return computed(() => settingSource.items.value.find((s) => s.key === key)?.value.trim() || fallback)
+}
+
+/**
+ * 關於亞創「課程的起點」右側的照片輪播（試算表「關於亞創輪播」分頁，一列一張，依 order 排序）
+ * 分頁網址未設定或沒有任何照片時為空陣列，頁面改用 about.ts 的 aboutOrigin.photo。
+ */
+export function useOriginPhotos() {
+  originSource.load()
+  return {
+    photos: computed(() =>
+      [...originSource.items.value].sort((a, b) => a.order - b.order || a.index - b.index).map((x) => x.item),
+    ),
+    loading: computed(() => originSource.status.value === 'loading'),
+  }
 }
 
 /** 熱門課程（試算表優先，失敗用內建資料）：依「設定」分頁的 newsSort 取最多 5 則 */
