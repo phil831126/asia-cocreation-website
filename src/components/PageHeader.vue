@@ -82,22 +82,24 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 /* 有右側內容時：左文右卡片 */
 .ph__layout--aside {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, min(616px, 50%));
   align-items: center;
-  gap: clamp(32px, 4vw, 48px);
+  gap: 24px;
 }
 
+/* 右側內容再往右「出血」到頁面邊緣（右邊留約 44px），寬螢幕上圖片可以更大 */
 .ph__aside {
   min-width: 0;
+  margin-right: calc(-1 * max(0px, (100vw - var(--container)) / 2 - 44px));
   animation: ph-in 0.8s var(--ease-out) both 0.3s;
 }
 
 /* 黃底上的輪播控制：頁碼點與箭頭改成白／深色，避免與底色混在一起 */
-.ph__aside :deep(.hcc__dot) {
-  background: rgba(255, 255, 255, 0.7);
+.ph__aside.ph__aside :deep(.hcc__pagination .hcc__dot) {
+  background: rgba(255, 255, 255, 0.75);
 }
 
-.ph__aside :deep(.hcc__dot.is-active) {
+.ph__aside.ph__aside :deep(.hcc__pagination .hcc__dot.is-active) {
   background: var(--c-text);
 }
 
@@ -217,6 +219,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 
   .ph__aside {
     max-width: 520px;
+    margin-right: 0;
   }
 }
 
