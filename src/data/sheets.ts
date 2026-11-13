@@ -35,9 +35,9 @@ export const sheetSources = {
   /**
    * 「關於亞創輪播」分頁：關於亞創「從自媒體課堂開始的學習旅程」右側的照片輪播（一列一張照片）
    * 欄位：show, order, photo, caption
-   * ※ 新增分頁並「發布到網路」後，把該分頁的 CSV 網址貼在這裡；留空字串＝使用 src/data/about.ts 的 aboutOrigin.photo
+   * ※ 留空字串＝使用 src/data/about.ts 的 aboutOrigin.photo；沒有任何照片時也會用它
    */
-  originPhotos: '',
+  originPhotos: `${PUBLISHED}?gid=947729461&single=true&output=csv`,
   /** 「設定」分頁：欄位 key, value（目前有 newsSort：熱門課程超過 5 則時依「排序數字」或「日期最新」取捨） */
   settings: `${PUBLISHED}?gid=310568720&single=true&output=csv`,
 }
