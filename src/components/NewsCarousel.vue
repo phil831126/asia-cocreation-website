@@ -2,11 +2,11 @@
 /*
  * 熱門課程輪播：實務總覽頁頁首右側，只顯示圖片（橫幅 2.55:1）
  * 內容來自試算表「熱門課程」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
- * 只有一則時不顯示頁碼與箭頭。
+ * 沒有頁碼點；左右箭頭疊在圖片兩側，只有一則時不顯示。
  */
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper'
-import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { A11y, Autoplay, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import { ArrowLeft, ArrowRight } from '@lucide/vue'
 import NewsItem from './NewsItem.vue'
@@ -16,7 +16,6 @@ import { prefersReducedMotion } from '@/composables/motion'
 const { news, loading } = useNews()
 
 const root = ref<HTMLElement | null>(null)
-const pagination = ref<HTMLElement | null>(null)
 const prevBtn = ref<HTMLButtonElement | null>(null)
 const nextBtn = ref<HTMLButtonElement | null>(null)
 let swiper: Swiper | null = null
@@ -27,7 +26,7 @@ function init() {
   if (!root.value || news.value.length < 2) return
   const reduced = prefersReducedMotion()
   swiper = new Swiper(root.value, {
-    modules: [Navigation, Pagination, A11y, Autoplay],
+    modules: [Navigation, A11y, Autoplay],
     slidesPerView: 1,
     spaceBetween: 16,
     speed: reduced ? 0 : 600,
@@ -35,11 +34,9 @@ function init() {
     loop: news.value.length > 2,
     autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
-    pagination: { el: pagination.value, clickable: true, bulletClass: 'hcc__dot', bulletActiveClass: 'is-active' },
     a11y: {
       prevSlideMessage: '上一個熱門課程',
       nextSlideMessage: '下一個熱門課程',
-      paginationBulletMessage: '前往第 {{index}} 個熱門課程',
     },
   })
 }
@@ -78,25 +75,21 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
       </div>
     </template>
 
-    <!-- 下方控制列：頁碼、左右箭頭（兩則以上） -->
-    <div v-if="!loading && news.length > 1" class="hcc__foot">
-      <div ref="pagination" class="hcc__pagination"></div>
-      <div class="hcc__nav">
-        <template v-if="news.length > 1">
-          <button ref="prevBtn" type="button" class="hcc__arrow" aria-label="上一個熱門課程">
-            <ArrowLeft :size="16" aria-hidden="true" />
-          </button>
-          <button ref="nextBtn" type="button" class="hcc__arrow" aria-label="下一個熱門課程">
-            <ArrowRight :size="16" aria-hidden="true" />
-          </button>
-        </template>
-      </div>
-    </div>
+    <!-- 左右箭頭：疊在圖片兩側（兩則以上） -->
+    <template v-if="!loading && news.length > 1">
+      <button ref="prevBtn" type="button" class="hcc__arrow hcc__arrow--prev" aria-label="上一個熱門課程">
+        <ArrowLeft :size="18" aria-hidden="true" />
+      </button>
+      <button ref="nextBtn" type="button" class="hcc__arrow hcc__arrow--next" aria-label="下一個熱門課程">
+        <ArrowRight :size="18" aria-hidden="true" />
+      </button>
+    </template>
   </section>
 </template>
 
 <style scoped>
 .hcc {
+  position: relative;
   width: 100%;
 }
 
@@ -110,55 +103,33 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
   height: auto;
 }
 
-/* ---------- 下方控制列 ---------- */
-.hcc__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.hcc__pagination {
-  display: flex;
-  gap: 5px;
-}
-
-.hcc__pagination :deep(.hcc__dot) {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--c-gray-300);
-  cursor: pointer;
-  transition:
-    width 0.4s var(--ease-out),
-    background-color 0.3s;
-}
-
-.hcc__pagination :deep(.hcc__dot.is-active) {
-  width: 20px;
-  background: var(--c-yellow);
-}
-
-.hcc__nav {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
+/* ---------- 左右箭頭：疊在圖片兩側 ---------- */
 .hcc__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: 50%;
-  background: rgba(34, 34, 34, 0.07);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--c-text);
+  box-shadow: 0 6px 16px -8px rgba(34, 34, 34, 0.5);
   cursor: pointer;
+  transform: translateY(-50%);
   transition:
     background-color 0.3s,
     opacity 0.3s;
+}
+
+.hcc__arrow--prev {
+  left: 12px;
+}
+
+.hcc__arrow--next {
+  right: 12px;
 }
 
 .hcc__arrow:hover {

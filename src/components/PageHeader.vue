@@ -23,7 +23,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   <section class="ph" :class="{ 'ph--compact': compact }">
     <div class="ph__dots" aria-hidden="true"></div>
     <div class="container ph__layout" :class="{ 'ph__layout--aside': $slots.aside }">
-      <div class="ph__inner">
+      <div class="ph__inner" :class="{ 'ph__inner--cq': singleLineDesc }">
         <nav v-if="crumbs" class="ph__crumbs" aria-label="麵包屑">
           <ol>
             <li><RouterLink to="/">首頁</RouterLink></li>
@@ -72,43 +72,27 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   z-index: -1;
   width: 60%;
   height: 100%;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.6) 1.3px, transparent 1.5px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.95) 1.7px, transparent 1.9px);
   background-size: 16px 16px;
   -webkit-mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
   mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
-  opacity: 0.55;
+  opacity: 1;
 }
 
 /* 有右側內容時：左文右卡片 */
 .ph__layout--aside {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, min(616px, 50%));
-  align-items: center;
-  gap: 24px;
+  /* 左欄依內容寬度，右欄（輪播）佔滿其餘空間；底部對齊 */
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(24px, 3vw, 44px);
 }
 
-/* 右側內容再往右「出血」到頁面邊緣（右邊留約 44px），寬螢幕上圖片可以更大 */
+/* 右側內容再往右「出血」到頁面邊緣（右邊留約 40px），寬螢幕上圖片可以更大 */
 .ph__aside {
   min-width: 0;
-  margin-right: calc(-1 * max(0px, (100vw - var(--container)) / 2 - 44px));
+  margin-right: calc(-1 * max(0px, (100vw - var(--container)) / 2 - 40px));
   animation: ph-in 0.8s var(--ease-out) both 0.3s;
-}
-
-/* 黃底上的輪播控制：頁碼點與箭頭改成白／深色，避免與底色混在一起 */
-.ph__aside.ph__aside :deep(.hcc__pagination .hcc__dot) {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-.ph__aside.ph__aside :deep(.hcc__pagination .hcc__dot.is-active) {
-  background: var(--c-text);
-}
-
-.ph__aside :deep(.hcc__arrow) {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-.ph__aside :deep(.hcc__arrow:hover) {
-  background: #fff;
 }
 
 .ph__inner {
@@ -117,7 +101,10 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   flex-direction: column;
   align-items: flex-start;
   gap: 14px;
-  /* 讓單行說明文字依內容寬度縮放字級（cqi） */
+}
+
+/* 單行說明文字依內容寬度縮放字級（cqi）；會讓內容寬度不再撐開，所以只在需要時啟用 */
+.ph__inner--cq {
   container-type: inline-size;
 }
 
@@ -215,6 +202,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 @media (max-width: 960px) {
   .ph__layout--aside {
     grid-template-columns: minmax(0, 1fr);
+    align-items: start;
   }
 
   .ph__aside {
