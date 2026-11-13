@@ -51,7 +51,8 @@ watch(
 <style scoped>
 .hot__card {
   display: block;
-  border-radius: 18px;
+  /* 長方形，不用圓角 */
+  border-radius: 0;
   background: #fff;
   color: var(--c-text);
   overflow: hidden;
