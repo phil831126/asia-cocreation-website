@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowUp } from '@lucide/vue'
 import BrandLogo from './BrandLogo.vue'
+import ContactMap from './ContactMap.vue'
 import { brand, footerNavItems, contact, footerContactFields } from '@/data/site'
 import { prefersReducedMotion } from '@/composables/motion'
 
@@ -48,7 +49,7 @@ function backToTop() {
         <div class="foot__col">
           <h2 class="foot__heading">聯絡資訊</h2>
           <dl class="foot__contact">
-            <!-- 依序顯示：聯絡電話、電子郵件、公司地址、服務時間（順序在 site.ts 的 footerOrder） -->
+            <!-- 依序顯示：聯絡電話、電子郵件、服務時間、公司地址（順序在 site.ts 的 footerOrder） -->
             <div v-for="f in footerContactFields" :key="f.key">
               <dt>{{ f.label }}</dt>
               <dd>
@@ -59,6 +60,8 @@ function backToTop() {
               </dd>
             </div>
           </dl>
+          <!-- 公司地址的 Google 地圖小地圖 -->
+          <ContactMap :height="150" class="foot__map" />
         </div>
       </div>
 
@@ -191,6 +194,10 @@ function backToTop() {
   line-height: var(--foot-lh);
   font-weight: 500;
   overflow-wrap: anywhere;
+}
+
+.foot__map {
+  margin-top: 18px;
 }
 
 /* 點擊撥號：與全站文字連結相同，滑過時黃色底線展開 */

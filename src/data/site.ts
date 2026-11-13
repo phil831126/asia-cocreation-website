@@ -40,7 +40,7 @@ export const footerNavItems: NavItem[] = [...navItems, { label: '聯絡我們', 
 /* ---------- 聯絡資訊（全站共用：頁尾、聯絡我們頁） ----------
    ※ 請勿自行增加未經提供的聯絡資料。空字串＝尚未確認。
    - 電話：來自第三方公開電話簿，尚未取得公司直接確認
-   - 地址：只以文字顯示，不提供地圖導航連結
+   - 地址：除文字外，聯絡我們頁與頁尾會附上 Google 地圖小地圖（見 mapEmbedSrc）
    - 電子郵件、服務時間：由企業提供（2026/11） */
 export const contact = {
   phone: '02-2704-2040',
@@ -48,6 +48,9 @@ export const contact = {
   address: '臺北市大安區仁愛路4段396之1號1樓',
   hours: '每周一至五 09:00-18:00（12:00-13:00午休）',
 }
+
+/** Google 地圖嵌入網址：以地址搜尋，不需要 API 金鑰 */
+export const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(contact.address)}&hl=zh-TW&z=16&output=embed`
 
 /** 點擊撥號連結（國際格式） */
 export const phoneHref = 'tel:+886227042040'
@@ -57,12 +60,12 @@ export type ContactKey = keyof typeof contact
 export const contactFields: { key: ContactKey; label: string; href?: string; footer: boolean }[] = [
   { key: 'phone', label: '聯絡電話', href: phoneHref, footer: true },
   { key: 'email', label: '電子郵件', href: 'mailto:asia.alliance2020@gmail.com', footer: true },
-  { key: 'address', label: '公司地址', footer: true },
   { key: 'hours', label: '服務時間', footer: true },
+  { key: 'address', label: '公司地址', footer: true },
 ]
 
-/** 頁尾聯絡資訊的顯示順序（與聯絡我們頁相同）：聯絡電話 → 電子郵件 → 公司地址 → 服務時間 */
-const footerOrder: ContactKey[] = ['phone', 'email', 'address', 'hours']
+/** 頁尾聯絡資訊的顯示順序（與聯絡我們頁相同）：聯絡電話 → 電子郵件 → 服務時間 → 公司地址 */
+const footerOrder: ContactKey[] = ['phone', 'email', 'hours', 'address']
 
 /** 頁尾顯示的聯絡項目：只列出已填寫、且允許顯示在頁尾的資料 */
 export const footerContactFields = footerOrder

@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { Phone, Mail, MapPin, Clock, Info, CircleCheck, CircleAlert } from '@lucide/vue'
 import PageHeader from '@/components/PageHeader.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import ContactMap from '@/components/ContactMap.vue'
 import { contact, contactFields, phoneHref } from '@/data/site'
 import { contactFormEndpoint } from '@/data/sheets'
 
@@ -118,7 +119,8 @@ async function onSubmit() {
 
     <section class="section">
       <div class="container contact">
-        <aside class="info">
+        <aside class="info-col">
+         <div class="info">
           <h2 class="info__title">聯絡資訊</h2>
           <ul class="info__list">
             <li v-for="f in contactFields" :key="f.key" class="info__item">
@@ -131,6 +133,9 @@ async function onSubmit() {
               </div>
             </li>
           </ul>
+         </div>
+         <!-- 公司地址的 Google 地圖小地圖 -->
+         <ContactMap :height="220" class="info-col__map" />
         </aside>
 
         <div class="form-card">
@@ -222,9 +227,17 @@ async function onSubmit() {
   align-items: start;
 }
 
-.info {
+/* 左欄（聯絡資訊卡＋小地圖）捲動時固定在上方 */
+.info-col {
   position: sticky;
   top: calc(var(--nav-h) + 24px);
+}
+
+.info-col__map {
+  margin-top: 16px;
+}
+
+.info {
   padding: 32px;
   border-radius: var(--radius-lg);
   background: var(--c-bg-alt);
@@ -449,7 +462,7 @@ async function onSubmit() {
     grid-template-columns: 1fr;
   }
 
-  .info {
+  .info-col {
     position: static;
   }
 }
