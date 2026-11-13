@@ -19,24 +19,38 @@ const showPhoto = (l: Lecturer) => !!l.photo && !brokenPhotos.value.has(l.id)
 const markBroken = (id: string) => (brokenPhotos.value = new Set(brokenPhotos.value).add(id))
 
 /* ---------- 篩選條件（同步到網址，篩選結果可以分享或加入書籤） ---------- */
-const groups = [
-  { key: 'field', label: '專業領域', options: lecturerFields as readonly string[] },
-  { key: 'aud', label: '適合對象', options: lecturerAudiences as readonly string[] },
-  { key: 'fmt', label: '授課形式', options: lecturerFormats as readonly string[] },
-] as const
-type GroupKey = (typeof groups)[number]['key']
+/**
+ * 篩選按鈕＝試算表「講師」分頁裡實際出現的標籤：
+ * 內建清單（src/data/lecturers.ts）裡有的照原順序排前面，試算表新增的標籤依出現次數接在後面；
+ * 沒有任何講師使用的標籤不顯示。
+ */
+function tagOptions(known: readonly string[], used: string[]) {
+  const count = new Map<string, number>()
+  for (const t of used) count.set(t, (count.get(t) ?? 0) + 1)
+  const first = known.filter((t) => count.has(t))
+  const extra = [...count.keys()].filter((t) => !known.includes(t)).sort((a, b) => count.get(b)! - count.get(a)!)
+  return [...first, ...extra]
+}
 
-function readList(query: LocationQuery, key: GroupKey, options: readonly string[]) {
+const groups = computed(() => [
+  { key: 'field' as const, label: '專業領域', options: tagOptions(lecturerFields, lecturers.value.flatMap((l) => l.fields)) },
+  { key: 'aud' as const, label: '適合對象', options: tagOptions(lecturerAudiences, lecturers.value.flatMap((l) => l.audiences)) },
+  { key: 'fmt' as const, label: '授課形式', options: tagOptions(lecturerFormats, lecturers.value.flatMap((l) => l.formats)) },
+])
+type GroupKey = 'field' | 'aud' | 'fmt'
+
+/** 網址裡的篩選值（試算表載入前不知道有哪些標籤，所以不先比對選項） */
+function readList(query: LocationQuery, key: GroupKey) {
   const raw = query[key]
   const text = Array.isArray(raw) ? raw.join(',') : (raw ?? '')
-  return text.split(',').filter((v) => options.includes(v))
+  return text.split(',').filter(Boolean)
 }
 
 const keyword = ref(String(route.query.q ?? ''))
 const selected = ref<Record<GroupKey, string[]>>({
-  field: readList(route.query, 'field', lecturerFields),
-  aud: readList(route.query, 'aud', lecturerAudiences),
-  fmt: readList(route.query, 'fmt', lecturerFormats),
+  field: readList(route.query, 'field'),
+  aud: readList(route.query, 'aud'),
+  fmt: readList(route.query, 'fmt'),
 })
 
 function toggle(key: GroupKey, option: string) {
@@ -44,7 +58,7 @@ function toggle(key: GroupKey, option: string) {
   selected.value[key] = list.includes(option) ? list.filter((o) => o !== option) : [...list, option]
 }
 
-const hasFilters = computed(() => !!keyword.value.trim() || groups.some((g) => selected.value[g.key].length))
+const hasFilters = computed(() => !!keyword.value.trim() || groups.value.some((g) => selected.value[g.key].length))
 
 function clearAll() {
   keyword.value = ''
@@ -56,7 +70,7 @@ watch(
   () => {
     const query: Record<string, string> = {}
     if (keyword.value.trim()) query.q = keyword.value.trim()
-    for (const g of groups) if (selected.value[g.key].length) query[g.key] = selected.value[g.key].join(',')
+    for (const g of groups.value) if (selected.value[g.key].length) query[g.key] = selected.value[g.key].join(',')
     router.replace({ query })
   },
   { deep: true },
