@@ -3,12 +3,13 @@
  * 首頁主視覺：導覽列下方的滿版「熱門課程」輪播，只放圖片（不放任何文字）。
  * 圖片來自試算表「熱門課程」分頁的 cover 欄位（與實務總覽頁共用同一份資料）；
  * 點圖片會前往該則的連結（沒填連結就不能點）。
- * 目前這張置中，左右露出前後張；沒有「循環」，到最後一張回到第一張。
+ * 一次一張、鋪滿導覽列下方整個畫面（圖片以 cover 裁切）；沒有頁碼點，只有左右箭頭與自動換片，
+ * 到最後一張回到第一張。
  */
 import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import Swiper from 'swiper'
-import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { A11y, Autoplay, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import { ArrowLeft, ArrowRight, ImageIcon } from '@lucide/vue'
 import { brand } from '@/data/site'
@@ -18,7 +19,6 @@ import { prefersReducedMotion } from '@/composables/motion'
 const { news, loading } = useNews()
 
 const root = ref<HTMLElement | null>(null)
-const pagination = ref<HTMLElement | null>(null)
 const prevBtn = ref<HTMLButtonElement | null>(null)
 const nextBtn = ref<HTMLButtonElement | null>(null)
 let swiper: Swiper | null = null
@@ -41,20 +41,16 @@ function init() {
   if (!root.value || !multiple.value) return
   const reduced = prefersReducedMotion()
   swiper = new Swiper(root.value, {
-    modules: [Navigation, Pagination, A11y, Autoplay],
-    slidesPerView: 'auto',
-    centeredSlides: true,
-    spaceBetween: 20,
+    modules: [Navigation, A11y, Autoplay],
+    slidesPerView: 1,
     speed: reduced ? 0 : 700,
     grabCursor: true,
     rewind: true,
     autoplay: reduced ? false : { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
     navigation: { prevEl: prevBtn.value, nextEl: nextBtn.value, disabledClass: 'is-disabled' },
-    pagination: { el: pagination.value, clickable: true, bulletClass: 'hb__dot', bulletActiveClass: 'is-active' },
     a11y: {
       prevSlideMessage: '上一張',
       nextSlideMessage: '下一張',
-      paginationBulletMessage: '前往第 {{index}} 張',
     },
   })
 }
@@ -121,7 +117,6 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
         <button ref="nextBtn" type="button" class="hb__arrow hb__arrow--next" aria-label="下一張">
           <ArrowRight :size="22" aria-hidden="true" />
         </button>
-        <div ref="pagination" class="hb__pagination"></div>
       </template>
     </div>
   </section>
@@ -129,14 +124,10 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
 <style scoped>
 .hero {
-  --hb-gap: 18px;
-  --hb-dots: 40px;
   position: relative;
-  display: flex;
-  align-items: center;
   min-height: max(100svh, 520px);
-  /* 上方讓出固定在頂端的導覽列 */
-  padding: calc(var(--nav-h) + var(--hb-gap)) 0 0;
+  /* 上方讓出固定在頂端的導覽列；導覽列以下整個畫面都是輪播 */
+  padding: var(--nav-h) 0 0;
   background: transparent;
   overflow: hidden;
 }
@@ -144,37 +135,24 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 .hb {
   position: relative;
   width: 100%;
-  /* 圖片高度＝畫面高度扣掉導覽列、上方留白與頁碼區 */
-  --hb-h: calc(max(100svh, 520px) - var(--nav-h) - var(--hb-gap) - var(--hb-dots));
+  height: calc(max(100svh, 520px) - var(--nav-h));
+}
+
+.hb__swiper,
+.hb__slide,
+.hb__single,
+.hb__item {
+  height: 100%;
 }
 
 .hb__swiper {
   overflow: hidden;
 }
 
-/* 每張 16:10；寬度依高度推算，窄螢幕不超過畫面寬度（左右留一點露出鄰張） */
-.hb__slide,
-.hb__single {
-  width: min(calc(var(--hb-h) * 1.6), calc(100% - 2 * var(--gutter) - 56px));
-  transition: opacity 0.5s;
-}
-
-.hb__single {
-  margin-inline: auto;
-}
-
-/* 沒有被選中的相鄰張：淡化 */
-.hb__slide:not(.swiper-slide-active) {
-  opacity: 0.45;
-}
-
 .hb__item {
   display: block;
-  aspect-ratio: 16 / 10;
-  border-radius: 20px;
   overflow: hidden;
   background: var(--c-bg-alt);
-  box-shadow: 0 22px 44px -26px rgba(60, 50, 20, 0.55);
 }
 
 .hb__img {
@@ -204,7 +182,7 @@ a.hb__item:hover .hb__img {
 /* ---------- 左右箭頭：貼在畫面兩側 ---------- */
 .hb__arrow {
   position: absolute;
-  top: calc(var(--hb-h) / 2);
+  top: 50%;
   z-index: 2;
   display: grid;
   place-items: center;
@@ -239,40 +217,22 @@ a.hb__item:hover .hb__img {
   pointer-events: none;
 }
 
-/* ---------- 頁碼點：圖片正下方置中 ---------- */
-.hb__pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  height: var(--hb-dots);
-}
-
-.hb__pagination :deep(.hb__dot) {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--c-gray-300);
-  cursor: pointer;
-  transition:
-    width 0.4s var(--ease-out),
-    background-color 0.3s;
-}
-
-.hb__pagination :deep(.hb__dot.is-active) {
-  width: 26px;
-  background: var(--c-yellow);
-}
-
-/* 平板與手機：不再要求整張圖在第一個畫面內，圖片依寬度顯示 */
+/* 平板與手機：高度依圖片比例（16:10），整張顯示不裁切 */
 @media (max-width: 1080px) {
   .hero {
     min-height: auto;
-    padding-bottom: 24px;
   }
 
   .hb {
-    --hb-h: calc(100vw * 0.55);
+    height: auto;
+  }
+
+  .hb__swiper,
+  .hb__slide,
+  .hb__single,
+  .hb__item {
+    height: auto;
+    aspect-ratio: 16 / 10;
   }
 
   .hb__arrow {

@@ -8,13 +8,12 @@ import SectionHeading from '@/components/SectionHeading.vue'
 import CaseShowcase from '@/components/CaseShowcase.vue'
 import PartnerWall from '@/components/PartnerWall.vue'
 import CtaBanner from '@/components/CtaBanner.vue'
-import SectionDots from '@/components/SectionDots.vue'
 import HomeBackdrop from '@/components/HomeBackdrop.vue'
 import { casesSection } from '@/data/home'
 import { useSectionSnap } from '@/composables/sectionSnap'
 
 const root = ref<HTMLElement | null>(null)
-const snap = useSectionSnap(root)
+useSectionSnap(root)
 </script>
 
 <template>
@@ -49,14 +48,6 @@ const snap = useSectionSnap(root)
     <PartnerWall data-snap="合作單位" />
     <!-- 06 合作邀請 -->
     <CtaBanner data-snap="洽詢合作" />
-
-    <Teleport to="body">
-      <SectionDots
-        :sections="snap.sections.value"
-        :active="snap.active.value"
-        @go="snap.goTo"
-      />
-    </Teleport>
   </div>
 </template>
 
