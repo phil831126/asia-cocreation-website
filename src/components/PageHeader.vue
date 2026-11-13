@@ -60,8 +60,8 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   position: relative;
   isolation: isolate;
   padding: calc(var(--nav-h) + var(--section-y)) 0 var(--section-y);
-  /* 灰底：比原本更深一些，但仍淺於 Logo 的灰色（#8a8a88 左右） */
-  background: linear-gradient(180deg, #e9e9e6, #d6d6d3);
+  /* 底色：亞洲共創 Logo 的黃色 */
+  background: var(--c-yellow);
   overflow: hidden;
 }
 
@@ -72,7 +72,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   z-index: -1;
   width: 60%;
   height: 100%;
-  background-image: radial-gradient(rgba(224, 165, 0, 0.5) 1.3px, transparent 1.5px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.6) 1.3px, transparent 1.5px);
   background-size: 16px 16px;
   -webkit-mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
   mask-image: radial-gradient(ellipse at 80% 40%, #000, transparent 65%);
@@ -90,6 +90,23 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 .ph__aside {
   min-width: 0;
   animation: ph-in 0.8s var(--ease-out) both 0.3s;
+}
+
+/* 黃底上的輪播控制：頁碼點與箭頭改成白／深色，避免與底色混在一起 */
+.ph__aside :deep(.hcc__dot) {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ph__aside :deep(.hcc__dot.is-active) {
+  background: var(--c-text);
+}
+
+.ph__aside :deep(.hcc__arrow) {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.ph__aside :deep(.hcc__arrow:hover) {
+  background: #fff;
 }
 
 .ph__inner {
@@ -111,7 +128,12 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   gap: 10px;
 }
 
-.ph--compact .ph__title {
+.ph--compact .ph__eyebrow::before {
+  background: var(--c-text);
+  box-shadow: 0 0 0 4px rgba(34, 34, 34, 0.15);
+}
+
+.ph__title {
   font-size: clamp(2.3rem, 5.4vw, 3.8rem);
 }
 
@@ -121,7 +143,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   align-items: center;
   gap: 6px;
   font-size: 0.88rem;
-  color: var(--c-text-2);
+  color: var(--c-text);
 }
 
 .ph__crumbs li {
@@ -136,7 +158,9 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
   text-underline-offset: 4px;
 }
 
+/* 黃底上：小標的黃點改為深色 */
 .ph__eyebrow {
+  color: var(--c-text);
   animation: ph-in 0.8s var(--ease-out) both 0.05s;
 }
 
@@ -152,7 +176,7 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 .ph__desc {
   max-width: 620px;
   font-size: 1.1rem;
-  color: var(--c-text-2);
+  color: var(--c-text);
   animation: ph-in 0.8s var(--ease-out) both 0.25s;
 }
 

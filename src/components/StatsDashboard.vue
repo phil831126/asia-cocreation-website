@@ -43,7 +43,7 @@ const inView = useInView(root, 0.2, { repeat: true })
   padding-bottom: 14px;
 }
 
-/* 裝飾底線：灰色細線，左側一段品牌黃（滑鼠移入時延長） */
+/* 裝飾底線：深色細線，左側一段較深的線（滑鼠移入時延長）；頁首為黃底，所以不用黃色 */
 .stat::before,
 .stat::after {
   content: '';
@@ -56,12 +56,12 @@ const inView = useInView(root, 0.2, { repeat: true })
 
 .stat::before {
   right: 0;
-  background: var(--c-gray-200);
+  background: rgba(34, 34, 34, 0.22);
 }
 
 .stat::after {
   width: 28px;
-  background: var(--c-yellow);
+  background: var(--c-text);
   transition: width 0.5s var(--ease-out);
 }
 
@@ -83,7 +83,7 @@ const inView = useInView(root, 0.2, { repeat: true })
 
 .stat__label {
   margin-top: 8px;
-  color: var(--c-text-3);
+  color: var(--c-text-2);
   font-size: clamp(14px, 2.2vh, 17px);
   font-weight: 500;
   letter-spacing: 0.16em;

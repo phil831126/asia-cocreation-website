@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Menu, X, ArrowUpRight } from '@lucide/vue'
 import BaseButton from './BaseButton.vue'
 import { brand, navItems } from '@/data/site'
-import { NAV_DOCK_QUERY, navDockEl } from '@/composables/navDock'
 
 const route = useRoute()
 const scrolled = ref(false)
@@ -18,34 +17,8 @@ function isActive(to: string) {
 let openedAtY = 0
 watch(open, (v) => v && (openedAtY = window.scrollY))
 
-/* ---------- 首頁桌機版：導覽列停在 Hero 底部色帶，往下捲動時跟著上移，到頂端後固定 ---------- */
-/** 導覽列本體上方的留白（與 .nav 的 padding-top 相同） */
-const NAV_TOP_GAP = 14
-const dockOffset = ref(0)
-let dockMedia: MediaQueryList | null = null
-let dockObserver: ResizeObserver | null = null
-
-function updateDock() {
-  const el = navDockEl.value
-  dockOffset.value = el && dockMedia?.matches ? Math.max(0, Math.round(el.getBoundingClientRect().top - NAV_TOP_GAP)) : 0
-}
-
-/** 停在色帶中（尚未抵達頂端） */
-const docked = computed(() => dockOffset.value > 0)
-
-watch(navDockEl, (el) => {
-  dockObserver?.disconnect()
-  if (el && typeof ResizeObserver !== 'undefined') {
-    // Hero 內容（圖片、字型）載入後高度會變，重新對齊
-    dockObserver = new ResizeObserver(() => onScroll())
-    dockObserver.observe(el.closest('section') ?? el)
-  }
-  onScroll()
-})
-
 function onScroll() {
-  updateDock()
-  scrolled.value = navDockEl.value && dockMedia?.matches ? !docked.value : window.scrollY > 24
+  scrolled.value = window.scrollY > 24
   // 行動版選單開啟後捲動頁面即自動收合
   if (open.value && Math.abs(window.scrollY - openedAtY) > 60) open.value = false
 }
@@ -61,9 +34,6 @@ function onClickOutside(e: MouseEvent) {
 watch(() => route.fullPath, () => (open.value = false))
 
 onMounted(() => {
-  dockMedia = window.matchMedia(NAV_DOCK_QUERY)
-  dockMedia.addEventListener('change', onScroll)
-  window.addEventListener('resize', onScroll, { passive: true })
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('keydown', onKeydown)
@@ -71,9 +41,6 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  dockMedia?.removeEventListener('change', onScroll)
-  dockObserver?.disconnect()
-  window.removeEventListener('resize', onScroll)
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKeydown)
   document.removeEventListener('click', onClickOutside)
@@ -84,18 +51,11 @@ onBeforeUnmount(() => {
   <header
     ref="headerEl"
     class="nav"
-    :class="{ 'is-scrolled': scrolled || open, 'is-open': open, 'is-docked': docked }"
-    :style="docked ? { transform: `translateY(${dockOffset}px)` } : undefined"
+    :class="{ 'is-scrolled': scrolled || open, 'is-open': open }"
   >
     <div class="nav__wrap">
       <div class="nav__bar">
-        <!-- 首頁停靠時，Logo 反向位移留在畫面左上角；導覽列上移到頂端後與 Logo 合併 -->
-        <RouterLink
-          to="/"
-          class="nav__brand"
-          aria-label="亞洲共創學院 回到首頁"
-          :style="docked ? { transform: `translateY(${-dockOffset}px)` } : undefined"
-        >
+        <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁">
           <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="282" height="240" />
         </RouterLink>
 
@@ -157,36 +117,21 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0 0 auto;
   z-index: 100;
-  padding-top: 14px;
-  transition: padding 0.4s var(--ease-out);
+  /* 固定在畫面頂端的整條白底導覽列（所有頁面一致，不隨捲動移動或縮放） */
+  background: #fff;
+  border-bottom: 1px solid var(--c-line);
+  transition: box-shadow 0.3s;
 }
 
+/* 往下捲動後加一道淡淡的陰影，與下方內容區隔 */
 .nav.is-scrolled {
-  padding-top: 10px;
+  box-shadow: 0 8px 24px -16px rgba(34, 34, 34, 0.3);
 }
 
 .nav__wrap {
   width: calc(100% - var(--gutter) * 2);
   max-width: var(--container);
   margin-inline: auto;
-  border: 1px solid transparent;
-  border-radius: 32px;
-  transition:
-    background-color 0.4s,
-    border-color 0.4s,
-    box-shadow 0.4s,
-    -webkit-backdrop-filter 0.4s,
-    backdrop-filter 0.4s;
-}
-
-.nav.is-scrolled .nav__wrap {
-  background: rgba(255, 255, 255, 0.72);
-  border-color: rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 14px 40px -20px rgba(34, 34, 34, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
-  backdrop-filter: blur(22px) saturate(170%);
 }
 
 .nav__bar {
@@ -194,24 +139,13 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  height: 64px;
+  height: 76px;
   padding: 0 10px 0 18px;
-  transition: height 0.4s var(--ease-out);
-}
-
-.nav.is-scrolled .nav__bar {
-  height: 58px;
 }
 
 .nav__brand {
   display: inline-flex;
   border-radius: 12px;
-}
-
-/* 首頁停靠時 Logo 獨立留在左上角：加一層淡白底，內容捲到下方時仍清楚 */
-.nav.is-docked .nav__brand {
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.82);
 }
 
 /* 圖文一體的 Logo（字樣在圖示下方），高度接近導覽列本體 */
@@ -226,24 +160,13 @@ onBeforeUnmount(() => {
   transform: scale(1.04);
 }
 
-.nav.is-scrolled .nav__logo {
-  height: 54px;
-}
-
 /* 膠囊式導覽 */
 .nav__pill ul {
   display: flex;
   gap: 2px;
   padding: 5px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.6);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  transition: background-color 0.4s;
-}
-
-.nav.is-scrolled .nav__pill ul {
-  background: rgba(239, 239, 236, 0.7);
+  background: var(--c-gray-100);
 }
 
 .nav__link {
@@ -261,7 +184,7 @@ onBeforeUnmount(() => {
 
 .nav__link:hover {
   color: var(--c-text);
-  background: rgba(255, 255, 255, 0.9);
+  background: #fff;
 }
 
 .nav__link.is-active {
@@ -347,13 +270,6 @@ onBeforeUnmount(() => {
 .menu-leave-to {
   opacity: 0;
   transform: translateY(-8px);
-}
-
-/* 停在 Hero 底部時，讓出右下角「共創諮詢台」按鈕的位置 */
-@media (min-width: 1081px) and (max-width: 1500px) {
-  .nav.is-docked .nav__bar {
-    padding-right: 76px;
-  }
 }
 
 @media (max-width: 1080px) {

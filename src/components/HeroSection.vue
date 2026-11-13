@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { Sparkles } from '@lucide/vue'
 import HeroServices from './HeroServices.vue'
 import NewsCarousel from './NewsCarousel.vue'
 import { hero } from '@/data/home'
-import { navDockEl } from '@/composables/navDock'
 
 function splitLine(line: string) {
   const i = line.indexOf(hero.titleHighlight)
   if (i < 0) return { before: line, mark: '', after: '' }
   return { before: line.slice(0, i), mark: hero.titleHighlight, after: line.slice(i + hero.titleHighlight.length) }
 }
-
-/** 底部色帶：桌機版導覽列一開始停在這裡（見 AppNavbar.vue） */
-const dock = ref<HTMLElement | null>(null)
-onMounted(() => (navDockEl.value = dock.value))
-onBeforeUnmount(() => {
-  if (navDockEl.value === dock.value) navDockEl.value = null
-})
 </script>
 
 <template>
@@ -49,16 +40,11 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- 底部色帶：導覽列停靠的位置（平板與手機不顯示） -->
-    <div class="hero__band">
-      <div ref="dock" class="hero__dock"></div>
-    </div>
   </section>
 </template>
 
 <style scoped>
 .hero {
-  --band-y: 14px;
   position: relative;
   isolation: isolate;
   display: flex;
@@ -117,7 +103,7 @@ onBeforeUnmount(() => {
 }
 
 /* 左欄：標題（上）＋服務項目（下）；右欄：熱門課程輪播
-   上方留白讓出左上角的 Logo（桌機版導覽列停在底部時，Logo 留在左上角） */
+   上方留白讓出固定在頂端的導覽列 */
 .hero__grid {
   flex: 1;
   display: grid;
@@ -129,7 +115,7 @@ onBeforeUnmount(() => {
   align-content: center;
   column-gap: clamp(40px, 5vw, 80px);
   row-gap: clamp(24px, 5vh, 52px);
-  padding-block: calc(76px + clamp(12px, 3vh, 32px)) clamp(24px, 3.5vh, 44px);
+  padding-block: calc(var(--nav-h) + clamp(8px, 2vh, 24px)) clamp(24px, 3.5vh, 44px);
 }
 
 .hero__copy {
@@ -194,19 +180,6 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-/* ---------- 底部色帶（導覽列停靠處） ---------- */
-.hero__band {
-  position: relative;
-  padding-block: var(--band-y);
-  background: var(--c-bg-alt);
-  border-top: 1px solid var(--c-line);
-}
-
-/* 與導覽列本體同高（64px），導覽列會對齊這個位置 */
-.hero__dock {
-  height: 64px;
-}
-
 /* 載入時逐步淡入 */
 .hero__in {
   animation: hero-in 1s var(--ease-out) both;
@@ -258,7 +231,6 @@ onBeforeUnmount(() => {
     max-width: none;
   }
 
-  .hero__band,
   .hero__spark {
     display: none;
   }
