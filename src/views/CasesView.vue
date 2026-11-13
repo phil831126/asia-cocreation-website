@@ -11,7 +11,7 @@ import CtaBanner from '@/components/CtaBanner.vue'
     <PageHeader
       eyebrow="Practice Overview"
       title="實務總覽"
-      desc="整理亞洲共創的熱門課程，以及政府計畫、產學合作與企業內訓的合作案例，了解我們如何規劃學習與實作。"
+      :desc="'整理亞洲共創的熱門課程，以及政府計畫、產學合作與企業內訓的合作案例，\n了解我們如何規劃學習與實作。'"
       :crumbs="[{ label: '實務總覽' }]"
     >
       <!-- 成果數據：副標下方（原本在學習地圖頁） -->

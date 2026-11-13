@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /*
- * 熱門課程輪播：首頁主視覺右側與實務總覽頁頁首右側共用
+ * 熱門課程輪播：實務總覽頁頁首右側，只顯示圖片（橫幅 2.55:1）
  * 內容來自試算表「熱門課程」分頁（最多 5 則，取捨方式見「設定」分頁），一次顯示一張；
- * 只有一則時不顯示頁碼與箭頭。showAll＝在下方加上「實務總覽」連結（首頁使用）。
+ * 只有一則時不顯示頁碼與箭頭。
  */
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import Swiper from 'swiper'
@@ -12,8 +12,6 @@ import { ArrowLeft, ArrowRight } from '@lucide/vue'
 import NewsItem from './NewsItem.vue'
 import { useNews } from '@/composables/sheetData'
 import { prefersReducedMotion } from '@/composables/motion'
-
-withDefaults(defineProps<{ showAll?: boolean; titleTag?: 'h2' | 'h3' }>(), { showAll: false, titleTag: 'h3' })
 
 const { news, loading } = useNews()
 
@@ -67,21 +65,21 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
     </div>
 
     <div v-else-if="news.length === 1" class="hcc__single">
-      <NewsItem :item="news[0]" :title-tag="titleTag" />
+      <NewsItem :item="news[0]" />
     </div>
 
     <template v-else>
       <div ref="root" class="swiper hcc__swiper">
         <ul class="swiper-wrapper">
           <li v-for="(c, i) in news" :key="`${i}-${c.title}`" class="swiper-slide hcc__slide">
-            <NewsItem :item="c" :title-tag="titleTag" />
+            <NewsItem :item="c" />
           </li>
         </ul>
       </div>
     </template>
 
-    <!-- 下方控制列：頁碼、左右箭頭（兩則以上），以及首頁的「實務總覽」連結 -->
-    <div v-if="!loading && (news.length > 1 || showAll)" class="hcc__foot">
+    <!-- 下方控制列：頁碼、左右箭頭（兩則以上） -->
+    <div v-if="!loading && news.length > 1" class="hcc__foot">
       <div ref="pagination" class="hcc__pagination"></div>
       <div class="hcc__nav">
         <template v-if="news.length > 1">
@@ -92,7 +90,6 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
             <ArrowRight :size="16" aria-hidden="true" />
           </button>
         </template>
-        <RouterLink v-if="showAll" to="/cases" class="hcc__all">實務總覽</RouterLink>
       </div>
     </div>
   </section>
@@ -111,10 +108,6 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
 .hcc__slide {
   height: auto;
-}
-
-.hcc__slide :deep(.hot__card) {
-  height: 100%;
 }
 
 /* ---------- 下方控制列 ---------- */
@@ -170,19 +163,6 @@ onBeforeUnmount(() => swiper?.destroy(true, true))
 
 .hcc__arrow:hover {
   background: var(--c-yellow);
-}
-
-/* 首頁：前往實務總覽 */
-.hcc__all {
-  margin-left: 8px;
-  padding: 2px 0;
-  font-size: 0.85rem;
-  font-weight: 700;
-  border-bottom: 2px solid var(--c-yellow);
-}
-
-.hcc__all:hover {
-  color: var(--c-yellow-deep);
 }
 
 .hcc__arrow.is-disabled {

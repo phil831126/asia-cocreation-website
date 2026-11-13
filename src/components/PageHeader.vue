@@ -82,9 +82,9 @@ const descChars = computed(() => Math.max(...descLines.value.map((l) => l.length
 /* 有右側內容時：左文右卡片 */
 .ph__layout--aside {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
   align-items: center;
-  gap: clamp(32px, 5vw, 72px);
+  gap: clamp(32px, 4vw, 48px);
 }
 
 .ph__aside {
