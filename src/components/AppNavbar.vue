@@ -62,8 +62,7 @@ onBeforeUnmount(() => {
     <div class="nav__wrap">
       <div class="nav__bar">
         <RouterLink to="/" class="nav__brand" aria-label="亞洲共創學院 回到首頁" @click="onBrandClick">
-          <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="301" height="360" />
-          <span class="nav__name">{{ brand.name }}</span>
+          <img :src="brand.navLogoSrc" :alt="brand.navLogoAlt" class="nav__logo" width="783" height="180" />
         </RouterLink>
 
         <nav class="nav__pill" aria-label="主要導覽">
@@ -161,19 +160,11 @@ onBeforeUnmount(() => {
   border-radius: 12px;
 }
 
-/* Logo 旁的粗體校名 */
-.nav__name {
-  font-size: 1.3rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-}
-
-/* 圖文一體的 Logo（字樣在圖示下方），高度接近導覽列本體 */
+/* 橫式 Logo（圖示在左、「亞洲共創學院」與英文字樣在右），已含校名 */
 .nav__logo {
   display: block;
   width: auto;
-  height: 60px;
+  height: 48px;
   transition: transform 0.5s var(--ease-out);
 }
 
@@ -314,9 +305,8 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 400px) {
-  .nav__name {
-    font-size: 1.1rem;
-    letter-spacing: 0.03em;
+  .nav__logo {
+    height: 40px;
   }
 }
 

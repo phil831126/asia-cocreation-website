@@ -31,7 +31,7 @@ withDefaults(defineProps<{ showCompany?: boolean }>(), { showCompany: false })
 }
 
 .logo__img {
-  height: 40px;
+  height: 44px;
   width: auto;
 }
 

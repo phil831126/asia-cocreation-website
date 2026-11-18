@@ -9,12 +9,13 @@ export const brand = {
   /** 品牌標誌圖示（不含文字），顯示在「亞洲共創學院」字樣左側；留空時使用暫代的放大鏡圖示 */
   markSrc: '/brand/logo-mark.png',
   /**
-   * 含文字的完整 Logo（圖文一體）：填入後會取代「圖示＋文字」整組，例如 '/brand/logo.svg'
+   * 含文字的完整 Logo（圖文一體）：填入後會取代「圖示＋文字」整組（頁尾使用）
+   * 新版橫式 Logo：圖示在左、「亞洲共創學院 ASIA ALLIANCE 2020」在右，透明背景
    */
-  logoSrc: '',
+  logoSrc: '/brand/logo-horizontal.png',
   logoAlt: '亞洲共創學院 Logo',
-  /** 導覽列使用的 Logo（新版：圖示＋「亞洲共創學院 ASIA ALLIANCE 2020」字樣，透明背景，已裁掉四周留白） */
-  navLogoSrc: '/brand/logo-asia-alliance-2020.png',
+  /** 導覽列使用的 Logo：同一個橫式新版 Logo */
+  navLogoSrc: '/brand/logo-horizontal.png',
   navLogoAlt: '亞洲共創學院 Asia Alliance 2020',
   intro: '亞洲共創學院提供教育培訓、專業課程規劃及相關合作服務，連結政府、企業與人才發展需求。',
 }
